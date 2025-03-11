@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getCourseById, updateCourse } from "../services/api";
+import { getCourseById, updateCourse } from "../../services/api";
 
 function EditCourse() {
   const { id } = useParams(); // Obtenemos el ID del curso desde la URL

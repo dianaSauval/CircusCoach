@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { createCourse } from "../services/api";
-import { uploadFile } from "../services/uploadFile";
+import { createCourse } from "../../services/api";
+import { uploadFile } from "../../services/uploadFile";
 import { useNavigate } from "react-router-dom";
 
 function CreateCourse() {

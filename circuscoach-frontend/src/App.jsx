@@ -3,9 +3,12 @@ import Home from "./pages/Home";
 import Courses from "./pages/Courses";
 import CourseDetail from "./pages/CourseDetail";
 import Login from "./pages/Login";
-import AdminDashboard from "./pages/AdminDashboard";
-import CreateCourse from "./pages/CreateCourse";
-import EditCourse from "./pages/EditCourse";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import CreateCourse from "./pages/admin/CreateCourse";
+import EditCourse from "./pages/admin/EditCourse";
+import ManageFormations from "./pages/admin/ManageFormations";
+import ManageModules from "./pages/admin/ManageModules";
+import ManageClasses from "./pages/admin/ManageClasses";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import RequireAuth from "./components/RequireAuth";
@@ -22,9 +25,17 @@ function App() {
         
         {/* Protegemos las rutas de administración */}
         <Route element={<RequireAuth />}>
+          {/* Dashboard de Admin */}
           <Route path="/admin" element={<AdminDashboard />} />
+
+          {/* Gestión de Cursos */}
           <Route path="/admin/create" element={<CreateCourse />} />
           <Route path="/admin/edit/:id" element={<EditCourse />} />
+
+          {/* Gestión de Formaciones */}
+          <Route path="/admin/formaciones" element={<ManageFormations />} />
+          <Route path="/admin/formaciones/:formationId/modulos" element={<ManageModules />} />
+          <Route path="/admin/modulos/:moduleId/clases" element={<ManageClasses />} />
         </Route>
       </Routes>
       <Footer />
@@ -33,6 +44,7 @@ function App() {
 }
 
 export default App;
+
 
 
 

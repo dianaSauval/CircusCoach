@@ -1,0 +1,58 @@
+.admin-dashboard {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .admin-section {
+    margin-top: 30px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: #f8f9fa;
+  }
+  
+  .admin-button {
+    display: inline-block;
+    padding: 10px 15px;
+    margin: 10px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .admin-button {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .admin-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .course-item {
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+  }
+  
+  .edit-button, .delete-button {
+    padding: 8px 12px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .edit-button {
+    background-color: #ffc107;
+    color: black;
+  }
+  
+  .delete-button {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .delete-button:hover {
+    background-color: #a71d2a;
+  }
+  
