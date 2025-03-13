@@ -1,0 +1,103 @@
+/* Fondo del modal (oscurece el fondo cuando está abierto) */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  /* Contenedor del modal */
+  .modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  /* Animación de entrada */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Título del modal */
+  .modal-content h2 {
+    margin-bottom: 15px;
+    color: #333;
+  }
+  
+  /* Estilos del formulario */
+  .modal-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  /* Campos de entrada */
+  .modal-content input,
+  .modal-content textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: border 0.3s ease;
+  }
+  
+  .modal-content input:focus,
+  .modal-content textarea:focus {
+    border: 1px solid #007BFF;
+    outline: none;
+  }
+  
+  /* Botones */
+  .modal-content button {
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .modal-content button[type="submit"] {
+    background: #007BFF;
+    color: white;
+  }
+  
+  .modal-content button[type="submit"]:hover {
+    background: #0056b3;
+  }
+  
+  .modal-content button[type="button"] {
+    background: #ddd;
+    color: #333;
+  }
+  
+  .modal-content button[type="button"]:hover {
+    background: #bbb;
+  }
+  
+  /* Responsivo */
+  @media (max-width: 500px) {
+    .modal-content {
+      width: 90%;
+    }
+  }
+  

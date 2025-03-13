@@ -1,0 +1,41 @@
+.modules-list {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  border-radius: 10px;
+  overflow-y: auto;
+}
+
+.module-item {
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.module-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #2563eb;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.classes-list {
+  margin-left: 15px;
+  padding: 5px;
+}
+
+.class-item {
+  padding: 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.class-item:hover {
+  background: rgba(255, 255, 255, 0.3);
+}

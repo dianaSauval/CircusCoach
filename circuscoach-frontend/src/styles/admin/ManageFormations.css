@@ -1,22 +1,74 @@
-.admin-container {
-    padding: 20px;
+/* 🎯 Ajuste completo de pantalla */
+.admin-dashboard {
+  display: flex;
+  height: 100vh;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: white;
+  font-family: "Poppins", sans-serif;
+  overflow: hidden;
+}
+
+/* 📌 Menú lateral */
+.sidebar {
+  width: 30%;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 5px 0 10px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  overflow-y: auto;
+}
+
+/* 📌 Contenido de Edición */
+.content-area {
+  flex-grow: 1;
+  padding: 30px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  margin: 20px;
+  color: black;
+  overflow-y: auto;
+  max-height: 90vh;
+}
+
+/* 📜 Lista de formaciones */
+.formation-item {
+  padding: 12px;
+  margin: 10px 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.formation-item:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.formation-item.active {
+  background: #2563eb;
+  font-weight: bold;
+  box-shadow: 0px 0px 10px rgba(37, 99, 235, 0.6);
+}
+
+/* 📱 Responsivo */
+@media (max-width: 768px) {
+  .admin-dashboard {
+    flex-direction: column;
   }
-  
-  .add-button, .edit-button {
-    display: inline-block;
-    padding: 8px 15px;
-    margin: 5px;
-    text-decoration: none;
-    border-radius: 5px;
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
   }
-  
-  .add-button {
-    background-color: #28a745;
-    color: white;
+
+  .content-area {
+    margin: 10px;
   }
-  
-  .edit-button {
-    background-color: #007bff;
-    color: white;
-  }
-  
+}
