@@ -2,7 +2,7 @@ import { useState } from "react";
 import api from "../../services/api";
 import "../../styles/admin/AddItemModal.css";
 
-const AddItemModal = ({ type, parentId, closeModal, fetchFormations }) => {
+const AddItemModal = ({ type, parentId, closeModal, onAdd }) => {
   const [formData, setFormData] = useState({
     title: "",
     description: type === "module" ? "" : undefined,
@@ -20,15 +20,15 @@ const AddItemModal = ({ type, parentId, closeModal, fetchFormations }) => {
     try {
       const endpoint = type === "module" ? "/modules" : "/classes";
 
-      // 🔹 Enviamos el `formationId` cuando agregamos un módulo
-      const payload = type === "module"
-        ? { title: formData.title, description: formData.description, formationId: parentId }
-        : { title: formData.title, content: formData.content, fileUrl: formData.fileUrl, videoUrl: formData.videoUrl, moduleId: parentId };
+      const payload =
+        type === "module"
+          ? { title: formData.title, description: formData.description, formationId: parentId }
+          : { title: formData.title, content: formData.content, fileUrl: formData.fileUrl, videoUrl: formData.videoUrl, moduleId: parentId };
 
-      await api.post(endpoint, payload);
+      const response = await api.post(endpoint, payload);
 
-      fetchFormations(); // 🔄 Actualizar formaciones al instante
-      closeModal(); // 🔹 Cerrar el modal automáticamente
+      onAdd(response.data); // 🔄 Actualiza la lista sin necesidad de recargar
+      closeModal(); // 🔹 Cierra el modal automáticamente
     } catch (error) {
       console.error(`Error al agregar ${type}:`, error);
     }
@@ -40,7 +40,6 @@ const AddItemModal = ({ type, parentId, closeModal, fetchFormations }) => {
         <h2>Agregar {type === "module" ? "Módulo" : "Clase"}</h2>
         <form onSubmit={handleSubmit}>
           <input type="text" name="title" value={formData.title} onChange={handleChange} placeholder="Título" required />
-          {type === "module" && <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Descripción" />}
           {type === "class" && (
             <>
               <textarea name="content" value={formData.content} onChange={handleChange} placeholder="Contenido de la clase" />
@@ -57,3 +56,4 @@ const AddItemModal = ({ type, parentId, closeModal, fetchFormations }) => {
 };
 
 export default AddItemModal;
+
