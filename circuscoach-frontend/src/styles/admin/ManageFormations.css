@@ -10,6 +10,7 @@ h1 {
   margin-bottom: 20px;
 }
 
+/* 🔹 Diseño de dos columnas */
 .formations-layout {
   display: grid;
   grid-template-columns: 40% 60%;
@@ -39,29 +40,87 @@ h1 {
   background: #0056b3;
 }
 
+/* 🔹 Cada formación */
 .formation-item {
   background: white;
   padding: 10px;
   margin: 10px 0;
   border-radius: 8px;
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* ✅ Asegura que los módulos se desplieguen debajo */
   border: 1px solid #ddd;
 }
 
-.formation-header {
+/* 🔹 Contenedor principal de cada formación */
+.formation-content {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  cursor: pointer;
+}
+
+/* 🔹 Indicadores de visibilidad */
+.formation-visibility {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: end;
+  gap: 5px;
+}
+
+/* ✅ Si la formación está completamente visible */
+.full-visible {
+  color: green;
   font-weight: bold;
 }
 
-.formation-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 5px;
+/* 🟢 Visibilidad por idioma */
+.visible {
+  color: green;
+  font-weight: bold;
+  margin-right: 10px;
 }
 
+/* 🔴 No visible */
+.not-visible {
+  color: red;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+/* 🔹 Cabecera de formación */
+.formation-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex: 1;
+  justify-content: space-between;
+  font-weight: bold;
+}
+
+/* 🔹 Botón de flecha */
+.toggle-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* 🔹 Acciones de formación */
+.formation-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-left: 10px;
+}
+
+/* 🔹 Estilo para los módulos desplegados */
+.formation-modules {
+  margin-top: 10px;
+  padding-left: 20px;
+  border-left: 2px solid #007bff;
+}
+
+/* 🔹 Botones */
 .small-btn {
   padding: 5px 10px;
   background: #28a745;
@@ -88,14 +147,10 @@ h1 {
   background: #a71d2a;
 }
 
-.formation-details {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-}
-
-.placeholder {
-  color: #777;
-  text-align: center;
-  font-style: italic;
+/* 🔹 Responsive */
+@media (max-width: 768px) {
+  .formations-layout {
+    grid-template-columns: 100%;
+    height: auto;
+  }
 }

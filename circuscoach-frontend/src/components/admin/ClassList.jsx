@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import api from "../../services/api";
 import "../../styles/admin/ClassList.css";
 
-const ClassList = ({ module, setSelectedClass }) => {
+const ClassList = ({ module, setSelectedClass, selectedClass }) => {
   const [classes, setClasses] = useState([]);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const ClassList = ({ module, setSelectedClass }) => {
       await api.delete(`/classes/${classId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
-      fetchClasses(); // 🔄 Actualiza la lista tras eliminar
+      fetchClasses();
     } catch (error) {
       console.error("Error al eliminar clase:", error);
     }
@@ -36,12 +36,49 @@ const ClassList = ({ module, setSelectedClass }) => {
   return (
     <div className="class-list">
       {classes.length > 0 ? (
-        classes.map((cls) => (
-          <div key={cls._id} className="class-item">
-            <span onClick={() => setSelectedClass(cls)}>{cls.title.es}</span>
-            <button className="delete-btn" onClick={() => handleDeleteClass(cls._id)}>🗑️</button>
-          </div>
-        ))
+        classes.map((cls) => {
+          // ✅ Verificamos si `cls.visible` existe y tiene los valores esperados
+          const isVisible = cls.visible || {};
+          const esVisible = isVisible.es ?? false;
+          const enVisible = isVisible.en ?? false;
+          const frVisible = isVisible.fr ?? false;
+
+          const isFullyVisible = esVisible && enVisible && frVisible;
+
+          return (
+            <div key={cls._id} className={`class-item ${selectedClass?._id === cls._id ? "selected" : ""}`}>
+              {/* 🔹 Nueva estructura con visibilidad de idiomas */}
+              <div className="class-content">
+                {/* 🔹 Indicadores de visibilidad */}
+                <div className="class-visibility">
+                  {isFullyVisible ? (
+                    <span className="full-visible">✅ Disponible en todos los idiomas</span>
+                  ) : (
+                    <>
+                      <span className={esVisible ? "visible" : "not-visible"}>Español {esVisible ? "✅" : "✖"}</span>
+                      <span className={enVisible ? "visible" : "not-visible"}>Inglés {enVisible ? "✅" : "✖"}</span>
+                      <span className={frVisible ? "visible" : "not-visible"}>Francés {frVisible ? "✅" : "✖"}</span>
+                    </>
+                  )}
+                </div>
+
+                {/* 🔹 Nombre de la clase */}
+                <div className="class-header">
+                  <span onClick={() => setSelectedClass(cls)}>
+                    {cls.title?.es || "Sin título"}
+                  </span>
+                </div>
+
+                {/* 🔹 Botón de eliminar */}
+                <div className="class-actions">
+                  <button className="delete-btn" onClick={() => handleDeleteClass(cls._id)}>
+                    🗑️ Eliminar
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        })
       ) : (
         <p className="no-classes">No hay clases en este módulo.</p>
       )}
@@ -50,6 +87,7 @@ const ClassList = ({ module, setSelectedClass }) => {
 };
 
 export default ClassList;
+
 
 
 

@@ -9,9 +9,9 @@ const ManageFormations = () => {
   const [formations, setFormations] = useState([]);
   const [selectedFormation, setSelectedFormation] = useState(null);
   const [selectedModule, setSelectedModule] = useState(null);
-  const [selectedClass, setSelectedClass] = useState(null); // 🔹 Nueva variable para la clase seleccionada
+  const [selectedClass, setSelectedClass] = useState(null);
   const [expandedFormations, setExpandedFormations] = useState({});
-  const [showModal, setShowModal] = useState(null); // 🔹 Ahora guarda el tipo
+  const [showModal, setShowModal] = useState(null);
 
   useEffect(() => {
     fetchFormations();
@@ -35,7 +35,7 @@ const ManageFormations = () => {
       await api.delete(`/formations/${formationId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
-      fetchFormations(); // 🔄 Recargar formaciones tras eliminación
+      fetchFormations();
     } catch (error) {
       console.error("Error al eliminar formación:", error);
     }
@@ -53,7 +53,6 @@ const ManageFormations = () => {
       <h1>📚 Formaciones</h1>
 
       <div className="formations-layout">
-        {/* 📌 Sección izquierda: Lista de formaciones */}
         <div className="formations-list">
           <h2>📌 Formaciones</h2>
           <button
@@ -63,67 +62,108 @@ const ManageFormations = () => {
             ➕ Crear nueva formación
           </button>
 
-          {formations.map((formation) => (
-            <div key={formation._id} className="formation-item">
-              <div className="formation-header">
-                <span
-                  onClick={() => {
-                    setSelectedFormation(formation);
-                    setSelectedModule(null);
-                    setSelectedClass(null); // 🔹 Limpiar selección de módulo y clase
-                  }}
-                >
-                  {formation.title.es}
-                </span>
-                <button onClick={() => toggleExpandFormation(formation._id)}>⬇️</button>
-              </div>
+          {formations.map((formation) => {
+            const { es, en, fr } = formation.visible;
+            const isFullyVisible = es && en && fr;
 
-              <div className="formation-actions">
-                <button
-                  className="small-btn"
-                  onClick={() => setShowModal({ type: "module", parentId: formation._id })}
-                >
-                  ➕ Agregar módulo
-                </button>
-                <button
-                  className="delete-btn"
-                  onClick={() => handleDeleteFormation(formation._id)}
-                >
-                  🗑️ Eliminar
-                </button>
-              </div>
+            return (
+              <div key={formation._id} className="formation-item">
+                {/* 🔹 Nueva estructura visual */}
+                <div className="formation-content">
+                  {/* 🔹 Indicadores de disponibilidad a la izquierda */}
+                  <div className="formation-visibility">
+                    {isFullyVisible ? (
+                      <span className="full-visible">
+                        ✅ Disponible en todos los idiomas
+                      </span>
+                    ) : (
+                      <>
+                        <span className={es ? "visible" : "not-visible"}>
+                          🇪spañol {es ? "✅" : " ❌"}
+                        </span>
+                        <span className={en ? "visible" : "not-visible"}>
+                          Inglés {en ? "✅" : " ❌"}
+                        </span>
+                        <span className={fr ? "visible" : "not-visible"}>
+                          🇫rancés {fr ? "✅" : " ❌"}
+                        </span>
+                      </>
+                    )}
+                  </div>
 
-              {/* 📌 Aquí se muestra la lista de módulos si la formación está expandida */}
-              {expandedFormations[formation._id] && (
-                <ModuleList
-                  formation={formation}
-                  setSelectedModule={(module) => {
-                    setSelectedModule(module);
-                    setSelectedFormation(null);
-                    setSelectedClass(null); // 🔹 Limpiar selección de formación y clase
-                  }}
-                  setSelectedClass={setSelectedClass} // ✅ Ahora pasa la función para seleccionar clases
-                />
-              )}
-            </div>
-          ))}
+                  {/* 🔹 Cabecera con título y flecha */}
+                  <div className="formation-header">
+                    <span
+                      onClick={() => {
+                        setSelectedFormation(formation);
+                        setSelectedModule(null);
+                        setSelectedClass(null);
+                      }}
+                    >
+                      {formation.title.es}
+                    </span>
+                    <button
+                      className="toggle-btn"
+                      onClick={() => toggleExpandFormation(formation._id)}
+                    >
+                      {expandedFormations[formation._id] ? "⬆️" : "⬇️"}
+                    </button>
+                  </div>
+
+                  {/* 🔹 Acciones a la derecha */}
+                  <div className="formation-actions">
+                    <button
+                      className="small-btn"
+                      onClick={() =>
+                        setShowModal({
+                          type: "module",
+                          parentId: formation._id,
+                        })
+                      }
+                    >
+                      ➕ Agregar módulo
+                    </button>
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleDeleteFormation(formation._id)}
+                    >
+                      🗑️ Eliminar
+                    </button>
+                  </div>
+                </div>
+
+                {/* 📌 Aquí la lista de módulos ahora se despliega debajo del título */}
+                {expandedFormations[formation._id] && (
+                  <div className="formation-modules">
+                    <ModuleList
+                      formation={formation}
+                      setSelectedModule={(module) => {
+                        setSelectedModule(module);
+                        setSelectedFormation(null);
+                        setSelectedClass(null);
+                      }}
+                      setSelectedClass={setSelectedClass}
+                    />
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
 
-        {/* 📌 Sección derecha: Información de la formación, módulo o clase seleccionada */}
         <EditPanel
           selectedFormation={selectedFormation}
           selectedModule={selectedModule}
-          selectedClass={selectedClass} // ✅ Pasamos la clase seleccionada
+          selectedClass={selectedClass}
         />
       </div>
 
-      {/* Modal para agregar formación o módulo */}
       {showModal && (
         <AddItemModal
           type={showModal.type}
           parentId={showModal.parentId}
           closeModal={() => setShowModal(null)}
-          onAdd={fetchFormations} // ✅ Para actualizar la lista después de crear
+          onAdd={fetchFormations}
         />
       )}
     </div>

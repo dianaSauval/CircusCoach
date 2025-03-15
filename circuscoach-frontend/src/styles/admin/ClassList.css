@@ -10,28 +10,62 @@
 /* 🔹 Cada clase en la lista */
 .class-item {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
   background: white;
   padding: 10px;
   margin: 5px 0;
   border-radius: 5px;
   border: 1px solid #ddd;
   transition: all 0.3s ease-in-out;
-  cursor: pointer;
-  gap:20px
 }
 
-.class-item:hover {
-  background: #e9ecef;
+/* 🔹 Si la clase está seleccionada */
+.class-item.selected {
+  background: #dff0ff;
+  border: 2px solid #007bff;
+}
+
+/* 🔹 Contenido de la clase */
+.class-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 🔹 Indicadores de visibilidad */
+.class-visibility {
+  display: flex;
+  flex-direction: column;
+  text-align: end;
+  gap: 5px;
+  font-size: small;
+}
+
+/* ✅ Si la clase está completamente visible */
+.full-visible {
+  color: green;
+  font-weight: bold;
+}
+
+/* 🟢 Visibilidad por idioma */
+.visible {
+  color: green;
+  font-weight: bold;
+}
+
+/* 🔴 No visible */
+.not-visible {
+  color: red;
+  font-weight: bold;
 }
 
 /* 🔹 Nombre de la clase */
-.class-item span {
+.class-header {
   flex: 1;
   font-size: 14px;
   font-weight: 500;
   color: #333;
+  
 }
 
 /* 🔹 Botón de eliminar */
@@ -44,6 +78,7 @@
   font-size: 14px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
+  margin-left: 10px;
 }
 
 .delete-btn:hover {

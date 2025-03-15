@@ -6,37 +6,35 @@ const AddItemModal = ({ type, parentId, closeModal, onAdd }) => {
   const [activeTab, setActiveTab] = useState("es"); // 🔹 Controla la pestaña activa
   const [formData, setFormData] = useState({
     title: { es: "", en: "", fr: "" },
-    subtitle: { es: "", en: "", fr: "" },
-    content: { es: "", en: "", fr: "" },
-    secondaryContent: { es: "", en: "", fr: "" },
-    pdf: {
-      es: { url: "", title: "", description: "" },
-      en: { url: "", title: "", description: "" },
-      fr: { url: "", title: "", description: "" }
-    },
-    video: {
-      es: { url: "", title: "", description: "" },
-      en: { url: "", title: "", description: "" },
-      fr: { url: "", title: "", description: "" }
-    },
+    description: { es: "", en: "", fr: "" },
     price: type === "formation" ? "" : undefined, // Solo para formaciones
+    subtitle: type === "class" ? { es: "", en: "", fr: "" } : undefined,
+    secondaryContent: type === "class" ? { es: "", en: "", fr: "" } : undefined,
+    pdf: type === "class"
+      ? { es: { url: "", title: "", description: "" }, en: { url: "", title: "", description: "" }, fr: { url: "", title: "", description: "" } }
+      : undefined,
+    video: type === "class"
+      ? { es: { url: "", title: "", description: "" }, en: { url: "", title: "", description: "" }, fr: { url: "", title: "", description: "" } }
+      : undefined,
   });
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: { ...formData[e.target.name], [activeTab]: e.target.value },
+      [name]: { ...formData[name], [activeTab]: value },
     });
   };
 
   const handleFileChange = (e, field) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
       [field]: {
         ...formData[field],
         [activeTab]: {
           ...formData[field][activeTab],
-          [e.target.name]: e.target.value
+          [name]: value
         }
       }
     });
@@ -52,26 +50,26 @@ const AddItemModal = ({ type, parentId, closeModal, onAdd }) => {
         endpoint = "/formations";
         payload = {
           title: formData.title,
-          description: formData.content, // 🔹 Aquí el contenido funciona como descripción
-          price: formData.price
+          description: formData.description,
+          price: formData.price,
         };
       } else if (type === "module") {
         endpoint = "/modules";
         payload = {
           title: formData.title,
-          description: formData.content,
-          formationId: parentId
+          description: formData.description,
+          formationId: parentId,
         };
       } else if (type === "class") {
         endpoint = "/classes";
         payload = {
           title: formData.title,
           subtitle: formData.subtitle,
-          content: formData.content,
+          content: formData.description,
           secondaryContent: formData.secondaryContent,
           pdf: formData.pdf,
           video: formData.video,
-          moduleId: parentId
+          moduleId: parentId,
         };
       }
 
@@ -83,7 +81,7 @@ const AddItemModal = ({ type, parentId, closeModal, onAdd }) => {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
 
-      onAdd(response.data); // 🔄 Actualiza la lista sin necesidad de recargar
+      onAdd(response.data);
       closeModal(); // 🔹 Cierra el modal automáticamente
     } catch (error) {
       console.error(`❌ Error al agregar ${type}:`, error.response?.data || error.message);
@@ -106,20 +104,27 @@ const AddItemModal = ({ type, parentId, closeModal, onAdd }) => {
 
         <form onSubmit={handleSubmit}>
           <input type="text" name="title" value={formData.title[activeTab]} onChange={handleChange} placeholder={`Título (${activeTab.toUpperCase()})`} required />
-          <input type="text" name="subtitle" value={formData.subtitle[activeTab]} onChange={handleChange} placeholder={`Subtítulo (${activeTab.toUpperCase()})`} />
-          <textarea name="content" value={formData.content[activeTab]} onChange={handleChange} placeholder={`Contenido (${activeTab.toUpperCase()})`} />
-          <textarea name="secondaryContent" value={formData.secondaryContent[activeTab]} onChange={handleChange} placeholder={`Contenido Secundario (${activeTab.toUpperCase()})`} />
+          <textarea name="description" value={formData.description[activeTab]} onChange={handleChange} placeholder={`Descripción (${activeTab.toUpperCase()})`} />
 
-          <h3>📄 PDF</h3>
-          <input type="text" name="url" value={formData.pdf[activeTab].url} onChange={(e) => handleFileChange(e, "pdf")} placeholder="URL del PDF" />
-          <input type="text" name="title" value={formData.pdf[activeTab].title} onChange={(e) => handleFileChange(e, "pdf")} placeholder="Título del PDF" />
-          <input type="text" name="description" value={formData.pdf[activeTab].description} onChange={(e) => handleFileChange(e, "pdf")} placeholder="Descripción del PDF" />
+          {/* 🔹 Campos específicos para clases */}
+          {type === "class" && (
+            <>
+              <input type="text" name="subtitle" value={formData.subtitle[activeTab]} onChange={handleChange} placeholder={`Subtítulo (${activeTab.toUpperCase()})`} />
+              <textarea name="secondaryContent" value={formData.secondaryContent[activeTab]} onChange={handleChange} placeholder={`Contenido Secundario (${activeTab.toUpperCase()})`} />
 
-          <h3>🎥 Video</h3>
-          <input type="text" name="url" value={formData.video[activeTab].url} onChange={(e) => handleFileChange(e, "video")} placeholder="URL del Video" />
-          <input type="text" name="title" value={formData.video[activeTab].title} onChange={(e) => handleFileChange(e, "video")} placeholder="Título del Video" />
-          <input type="text" name="description" value={formData.video[activeTab].description} onChange={(e) => handleFileChange(e, "video")} placeholder="Descripción del Video" />
+              <h3>📄 PDF</h3>
+              <input type="text" name="url" value={formData.pdf[activeTab].url} onChange={(e) => handleFileChange(e, "pdf")} placeholder="URL del PDF" />
+              <input type="text" name="title" value={formData.pdf[activeTab].title} onChange={(e) => handleFileChange(e, "pdf")} placeholder="Título del PDF" />
+              <input type="text" name="description" value={formData.pdf[activeTab].description} onChange={(e) => handleFileChange(e, "pdf")} placeholder="Descripción del PDF" />
 
+              <h3>🎥 Video</h3>
+              <input type="text" name="url" value={formData.video[activeTab].url} onChange={(e) => handleFileChange(e, "video")} placeholder="URL del Video" />
+              <input type="text" name="title" value={formData.video[activeTab].title} onChange={(e) => handleFileChange(e, "video")} placeholder="Título del Video" />
+              <input type="text" name="description" value={formData.video[activeTab].description} onChange={(e) => handleFileChange(e, "video")} placeholder="Descripción del Video" />
+            </>
+          )}
+
+          {/* 🔹 Campo de precio solo para formaciones */}
           {type === "formation" && (
             <input type="number" name="price" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} placeholder="Precio" required />
           )}
@@ -133,6 +138,7 @@ const AddItemModal = ({ type, parentId, closeModal, onAdd }) => {
 };
 
 export default AddItemModal;
+
 
 
 

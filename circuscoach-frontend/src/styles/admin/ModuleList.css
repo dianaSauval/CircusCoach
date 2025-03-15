@@ -5,7 +5,6 @@
   padding: 10px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
 }
 
 /* 🔹 Estilos para cada módulo */
@@ -22,85 +21,107 @@
 
 /* 🔹 Si el módulo está seleccionado */
 .module-item.selected {
-  background: #dff0ff; /* 🔹 Resalta el módulo seleccionado */
+  background: #dff0ff;
   border: 2px solid #007bff;
+}
+
+/* 🔹 Contenido del módulo */
+.module-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 🔹 Indicadores de visibilidad */
+.module-visibility {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: end;
+  gap: 5px;
+  font-size: small;
+}
+
+/* ✅ Si el módulo está completamente visible */
+.full-visible {
+  color: green;
+  font-weight: bold;
+}
+
+/* 🟢 Visibilidad por idioma */
+.visible {
+  color: green;
+  font-weight: bold;
+}
+
+/* 🔴 No visible */
+.not-visible {
+  color: red;
+  font-weight: bold;
 }
 
 /* 🔹 Cabecera del módulo */
 .module-header {
   display: flex;
   align-items: center;
+  flex: 1;
   justify-content: space-between;
-  cursor: pointer;
-  padding: 5px;
+  font-weight: bold;
 }
 
-/* 🔹 Botones a la izquierda */
+/* 🔹 Botón de flecha */
+.toggle-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* 🔹 Acciones del módulo */
 .module-actions {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 10px;
+  margin-left: 10px;
 }
 
-
-/* 🔹 Botón de eliminar */
-.delete-btn {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  background: #dc3545;
-  color: white;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 4px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  max-width: 130px;
+/* 🔹 Estilo para las clases desplegadas */
+.module-classes {
+  margin-top: 10px;
+  padding-left: 20px;
+  border-left: 2px solid #007bff;
 }
 
-.delete-btn:hover {
-  background: #c82333;
-}
-
-/* 🔹 Botón de agregar clase */
-.add-btn {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
+/* 🔹 Botones */
+.small-btn {
+  padding: 5px 10px;
   background: #28a745;
   color: white;
   border: none;
-  padding: 6px 10px;
-  border-radius: 4px;
-  font-size: 14px;
+  border-radius: 5px;
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  max-width: 130px;
 }
 
-.add-btn:hover {
+.small-btn:hover {
   background: #218838;
 }
 
-/* 🔹 Nombre del módulo */
-.module-header span {
-  flex: 1;
-  font-size: 14px;
-  font-weight: 500;
-  color: #333;
-  text-align: center;
-}
-
-/* 🔹 Botón de expandir/plegar clases */
-.toggle-btn {
-  background: none;
+.delete-btn {
+  padding: 5px 10px;
+  background: #dc3545;
+  color: white;
   border: none;
-  font-size: 16px;
+  border-radius: 5px;
   cursor: pointer;
-  transition: transform 0.3s ease-in-out;
 }
 
-.toggle-btn:hover {
-  color: #007bff;
+.delete-btn:hover {
+  background: #a71d2a;
+}
+
+/* 🔹 Responsive */
+@media (max-width: 768px) {
+  .module-list {
+    width: 100%;
+  }
 }

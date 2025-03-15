@@ -7,7 +7,7 @@ import AddItemModal from "./AddItemModal"; // ✅ Importamos el modal para agreg
 const ModuleList = ({ formation, setSelectedModule, setSelectedClass, selectedModule }) => {
   const [modules, setModules] = useState([]);
   const [expandedModules, setExpandedModules] = useState({});
-  const [showModal, setShowModal] = useState(null); // 🔹 Control del modal de clases
+  const [showModal, setShowModal] = useState(null);
 
   useEffect(() => {
     if (formation) {
@@ -33,7 +33,7 @@ const ModuleList = ({ formation, setSelectedModule, setSelectedClass, selectedMo
       await api.delete(`/modules/${moduleId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
-      fetchModules(); // 🔄 Actualiza la lista tras eliminar
+      fetchModules();
     } catch (error) {
       console.error("Error al eliminar módulo:", error);
     }
@@ -49,29 +49,57 @@ const ModuleList = ({ formation, setSelectedModule, setSelectedClass, selectedMo
   return (
     <div className="module-list">
       {modules.length > 0 ? (
-        modules.map((module) => (
-          <div
-            key={module._id}
-            className={`module-item ${selectedModule?._id === module._id ? "selected" : ""}`} // 🔹 Aplica la clase si el módulo está seleccionado
-          >
-            <div className="module-header">
-              <div className="module-actions">
-                <button className="delete-btn" onClick={() => handleDeleteModule(module._id)}><span>🗑️</span>Eliminar Módulo</button>
-                <button className="add-btn" onClick={() => setShowModal({ type: "class", parentId: module._id })}>
-                  <span>➕</span> Agregar Clase
-                </button>
-              </div>
-              <span onClick={() => setSelectedModule(module)}>{module.title.es}</span>
-              <button className="toggle-btn" onClick={() => toggleExpandModule(module._id)}>
-                {expandedModules[module._id] ? "⬆️" : "⬇️"} {/* 🔹 Flechita cambia según estado */}
-              </button>
-            </div>
+        modules.map((module) => {
+          const { es, en, fr } = module.visible;
+          const isFullyVisible = es && en && fr;
 
-            {expandedModules[module._id] && (
-              <ClassList module={module} setSelectedClass={setSelectedClass} />
-            )}
-          </div>
-        ))
+          return (
+            <div key={module._id} className={`module-item ${selectedModule?._id === module._id ? "selected" : ""}`}>
+              {/* 🔹 Nueva estructura con visibilidad de idiomas */}
+              <div className="module-content">
+                {/* 🔹 Indicadores de visibilidad */}
+                <div className="module-visibility">
+                  {isFullyVisible ? (
+                    <span className="full-visible">✅ Disponible en todos los idiomas</span>
+                  ) : (
+                    <>
+                      <span className={es ? "visible" : "not-visible"}>🇪spañol {es ? "✅" : "✖"}</span>
+                      <span className={en ? "visible" : "not-visible"}>Inglés {en ? "✅" : "✖"}</span>
+                      <span className={fr ? "visible" : "not-visible"}>🇫rancés {fr ? "✅" : "✖"}</span>
+                    </>
+                  )}
+                </div>
+
+                {/* 🔹 Título del módulo y botón de desplegar */}
+                <div className="module-header">
+                  <span onClick={() => setSelectedModule(module)}>
+                    {module.title.es}
+                  </span>
+                  <button className="toggle-btn" onClick={() => toggleExpandModule(module._id)}>
+                    {expandedModules[module._id] ? "⬆️" : "⬇️"}
+                  </button>
+                </div>
+
+                {/* 🔹 Acciones a la derecha */}
+                <div className="module-actions">
+                  <button className="small-btn" onClick={() => setShowModal({ type: "class", parentId: module._id })}>
+                    ➕ Agregar Clase
+                  </button>
+                  <button className="delete-btn" onClick={() => handleDeleteModule(module._id)}>
+                    🗑️ Eliminar
+                  </button>
+                </div>
+              </div>
+
+              {/* 📌 Aquí la lista de clases ahora se despliega debajo del módulo */}
+              {expandedModules[module._id] && (
+                <div className="module-classes">
+                  <ClassList module={module} setSelectedClass={setSelectedClass} />
+                </div>
+              )}
+            </div>
+          );
+        })
       ) : (
         <p>No hay módulos en esta formación.</p>
       )}
@@ -82,7 +110,7 @@ const ModuleList = ({ formation, setSelectedModule, setSelectedClass, selectedMo
           type={showModal.type}
           parentId={showModal.parentId}
           closeModal={() => setShowModal(null)}
-          onAdd={fetchModules} // 🔄 Recargar módulos tras agregar una clase
+          onAdd={fetchModules}
         />
       )}
     </div>
@@ -90,7 +118,3 @@ const ModuleList = ({ formation, setSelectedModule, setSelectedClass, selectedMo
 };
 
 export default ModuleList;
-
-
-
-
