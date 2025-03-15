@@ -4,7 +4,8 @@ const {
   getClassesByModule,
   createClass,
   updateClass,
-  toggleClassVisibility,
+  makeClassVisibleInAllLanguages,
+  toggleClassVisibilityByLanguage,
   deleteClass,
 } = require("../controllers/classController");
 
@@ -18,15 +19,16 @@ console.log("🛠️ Controllers importados en classRoutes:", {
   getClassesByModule,
   createClass,
   updateClass,
-  toggleClassVisibility,
+  makeClassVisibleInAllLanguages,
+  toggleClassVisibilityByLanguage,
   deleteClass,
 });
 
 // 🔹 Obtener todas las clases (solo admin)
 router.get("/admin", authMiddleware, isAdminMiddleware, getAllClasses);
 
-// 🔹 Obtener clases visibles por módulo (para alumnos)
-router.get("/:moduleId", getClassesByModule);
+// 🔹 Obtener clases de un módulo (visibles para alumnos o todas para admin)
+router.get("/module/:moduleId", authMiddleware, getClassesByModule);
 
 // 🔹 Crear una nueva clase (solo admin)
 router.post("/", authMiddleware, isAdminMiddleware, createClass);
@@ -34,8 +36,11 @@ router.post("/", authMiddleware, isAdminMiddleware, createClass);
 // 🔹 Editar una clase (solo admin)
 router.put("/:classId", authMiddleware, updateClass);
 
-// 🔹 Cambiar visibilidad de una clase (solo admin)
-router.patch("/:classId/visibility", authMiddleware, toggleClassVisibility);
+// 🔹 Hacer visible una clase en **todos** los idiomas (solo admin)
+router.patch("/:classId/visibility/all", authMiddleware, isAdminMiddleware, makeClassVisibleInAllLanguages);
+
+// 🔹 Cambiar visibilidad de un idioma específico (solo admin)
+router.patch("/:classId/visibility/:lang", authMiddleware, isAdminMiddleware, toggleClassVisibilityByLanguage);
 
 // 🔹 Eliminar una clase (solo admin)
 router.delete("/:classId", authMiddleware, isAdminMiddleware, deleteClass);

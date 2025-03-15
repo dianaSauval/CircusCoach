@@ -18,16 +18,35 @@ const getAllModules = async (req, res) => {
   }
 };
 
-// 🔹 Obtener módulos visibles por formación (para alumnos)
+// 🔹 Obtener módulos visibles por formación (para alumnos y admin)
 const getModulesByFormation = async (req, res) => {
   try {
-    const modules = await Module.find({ formation: req.params.formationId, visible: true })
-      .populate("classes");
+    const { formationId } = req.params;
+    const isAdminRequest = req.user && req.user.role === "admin";
+
+    console.log("📩 ID de formación recibido:", formationId);
+    console.log("👤 Es admin?", isAdminRequest);
+
+    // Verificar si la formación existe
+    const formationExists = await Formation.findById(formationId);
+    if (!formationExists) {
+      return res.status(404).json({ error: "Formación no encontrada" });
+    }
+
+    // Si el usuario no es admin, filtrar solo los módulos visibles
+    const query = { formation: formationId };
+    if (!isAdminRequest) {
+      query.$or = [{ "visible.es": true }, { "visible.en": true }, { "visible.fr": true }];
+    }
+
+    const modules = await Module.find(query).populate("classes");
+
+    console.log("📤 Módulos encontrados:", modules);
 
     res.status(200).json(modules);
   } catch (error) {
     console.error("❌ Error al obtener módulos:", error);
-    res.status(500).json({ error: "Error en el servidor" });
+    res.status(500).json({ error: "Error en el servidor", details: error.message });
   }
 };
 
@@ -55,7 +74,7 @@ const createModule = async (req, res) => {
       },
       formation: formationId,
       classes: [], // 🔹 Se inicializa vacío
-      visible: false // 🔹 Por defecto, no es visible
+      visible: { es: false, en: false, fr: false }
     });
 
     await newModule.save();
@@ -101,20 +120,45 @@ const updateModule = async (req, res) => {
   }
 };
 
-// 🔹 Cambiar visibilidad de un módulo
-const toggleModuleVisibility = async (req, res) => {
+// 🔹 Poner el módulo **visible en todos los idiomas** (si estaba oculto, se activa en todos)
+const makeModuleVisibleInAllLanguages = async (req, res) => {
   if (!isAdmin(req)) return res.status(403).json({ error: "No autorizado" });
 
   try {
     const module = await Module.findById(req.params.moduleId);
     if (!module) return res.status(404).json({ error: "Módulo no encontrado" });
 
-    module.visible = !module.visible;
-    await module.save();
+    // 🔹 Se pone visible en **todos los idiomas**
+    module.visible = { es: true, en: true, fr: true };
 
-    res.json({ message: `✅ Módulo ${module.visible ? "visible" : "oculto"}` });
+    await module.save();
+    res.json({ message: "Módulo ahora es visible en todos los idiomas." });
   } catch (error) {
-    console.error("❌ Error cambiando visibilidad:", error);
+    console.error("Error cambiando visibilidad del módulo:", error);
+    res.status(500).json({ error: "Error en el servidor" });
+  }
+};
+
+// 🔹 Cambiar visibilidad de un idioma específico del módulo
+const toggleModuleVisibilityByLanguage = async (req, res) => {
+  if (!isAdmin(req)) return res.status(403).json({ error: "No autorizado" });
+
+  try {
+    const { language } = req.params;
+    const validLanguages = ["es", "en", "fr"];
+    if (!validLanguages.includes(language)) {
+      return res.status(400).json({ error: "Idioma no válido. Usa 'es', 'en' o 'fr'." });
+    }
+
+    const module = await Module.findById(req.params.moduleId);
+    if (!module) return res.status(404).json({ error: "Módulo no encontrado" });
+
+    module.visible[language] = !module.visible[language];
+
+    await module.save();
+    res.json({ message: `Módulo ahora es ${module.visible[language] ? "visible" : "oculto"} en ${language}` });
+  } catch (error) {
+    console.error("Error cambiando visibilidad del módulo:", error);
     res.status(500).json({ error: "Error en el servidor" });
   }
 };
@@ -151,6 +195,7 @@ module.exports = {
   getModulesByFormation,
   createModule,
   updateModule,
-  toggleModuleVisibility,
+  makeModuleVisibleInAllLanguages,
+  toggleModuleVisibilityByLanguage,
   deleteModule
 };

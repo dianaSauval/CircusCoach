@@ -1,4 +1,6 @@
 const Formation = require("../models/Formation");
+const Module = require("../models/Module");
+const Class = require("../models/Class");
 
 // 🔹 Middleware para verificar si el usuario es admin
 const isAdmin = (req) => req.user && req.user.role === "admin";
@@ -26,18 +28,6 @@ exports.getAllFormations = async (req, res) => {
   }
 };
 
-// 🔹 Obtener formación por ID
-exports.getFormationById = async (req, res) => {
-  try {
-    const formation = await Formation.findById(req.params.id).populate("modules");
-    if (!formation) return res.status(404).json({ error: "Formación no encontrada" });
-
-    res.json(formation);
-  } catch (error) {
-    console.error("Error obteniendo formación:", error);
-    res.status(500).json({ error: "Error en el servidor" });
-  }
-};
 
 // 🔹 Crear una formación con soporte multilenguaje
 exports.createFormation = async (req, res) => {
@@ -46,16 +36,17 @@ exports.createFormation = async (req, res) => {
   try {
     const { title, description, price } = req.body;
 
-    // Validamos que al menos el título y la descripción en español existan
+    // 🔹 Validar que al menos el título y descripción en español estén presentes
     if (!title?.es || !description?.es || !price) {
-      return res.status(400).json({ error: "El título, descripción en español y precio son obligatorios" });
+      return res.status(400).json({ error: "Título en español, descripción y precio son obligatorios" });
     }
 
+    // 🔹 Crear la formación con los datos recibidos
     const newFormation = new Formation({
       title: {
         es: title.es,
-        en: title.en || "", // Opcional
-        fr: title.fr || "", // Opcional
+        en: title.en || "",
+        fr: title.fr || "",
       },
       description: {
         es: description.es,
@@ -63,18 +54,21 @@ exports.createFormation = async (req, res) => {
         fr: description.fr || "",
       },
       price,
-      modules: [],
-      visible: false, // 🔹 Inicialmente no visible
+      modules: [], // 🔹 Inicialmente sin módulos
+      visible: {
+        es: false, // 🔹 No visible hasta que se active
+        en: false,
+        fr: false,
+      },
     });
 
     await newFormation.save();
     res.status(201).json(newFormation);
   } catch (error) {
-    console.error("Error creando formación:", error);
+    console.error("❌ ERROR en createFormation:", error);
     res.status(500).json({ error: "Error en el servidor", details: error.message });
   }
 };
-
 // 🔹 Actualizar una formación (soporta múltiples idiomas y visibilidad)
 exports.updateFormation = async (req, res) => {
   if (!isAdmin(req)) return res.status(403).json({ error: "No autorizado" });
@@ -83,65 +77,98 @@ exports.updateFormation = async (req, res) => {
     const { title, description, price, visible } = req.body;
     const { id } = req.params;
 
-    // 🔹 Validamos que exista la formación
-    let formation = await Formation.findById(id);
-    if (!formation) return res.status(404).json({ error: "Formación no encontrada" });
+    // 🔹 Verificar si la formación existe
+    const formation = await Formation.findById(id);
+    if (!formation) {
+      return res.status(404).json({ error: "Formación no encontrada" });
+    }
 
-    // 🔹 Actualizamos solo los campos que se envíen (manteniendo estructura multilenguaje)
+    // 🔹 Actualizar solo los campos enviados (sin sobreescribir valores no enviados)
     if (title) {
-      formation.title = {
-        es: title.es || formation.title.es,
-        en: title.en !== undefined ? title.en : formation.title.en,
-        fr: title.fr !== undefined ? title.fr : formation.title.fr,
-      };
+      formation.title.es = title.es ?? formation.title.es;
+      formation.title.en = title.en ?? formation.title.en;
+      formation.title.fr = title.fr ?? formation.title.fr;
     }
 
     if (description) {
-      formation.description = {
-        es: description.es || formation.description.es,
-        en: description.en !== undefined ? description.en : formation.description.en,
-        fr: description.fr !== undefined ? description.fr : formation.description.fr,
-      };
+      formation.description.es = description.es ?? formation.description.es;
+      formation.description.en = description.en ?? formation.description.en;
+      formation.description.fr = description.fr ?? formation.description.fr;
     }
 
-    if (price !== undefined) formation.price = price;
-    if (visible !== undefined) formation.visible = visible;
+    if (price !== undefined) {
+      formation.price = price;
+    }
 
-    // 🔹 Guardamos los cambios
-    const updatedFormation = await formation.save();
-    res.json(updatedFormation);
+    if (visible) {
+      formation.visible.es = visible.es ?? formation.visible.es;
+      formation.visible.en = visible.en ?? formation.visible.en;
+      formation.visible.fr = visible.fr ?? formation.visible.fr;
+    }
 
+    await formation.save();
+
+    res.status(200).json({ message: "Formación actualizada correctamente", formation });
   } catch (error) {
-    console.error("Error actualizando formación:", error);
+    console.error("❌ ERROR en updateFormation:", error);
     res.status(500).json({ error: "Error en el servidor", details: error.message });
   }
 };
 
-// 🔹 Cambiar visibilidad de una formación (solo admins)
-exports.toggleFormationVisibility = async (req, res) => {
+
+// 🔹 Poner visibles TODOS los idiomas
+exports.makeFormationVisibleInAllLanguages = async (req, res) => {
   if (!isAdmin(req)) return res.status(403).json({ error: "No autorizado" });
 
   try {
     const { id } = req.params;
 
-    // 🔹 Buscamos la formación
     const formation = await Formation.findById(id);
     if (!formation) return res.status(404).json({ error: "Formación no encontrada" });
 
-    // 🔹 Alternamos el estado de visibilidad
-    formation.visible = !formation.visible;
+    // 🔄 Hacer visible en todos los idiomas
+    formation.visible = { es: true, en: true, fr: true };
+
     await formation.save();
 
-    res.json({ 
-      message: `Formación ahora está ${formation.visible ? "visible" : "oculta"}`,
-      formation 
+    res.json({
+      message: "Formación ahora es visible en todos los idiomas.",
     });
-
   } catch (error) {
-    console.error("Error cambiando visibilidad:", error);
-    res.status(500).json({ error: "Error en el servidor", details: error.message });
+    console.error("Error haciendo visible en todos los idiomas:", error);
+    res.status(500).json({ error: "Error en el servidor" });
   }
 };
+
+// 🔹 Cambiar visibilidad de un solo idioma 
+exports.toggleFormationVisibilityByLanguage = async (req, res) => {
+  if (!isAdmin(req)) return res.status(403).json({ error: "No autorizado" });
+
+  try {
+    const { id } = req.params;
+    const { language } = req.body; // 📌 El frontend debe enviar el idioma a modificar
+
+    if (!["es", "en", "fr"].includes(language)) {
+      return res.status(400).json({ error: "Idioma no válido" });
+    }
+
+    const formation = await Formation.findById(id);
+    if (!formation) return res.status(404).json({ error: "Formación no encontrada" });
+
+    // 🔄 Alternar visibilidad del idioma especificado
+    formation.visible[language] = !formation.visible[language];
+
+    await formation.save();
+
+    res.json({
+      message: `Formación en ${language.toUpperCase()} ahora es ${formation.visible[language] ? "visible" : "oculta"}`,
+    });
+  } catch (error) {
+    console.error("Error cambiando visibilidad por idioma:", error);
+    res.status(500).json({ error: "Error en el servidor" });
+  }
+};
+
 
 
 // 🔹 Eliminar una formación (solo admins)
@@ -150,24 +177,26 @@ exports.deleteFormation = async (req, res) => {
 
   try {
     const formation = await Formation.findById(req.params.id);
-    if (!formation) return res.status(404).json({ error: "Formación no encontrada" });
+    if (!formation) {
+      return res.status(404).json({ error: "Formación no encontrada" });
+    }
 
-    // 🔹 1. Obtener todos los módulos de la formación
+    // 🔹 Buscar los módulos asociados a la formación
     const modules = await Module.find({ formation: formation._id });
 
-    // 🔹 2. Eliminar todas las clases asociadas a esos módulos
+    // 🔹 Eliminar todas las clases asociadas a esos módulos
     const moduleIds = modules.map((mod) => mod._id);
     await Class.deleteMany({ module: { $in: moduleIds } });
 
-    // 🔹 3. Eliminar los módulos de la formación
+    // 🔹 Luego, eliminar los módulos
     await Module.deleteMany({ formation: formation._id });
 
-    // 🔹 4. Finalmente, eliminar la formación
+    // 🔹 Finalmente, eliminar la formación
     await Formation.findByIdAndDelete(req.params.id);
 
     res.json({ message: "Formación, módulos y clases eliminados correctamente" });
   } catch (error) {
-    console.error("Error eliminando formación:", error);
-    res.status(500).json({ error: "Error en el servidor" });
+    console.error("❌ ERROR en deleteFormation:", error);
+    res.status(500).json({ error: "Error en el servidor", details: error.message });
   }
 };

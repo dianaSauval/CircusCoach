@@ -1,4 +1,5 @@
 const Class = require("../models/Class");
+const Module = require("../models/Module");
 
 // 🔹 Middleware para verificar si el usuario es admin
 const isAdmin = (req) => req.user && req.user.role === "admin";
@@ -15,14 +16,35 @@ const getAllClasses = async (req, res) => {
 };
 
 
-// 🔹 Obtener clases visibles de un módulo (para alumnos)
+// 🔹 Obtener clases visibles por formación (para alumnos y admin)
 const getClassesByModule = async (req, res) => {
   try {
-    const classes = await Class.find({ module: req.params.moduleId, visible: true });
-    res.json(classes);
+    const { moduleId } = req.params;
+    const isAdminRequest = req.user && req.user.role === "admin";
+
+    console.log("📩 ID del módulo recibido:", moduleId);
+    console.log("👤 Es admin?", isAdminRequest);
+
+    // Verificar si el módulo existe
+    const moduleExists = await Module.findById(moduleId);
+    if (!moduleExists) {
+      return res.status(404).json({ error: "Módulo no encontrado" });
+    }
+
+    // Si el usuario no es admin, filtrar solo las clases visibles
+    const query = { module: moduleId };
+    if (!isAdminRequest) {
+      query.$or = [{ "visible.es": true }, { "visible.en": true }, { "visible.fr": true }];
+    }
+
+    const classes = await Class.find(query);
+
+    console.log("📤 Clases encontradas:", classes);
+
+    res.status(200).json(classes);
   } catch (error) {
-    console.error("Error obteniendo clases:", error);
-    res.status(500).json({ error: "Error en el servidor" });
+    console.error("❌ Error al obtener clases:", error);
+    res.status(500).json({ error: "Error en el servidor", details: error.message });
   }
 };
 
@@ -31,32 +53,32 @@ const createClass = async (req, res) => {
   if (!isAdmin(req)) return res.status(403).json({ error: "No autorizado" });
 
   try {
-    const { title, content, fileUrl, videoUrl, moduleId } = req.body;
+    console.log("📩 Datos recibidos en el backend:", req.body); // 🔹 Verifica qué datos llegan
+
+    const { title, subtitle, content, secondaryContent, pdf, video, moduleId } = req.body;
+
+    if (!title || !moduleId) {
+      return res.status(400).json({ error: "El título y el módulo son obligatorios" });
+    }
 
     const newClass = new Class({
-      title: {
-        es: title.es || "",
-        en: title.en || "",
-        fr: title.fr || "",
-      },
-      content: {
-        es: content.es || "",
-        en: content.en || "",
-        fr: content.fr || "",
-      },
-      fileUrl: fileUrl || "",
-      videoUrl: videoUrl || "",
+      title,
+      subtitle,
+      content,
+      secondaryContent,
+      pdf,
+      video,
       module: moduleId,
-      visible: false, // 🔹 Por defecto oculta
+      visible: { es: false, en: false, fr: false }
     });
 
     await newClass.save();
-    await Module.findByIdAndUpdate(moduleId, { $push: { classes: newClass._id } });
+    console.log("✅ Clase creada con éxito:", newClass);
 
     res.status(201).json(newClass);
   } catch (error) {
-    console.error("Error creando clase:", error);
-    res.status(500).json({ error: "Error en el servidor" });
+    console.error("❌ Error en createClass:", error);
+    res.status(500).json({ error: "Error en el servidor", details: error.message });
   }
 };
 
@@ -65,26 +87,7 @@ const updateClass = async (req, res) => {
   if (!isAdmin(req)) return res.status(403).json({ error: "No autorizado" });
 
   try {
-    const { title, content, fileUrl, videoUrl } = req.body;
-
-    const updatedClass = await Class.findByIdAndUpdate(
-      req.params.classId,
-      {
-        title: {
-          es: title.es || "",
-          en: title.en || "",
-          fr: title.fr || "",
-        },
-        content: {
-          es: content.es || "",
-          en: content.en || "",
-          fr: content.fr || "",
-        },
-        fileUrl: fileUrl || "",
-        videoUrl: videoUrl || "",
-      },
-      { new: true }
-    );
+    const updatedClass = await Class.findByIdAndUpdate(req.params.classId, req.body, { new: true });
 
     if (!updatedClass) return res.status(404).json({ error: "Clase no encontrada" });
 
@@ -95,20 +98,47 @@ const updateClass = async (req, res) => {
   }
 };
 
-// 🔹 Cambiar visibilidad de una clase
-const toggleClassVisibility = async (req, res) => {
+// 🔹 Hacer visible una clase en todos los idiomas
+const makeClassVisibleInAllLanguages = async (req, res) => {
   if (!isAdmin(req)) return res.status(403).json({ error: "No autorizado" });
 
   try {
     const classItem = await Class.findById(req.params.classId);
     if (!classItem) return res.status(404).json({ error: "Clase no encontrada" });
 
-    classItem.visible = !classItem.visible;
+    classItem.visible = { es: true, en: true, fr: true };
     await classItem.save();
 
-    res.json({ message: `Clase ${classItem.visible ? "visible" : "oculta"}` });
+    res.json({ message: "Clase ahora es visible en todos los idiomas" });
   } catch (error) {
     console.error("Error cambiando visibilidad:", error);
+    res.status(500).json({ error: "Error en el servidor" });
+  }
+};
+
+// 🔹 Cambiar visibilidad de un idioma específico en una clase
+const toggleClassVisibilityByLanguage = async (req, res) => {
+  if (!isAdmin(req)) return res.status(403).json({ error: "No autorizado" });
+
+  try {
+    const { classId, lang } = req.params;
+
+    // 🔹 Lista de idiomas válidos
+    const validLanguages = ["es", "en", "fr"];
+    if (!validLanguages.includes(lang)) {
+      return res.status(400).json({ error: "Idioma no válido" });
+    }
+
+    const classItem = await Class.findById(classId);
+    if (!classItem) return res.status(404).json({ error: "Clase no encontrada" });
+
+    // 🔹 Cambiar visibilidad del idioma específico
+    classItem.visible[lang] = !classItem.visible[lang];
+    await classItem.save();
+
+    res.json({ message: `Clase ahora es ${classItem.visible[lang] ? "visible" : "oculta"} en ${lang}` });
+  } catch (error) {
+    console.error("Error cambiando visibilidad por idioma:", error);
     res.status(500).json({ error: "Error en el servidor" });
   }
 };
@@ -133,6 +163,7 @@ module.exports = {
   getClassesByModule,
   createClass,
   updateClass,
-  toggleClassVisibility,
+  makeClassVisibleInAllLanguages,
+  toggleClassVisibilityByLanguage,
   deleteClass
 };

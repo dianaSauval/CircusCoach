@@ -13,7 +13,11 @@ const moduleSchema = new mongoose.Schema({
   },
   formation: { type: mongoose.Schema.Types.ObjectId, ref: "Formation", required: true }, // 🔹 Ahora es obligatorio
   classes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Class", default: [] }], // 🔹 Se inicializa vacío
-  visible: { type: Boolean, default: false } // 🔹 Control de visibilidad
+  visible: {
+    es: { type: Boolean, default: false },
+    en: { type: Boolean, default: false },
+    fr: { type: Boolean, default: false }
+  }, // 🔹 Ahora cada idioma puede estar visible o no
 });
 
 module.exports = mongoose.model("Module", moduleSchema);

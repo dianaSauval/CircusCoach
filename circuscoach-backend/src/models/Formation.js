@@ -13,7 +13,11 @@ const formationSchema = new mongoose.Schema({
   },
   price: { type: Number, required: true },
   modules: [{ type: mongoose.Schema.Types.ObjectId, ref: "Module" }], // Relación con módulos
-  visible: { type: Boolean, default: false }, // 🔹 Control de visibilidad
+  visible: {
+    es: { type: Boolean, default: false },
+    en: { type: Boolean, default: false },
+    fr: { type: Boolean, default: false }
+  }, 
 });
 
 module.exports = mongoose.model("Formation", formationSchema);
