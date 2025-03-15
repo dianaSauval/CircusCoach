@@ -1,103 +1,119 @@
-/* Fondo del modal (oscurece el fondo cuando está abierto) */
+/* 🔹 Fondo del modal con opacidad */
 .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-  
-  /* Contenedor del modal */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* 🔹 Opacidad del fondo */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* 🔹 Contenedor del modal con tamaño fijo y scroll interno */
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 450px; /* 🔹 Ancho fijo */
+  max-width: 90%;
+  max-height: 85vh; /* 🔹 Evita que el modal se extienda demasiado */
+  overflow-y: auto; /* 🔹 Habilita el scroll interno si el contenido es muy largo */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
+  text-align: center;
+}
+
+/* 🔹 Pestañas de idioma */
+.language-tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.language-tabs button {
+  background: none;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  border-radius: 5px;
+}
+
+.language-tabs button.active {
+  background: #007bff;
+  color: white;
+  border: 1px solid #007bff;
+}
+
+.language-tabs button:hover {
+  background: #0056b3;
+  color: white;
+}
+
+/* 🔹 Inputs y textarea */
+.modal-content input,
+.modal-content textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+/* 🔹 Área de archivos PDF y Video */
+.modal-content h3 {
+  font-size: 16px;
+  margin-top: 10px;
+  color: #007bff;
+  text-align: left;
+}
+
+/* 🔹 Botones de acción */
+.modal-content button {
+  padding: 10px 15px;
+  margin-top: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+}
+
+.modal-content button[type="submit"] {
+  background: #28a745;
+  color: white;
+}
+
+.modal-content button[type="submit"]:hover {
+  background: #218838;
+}
+
+.modal-content button[type="button"] {
+  background: #dc3545;
+  color: white;
+}
+
+.modal-content button[type="button"]:hover {
+  background: #c82333;
+}
+
+/* 🔹 Responsive */
+@media (max-width: 480px) {
   .modal-content {
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    width: 400px;
-    max-width: 90%;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    animation: fadeIn 0.3s ease-in-out;
+    width: 90%;
   }
-  
-  /* Animación de entrada */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  /* Título del modal */
-  .modal-content h2 {
-    margin-bottom: 15px;
-    color: #333;
-  }
-  
-  /* Estilos del formulario */
-  .modal-content form {
-    display: flex;
+
+  .language-tabs {
     flex-direction: column;
-    gap: 10px;
   }
-  
-  /* Campos de entrada */
-  .modal-content input,
-  .modal-content textarea {
+
+  .language-tabs button {
+    margin-bottom: 5px;
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-    transition: border 0.3s ease;
   }
-  
-  .modal-content input:focus,
-  .modal-content textarea:focus {
-    border: 1px solid #007BFF;
-    outline: none;
-  }
-  
-  /* Botones */
-  .modal-content button {
-    padding: 10px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-  
-  .modal-content button[type="submit"] {
-    background: #007BFF;
-    color: white;
-  }
-  
-  .modal-content button[type="submit"]:hover {
-    background: #0056b3;
-  }
-  
-  .modal-content button[type="button"] {
-    background: #ddd;
-    color: #333;
-  }
-  
-  .modal-content button[type="button"]:hover {
-    background: #bbb;
-  }
-  
-  /* Responsivo */
-  @media (max-width: 500px) {
-    .modal-content {
-      width: 90%;
-    }
-  }
-  
+}

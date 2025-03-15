@@ -1,77 +1,88 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import api from "../../services/api";
 import "../../styles/admin/ModuleList.css";
-import AddItemModal from "./AddItemModal";
-import ClassList from "./ClassList"; // Importamos ClassList
+import ClassList from "./ClassList"; // ✅ Importamos el nuevo componente
+import AddItemModal from "./AddItemModal"; // ✅ Importamos el modal para agregar clases
 
-const ModuleList = ({ formation, setSelectedModule, setSelectedClass, fetchFormations }) => {
+const ModuleList = ({ formation, setSelectedModule, setSelectedClass, selectedModule }) => {
   const [modules, setModules] = useState([]);
   const [expandedModules, setExpandedModules] = useState({});
-  const [showModal, setShowModal] = useState({ type: null, parentId: null });
+  const [showModal, setShowModal] = useState(null); // 🔹 Control del modal de clases
 
   useEffect(() => {
-    fetchModules();
-  }, [formation, fetchFormations]);
+    if (formation) {
+      fetchModules();
+    }
+  }, [formation]);
 
   const fetchModules = async () => {
     try {
-      const response = await api.get(`/modules/${formation._id}`);
+      const response = await api.get(`/modules/formation/${formation._id}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      });
       setModules(response.data);
     } catch (error) {
-      console.error("Error al cargar módulos:", error);
+      console.error("Error al obtener módulos:", error);
     }
   };
 
-  const handleSelectModule = (module) => {
-    setSelectedModule(module);
-    setSelectedClass(null);
-    toggleModule(module._id);
-  };
-
-  const toggleModule = (moduleId) => {
-    setExpandedModules((prev) => ({
-      ...prev,
-      [moduleId]: !prev[moduleId],
-    }));
-  };
-
-  // 🗑️ Eliminar módulo y actualizar formaciones
   const handleDeleteModule = async (moduleId) => {
-    if (!window.confirm("¿Seguro que quieres eliminar este módulo?")) return;
+    if (!window.confirm("¿Seguro que quieres eliminar este módulo? Esta acción no se puede deshacer.")) return;
 
     try {
-      await api.delete(`/modules/${moduleId}`);
-      fetchFormations(); // 🔄 Actualiza las formaciones
+      await api.delete(`/modules/${moduleId}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      });
+      fetchModules(); // 🔄 Actualiza la lista tras eliminar
     } catch (error) {
       console.error("Error al eliminar módulo:", error);
     }
   };
 
+  const toggleExpandModule = (moduleId) => {
+    setExpandedModules((prev) => ({
+      ...prev,
+      [moduleId]: !prev[moduleId]
+    }));
+  };
+
   return (
-    <div className="modules-list">
-      <h3>📂 Módulos</h3>
-      {modules.map((module) => (
-        <div key={module._id} className="module-item">
-          <div className="module-header" onClick={() => handleSelectModule(module)}>
-            {module.title} {expandedModules[module._id] ? "🔽" : "▶️"}
-          </div>
-          <div className="module-actions">
-            <button className="delete-button" onClick={() => handleDeleteModule(module._id)}>🗑️ Eliminar Módulo</button>
-          </div>
+    <div className="module-list">
+      {modules.length > 0 ? (
+        modules.map((module) => (
+          <div
+            key={module._id}
+            className={`module-item ${selectedModule?._id === module._id ? "selected" : ""}`} // 🔹 Aplica la clase si el módulo está seleccionado
+          >
+            <div className="module-header">
+              <div className="module-actions">
+                <button className="delete-btn" onClick={() => handleDeleteModule(module._id)}><span>🗑️</span>Eliminar Módulo</button>
+                <button className="add-btn" onClick={() => setShowModal({ type: "class", parentId: module._id })}>
+                  <span>➕</span> Agregar Clase
+                </button>
+              </div>
+              <span onClick={() => setSelectedModule(module)}>{module.title.es}</span>
+              <button className="toggle-btn" onClick={() => toggleExpandModule(module._id)}>
+                {expandedModules[module._id] ? "⬆️" : "⬇️"} {/* 🔹 Flechita cambia según estado */}
+              </button>
+            </div>
 
-          {expandedModules[module._id] && (
-            <ClassList module={module} setSelectedClass={setSelectedClass} /> // Delegamos a ClassList el manejo de clases
-          )}
-        </div>
-      ))}
+            {expandedModules[module._id] && (
+              <ClassList module={module} setSelectedClass={setSelectedClass} />
+            )}
+          </div>
+        ))
+      ) : (
+        <p>No hay módulos en esta formación.</p>
+      )}
 
-      {/* Modal para agregar módulos */}
-      {showModal.type === "module" && (
+      {/* Modal para agregar una nueva clase */}
+      {showModal && (
         <AddItemModal
-          type="module"
-          parentId={formation._id}
-          closeModal={() => setShowModal({ type: null, parentId: null })}
-          fetchFormations={fetchFormations}
+          type={showModal.type}
+          parentId={showModal.parentId}
+          closeModal={() => setShowModal(null)}
+          onAdd={fetchModules} // 🔄 Recargar módulos tras agregar una clase
         />
       )}
     </div>
@@ -79,3 +90,7 @@ const ModuleList = ({ formation, setSelectedModule, setSelectedClass, fetchForma
 };
 
 export default ModuleList;
+
+
+
+

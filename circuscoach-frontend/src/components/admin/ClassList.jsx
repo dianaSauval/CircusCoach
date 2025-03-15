@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
 import api from "../../services/api";
-import AddItemModal from "./AddItemModal";
 import "../../styles/admin/ClassList.css";
 
 const ClassList = ({ module, setSelectedClass }) => {
   const [classes, setClasses] = useState([]);
-  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     fetchClasses();
@@ -13,62 +11,46 @@ const ClassList = ({ module, setSelectedClass }) => {
 
   const fetchClasses = async () => {
     try {
-      const response = await api.get(`/classes/${module._id}`);
+      const response = await api.get(`/classes/module/${module._id}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      });
       setClasses(response.data);
     } catch (error) {
       console.error("Error al obtener clases:", error);
     }
   };
 
-  // 🗑️ Eliminar clase y actualizar lista en tiempo real
   const handleDeleteClass = async (classId) => {
-    if (!window.confirm("🛑 ¿Seguro que quieres eliminar esta clase?")) return;
+    if (!window.confirm("¿Seguro que quieres eliminar esta clase? Esta acción no se puede deshacer.")) return;
 
     try {
-      await api.delete(`/classes/${classId}`);
-      setClasses((prevClasses) => prevClasses.filter((cls) => cls._id !== classId));
+      await api.delete(`/classes/${classId}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      });
+      fetchClasses(); // 🔄 Actualiza la lista tras eliminar
     } catch (error) {
       console.error("Error al eliminar clase:", error);
     }
   };
 
   return (
-    <div className="classes-list">
-      <button onClick={() => setShowModal(true)} className="add-class-button">
-        ➕ Agregar Clase
-      </button>
-
-      {/* Modal para agregar clase */}
-      {showModal && (
-        <AddItemModal
-          type="class"
-          parentId={module._id}
-          closeModal={() => setShowModal(false)}
-          onAdd={(newClass) => {
-            setClasses((prevClasses) => [...prevClasses, newClass]); // 🔄 Se agrega la clase en tiempo real
-            setShowModal(false); // ✅ Cierra el modal al instante
-          }}
-        />
-      )}
-
-      {/* Lista de clases */}
+    <div className="class-list">
       {classes.length > 0 ? (
-        <ul className="class-items">
-          {classes.map((cls) => (
-            <li key={cls._id} className="class-item">
-              <p onClick={() => setSelectedClass(cls)}>{cls.title}</p>
-              <button className="delete-button" onClick={() => handleDeleteClass(cls._id)}>🗑️</button>
-            </li>
-          ))}
-        </ul>
+        classes.map((cls) => (
+          <div key={cls._id} className="class-item">
+            <span onClick={() => setSelectedClass(cls)}>{cls.title.es}</span>
+            <button className="delete-btn" onClick={() => handleDeleteClass(cls._id)}>🗑️</button>
+          </div>
+        ))
       ) : (
-        <p className="no-classes">❌ No hay clases aún</p>
+        <p className="no-classes">No hay clases en este módulo.</p>
       )}
     </div>
   );
 };
 
 export default ClassList;
+
 
 
 

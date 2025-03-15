@@ -1,79 +1,73 @@
-.classes-list {
-    background: #1e293b; /* Azul oscuro */
-    border-radius: 10px;
-    padding: 20px;
-    margin-top: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    max-height: 400px;
-    overflow-y: auto;
-  }
-  
-  .classes-list h3 {
-    color: #f8fafc; /* Blanco */
-    font-size: 18px;
-    margin-bottom: 15px;
-    text-align: center;
-  }
-  
-  .add-button {
-    background-color: #3b82f6; /* Azul vibrante */
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    font-size: 14px;
-    cursor: pointer;
-    border-radius: 5px;
-    width: 100%;
-    transition: background 0.3s ease;
-    margin-bottom: 10px;
-  }
-  
-  .add-button:hover {
-    background-color: #2563eb;
-  }
-  
+/* 🔹 Contenedor principal de la lista de clases */
+.class-list {
+  margin-top: 10px;
+  background: #f8f9fa;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 🔹 Cada clase en la lista */
+.class-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  gap:20px
+}
+
+.class-item:hover {
+  background: #e9ecef;
+}
+
+/* 🔹 Nombre de la clase */
+.class-item span {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+/* 🔹 Botón de eliminar */
+.delete-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.delete-btn:hover {
+  background: #c82333;
+}
+
+/* 🔹 Mensaje cuando no hay clases */
+.no-classes {
+  font-size: 14px;
+  color: #888;
+  text-align: center;
+  padding: 10px;
+}
+
+/* 🔹 Responsive */
+@media (max-width: 480px) {
   .class-item {
-    background: #334155; /* Azul oscuro grisáceo */
-    padding: 12px;
-    margin: 8px 0;
-    border-radius: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s ease;
+    flex-direction: column;
+    align-items: flex-start;
   }
-  
-  .class-item:hover {
-    background: #475569; /* Azul más claro */
-  }
-  
-  .class-item p {
-    margin: 0;
-    flex-grow: 1;
-    padding-left: 10px;
-  }
-  
-  .class-item button {
-    background: #ef4444; /* Rojo */
-    color: white;
-    border: none;
-    padding: 6px 10px;
-    font-size: 14px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background 0.3s ease;
-  }
-  
-  .class-item button:hover {
-    background: #dc2626; /* Rojo más oscuro */
-  }
-  
-  .no-classes {
-    color: #f1f5f9; /* Blanco grisáceo */
+
+  .delete-btn {
+    margin-top: 5px;
+    width: 100%;
     text-align: center;
-    padding: 10px;
   }
-  
+}

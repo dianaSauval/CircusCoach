@@ -1,58 +1,106 @@
-.modules-list {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 10px;
-  border-radius: 10px;
-  overflow-y: auto;
-}
-
-.module-item {
+/* 🔹 Contenedor de la lista de módulos */
+.module-list {
+  margin-top: 10px;
+  background: #f8f9fa;
   padding: 10px;
   border-radius: 8px;
-  cursor: pointer;
-  color: white;
-  font-weight: bold;
-  transition: 0.3s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
 }
 
+/* 🔹 Estilos para cada módulo */
+.module-item {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  transition: all 0.3s ease-in-out;
+}
+
+/* 🔹 Si el módulo está seleccionado */
+.module-item.selected {
+  background: #dff0ff; /* 🔹 Resalta el módulo seleccionado */
+  border: 2px solid #007bff;
+}
+
+/* 🔹 Cabecera del módulo */
 .module-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  background: #2563eb;
-  padding: 10px;
-  border-radius: 8px;
-}
-
-.classes-list {
-  margin-left: 15px;
+  justify-content: space-between;
+  cursor: pointer;
   padding: 5px;
 }
 
-.class-item {
-  padding: 8px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.2);
-  cursor: pointer;
-  transition: 0.3s;
+/* 🔹 Botones a la izquierda */
+.module-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
-.class-item:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
- 
 
-.delete-button {
-  background: #ff4d4d;
+/* 🔹 Botón de eliminar */
+.delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: #dc3545;
   color: white;
   border: none;
-  padding: 5px 10px;
+  padding: 6px 10px;
+  border-radius: 4px;
   font-size: 14px;
   cursor: pointer;
-  border-radius: 5px;
-  margin-left: 10px;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease-in-out;
+  max-width: 130px;
 }
 
-.delete-button:hover {
-  background: #cc0000;
+.delete-btn:hover {
+  background: #c82333;
+}
+
+/* 🔹 Botón de agregar clase */
+.add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  max-width: 130px;
+}
+
+.add-btn:hover {
+  background: #218838;
+}
+
+/* 🔹 Nombre del módulo */
+.module-header span {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
+}
+
+/* 🔹 Botón de expandir/plegar clases */
+.toggle-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+}
+
+.toggle-btn:hover {
+  color: #007bff;
 }

@@ -1,38 +1,102 @@
-/* 📜 Panel de edición */
+/* 🔹 Contenedor principal */
 .edit-panel {
-  background: rgba(255, 255, 255, 0.95);
+  background: #ffffff;
   padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  text-align: center;
-  max-width: 100%;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 100%;
   height: 100%;
+  overflow-y: auto; /* ✅ Scroll interno si el contenido es muy grande */
 }
 
-/* Texto visible */
-.title-display {
+/* 🔹 Títulos */
+.edit-panel h2 {
   font-size: 22px;
-  color: #1e40af;
+  color: #333;
+  margin-bottom: 10px;
 }
 
-.description-display {
+.edit-panel h3 {
   font-size: 18px;
-  color: #374151;
+  color: #007bff;
+  margin-top: 15px;
 }
 
-/* Botón de edición */
-.edit-button {
-  background: #4f46e5;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
+/* 🔹 Pestañas de idioma */
+.language-tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.language-tabs button {
+  background: none;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  margin: 0 5px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.3s ease-in-out;
+  border-radius: 5px;
 }
 
-.edit-button:hover {
-  background: #6366f1;
-  transform: scale(1.05);
+.language-tabs button.active {
+  background: #007bff;
+  color: white;
+  border: 1px solid #007bff;
+}
+
+.language-tabs button:hover {
+  background: #0056b3;
+  color: white;
+}
+
+/* 🔹 Contenido de la clase */
+.edit-panel p {
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+/* 🔹 PDF y Video */
+.edit-panel a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.edit-panel a:hover {
+  text-decoration: underline;
+}
+
+.edit-panel iframe {
+  border-radius: 5px;
+  border: none;
+  margin-top: 10px;
+}
+
+/* 🔹 Placeholder si no hay selección */
+.placeholder {
+  font-size: 16px;
+  color: #888;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* 🔹 Responsive */
+@media (max-width: 768px) {
+  .edit-panel {
+    max-width: 100%;
+    padding: 15px;
+  }
+
+  .language-tabs {
+    flex-direction: column;
+  }
+
+  .language-tabs button {
+    margin-bottom: 5px;
+    width: 100%;
+  }
 }

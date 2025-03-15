@@ -1,72 +1,81 @@
-import { useState, useEffect } from "react";
-import api from "../../services/api";
+import { useState } from "react";
 import "../../styles/admin/EditPanel.css";
 
-const EditPanel = ({ type, item, fetchFormations }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({
-    title: item?.title || "",
-    description: item?.description || "",
-    content: item?.content || "",  // 🔹 Agregamos "content" para clases
-    fileUrl: item?.fileUrl || "",  // 🔹 Agregamos "fileUrl" para clases
-    videoUrl: item?.videoUrl || "", // 🔹 Agregamos "videoUrl" para clases
-  });
-
-  useEffect(() => {
-    setFormData({
-      title: item?.title || "",
-      description: item?.description || "",
-      content: item?.content || "",
-      fileUrl: item?.fileUrl || "",
-      videoUrl: item?.videoUrl || "",
-    });
-  }, [item]);
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSave = async () => {
-    try {
-      await api.put(`/${type === "module" ? "modules" : "classes"}/${item._id}`, formData);
-      fetchFormations(); // 🔹 Actualiza la vista al instante
-      setIsEditing(false);
-    } catch (error) {
-      console.error("Error al guardar:", error);
-    }
-  };
+const EditPanel = ({ selectedFormation, selectedModule, selectedClass }) => {
+  const [activeTab, setActiveTab] = useState("es"); // 🔹 Control de idioma activo
 
   return (
     <div className="edit-panel">
-      <h2>{type === "module" ? "📦 Módulo" : "📄 Clase"}</h2>
-      {isEditing ? (
+      {selectedClass ? (
         <>
-          <input type="text" name="title" value={formData.title} onChange={handleChange} placeholder="Título" required />
-          <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Descripción" />
-          {type === "class" && (
-            <>
-              <textarea name="content" value={formData.content} onChange={handleChange} placeholder="Contenido de la clase" />
-              <input type="text" name="fileUrl" value={formData.fileUrl} onChange={handleChange} placeholder="URL del PDF" />
-              <input type="text" name="videoUrl" value={formData.videoUrl} onChange={handleChange} placeholder="URL del video" />
-            </>
+          <h2>📖 Clase: {selectedClass.title[activeTab]}</h2>
+
+          {/* 🔹 Pestañas de idioma */}
+          <div className="language-tabs">
+            {["es", "en", "fr"].map((lang) => (
+              <button
+                key={lang}
+                className={activeTab === lang ? "active" : ""}
+                onClick={() => setActiveTab(lang)}
+              >
+                {lang.toUpperCase()}
+              </button>
+            ))}
+          </div>
+
+          <h3>📌 Subtítulo</h3>
+          <p>{selectedClass.subtitle?.[activeTab] || "No disponible"}</p>
+
+          <h3>📄 Contenido</h3>
+          <p>{selectedClass.content?.[activeTab] || "No disponible"}</p>
+
+          <h3>📌 Contenido Secundario</h3>
+          <p>{selectedClass.secondaryContent?.[activeTab] || "No disponible"}</p>
+
+          {/* 📄 PDF */}
+          {selectedClass.pdf?.[activeTab]?.url && (
+            <div>
+              <h3>📄 PDF</h3>
+              <a
+                href={selectedClass.pdf[activeTab].url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {selectedClass.pdf[activeTab].title || "Ver PDF"}
+              </a>
+              <p>{selectedClass.pdf[activeTab].description}</p>
+            </div>
           )}
-          <button className="save-button" onClick={handleSave}>💾 Guardar</button>
+
+          {/* 🎥 Video */}
+          {selectedClass.video?.[activeTab]?.url && (
+            <div>
+              <h3>🎥 Video</h3>
+              <iframe
+                src={selectedClass.video[activeTab].url}
+                title={selectedClass.video[activeTab].title || "Video"}
+                width="100%"
+                height="315"
+                allowFullScreen
+              />
+              <p>{selectedClass.video[activeTab].description}</p>
+            </div>
+          )}
+        </>
+      ) : selectedModule ? (
+        <>
+          <h2>📝 Editar Módulo</h2>
+          <h3>{selectedModule.title.es}</h3>
+          <p>{selectedModule.description.es}</p>
+        </>
+      ) : selectedFormation ? (
+        <>
+          <h2>📌 Información de la Formación</h2>
+          <h3>{selectedFormation.title.es}</h3>
+          <p>{selectedFormation.description.es}</p>
         </>
       ) : (
-        <>
-          <h3>{formData.title}</h3>
-          <p>{formData.description || "Sin descripción"}</p>
-          {type === "class" && (
-            <>
-              <p>{formData.content || "Sin contenido"}</p>
-              {formData.fileUrl && <a href={formData.fileUrl}>📄 Descargar PDF</a>}
-              {formData.videoUrl && (
-                <iframe width="100%" height="200" src={formData.videoUrl} title="Video de la clase" frameBorder="0" allowFullScreen></iframe>
-              )}
-            </>
-          )}
-          <button className="edit-button" onClick={() => setIsEditing(true)}>✏️ Editar</button>
-        </>
+        <p className="placeholder">Selecciona una formación, módulo o clase para ver detalles.</p>
       )}
     </div>
   );
