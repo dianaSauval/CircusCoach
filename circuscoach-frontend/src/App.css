@@ -1,4 +1,4 @@
-/* 🔹 Estilos generales para toda la aplicación */
+/* 🔹 Estilos generales */
 body {
   font-family: 'Arial', sans-serif;
   margin: 0;
@@ -18,16 +18,27 @@ body {
 .main-content {
   flex: 1;
   padding: 20px;
-  max-width: 1200px;
   margin: 0 auto;
 }
 
-/* 🔹 Estilos para encabezados */
-h1, h2, h3 {
-  color: #007bff;
+/* 🔹 Header */
+header {
+  background-color: #007bff;
+  color: white;
+  padding: 15px 20px;
+  text-align: center;
 }
 
-/* 🔹 Botones generales */
+/* 🔹 Footer */
+footer {
+  background: #007bff;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  margin-top: auto;
+}
+
+/* 🔹 Botones */
 button {
   padding: 8px 12px;
   font-size: 14px;
@@ -41,24 +52,16 @@ button:hover {
   opacity: 0.8;
 }
 
-/* 🔹 Botones específicos */
+/* 🔹 Botón principal */
 .primary-btn {
   background-color: #007bff;
   color: white;
 }
 
+/* 🔹 Botón secundario */
 .secondary-btn {
   background-color: #6c757d;
   color: white;
-}
-
-/* 🔹 Footer */
-footer {
-  background: #007bff;
-  color: white;
-  text-align: center;
-  padding: 10px;
-  margin-top: auto;
 }
 
 /* 🔹 Responsive */

@@ -15,6 +15,7 @@ import RequireAuth from "./components/RequireAuth";
 function App() {
   return (
     <Router>
+      <div className="app-container">
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -37,6 +38,7 @@ function App() {
         </Route>
       </Routes>
       <Footer />
+      </div>
     </Router>
   );
 }

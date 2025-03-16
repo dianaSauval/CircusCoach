@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../services/api";
 import { saveToken } from "../services/auth";
+import "../styles/Login.css"
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -24,7 +25,7 @@ function Login() {
   };
 
   return (
-    <div>
+    <div className="contenedor-Login">
       <h1>Iniciar Sesión</h1>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <form onSubmit={handleLogin}>

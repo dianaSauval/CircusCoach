@@ -127,7 +127,7 @@ const ManageFormations = () => {
                       className="delete-btn"
                       onClick={() => handleDeleteFormation(formation._id)}
                     >
-                      🗑️ Eliminar
+                      🗑️ Eliminar Formación
                     </button>
                   </div>
                 </div>
@@ -155,6 +155,7 @@ const ManageFormations = () => {
           selectedFormation={selectedFormation}
           selectedModule={selectedModule}
           selectedClass={selectedClass}
+          onUpdate={fetchFormations}
         />
       </div>
 

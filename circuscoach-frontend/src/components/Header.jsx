@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { isAuthenticated, removeToken } from "../services/auth";
+import "../styles/components/Header.css"
 
 function Header() {
   const navigate = useNavigate();

@@ -1,0 +1,54 @@
+/* 🔹 Navbar principal */
+nav {
+    background-color: #007bff;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+    font-size: 1rem;
+  }
+  
+  /* 🔹 Estilos para los enlaces */
+  nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  nav a:hover {
+    color: #f8f9fa;
+  }
+  
+  /* 🔹 Botón de cerrar sesión */
+  nav button {
+    background: none;
+    border: 1px solid white;
+    color: white;
+    padding: 5px 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  nav button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  /* 🔹 Responsive: Ajuste en pantallas pequeñas */
+  @media (max-width: 768px) {
+    nav {
+      flex-direction: column;
+      text-align: center;
+      padding: 10px;
+    }
+  
+    nav a,
+    nav button {
+      margin: 5px 0;
+    }
+  }
+  

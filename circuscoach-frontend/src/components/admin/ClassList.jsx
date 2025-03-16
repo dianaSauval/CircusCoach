@@ -72,7 +72,7 @@ const ClassList = ({ module, setSelectedClass, selectedClass }) => {
                 {/* 🔹 Botón de eliminar */}
                 <div className="class-actions">
                   <button className="delete-btn" onClick={() => handleDeleteClass(cls._id)}>
-                    🗑️ Eliminar
+                    🗑️ Eliminar Clase
                   </button>
                 </div>
               </div>

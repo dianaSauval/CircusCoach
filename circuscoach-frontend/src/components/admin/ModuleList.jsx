@@ -86,7 +86,7 @@ const ModuleList = ({ formation, setSelectedModule, setSelectedClass, selectedMo
                     ➕ Agregar Clase
                   </button>
                   <button className="delete-btn" onClick={() => handleDeleteModule(module._id)}>
-                    🗑️ Eliminar
+                    🗑️ Eliminar Módulo
                   </button>
                 </div>
               </div>
