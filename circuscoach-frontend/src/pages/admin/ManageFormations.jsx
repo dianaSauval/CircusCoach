@@ -64,7 +64,6 @@ const ManageFormations = () => {
 
           {formations.map((formation) => {
             const { es, en, fr } = formation.visible;
-            const isFullyVisible = es && en && fr;
 
             return (
               <div key={formation._id} className="formation-item">
@@ -72,23 +71,17 @@ const ManageFormations = () => {
                 <div className="formation-content">
                   {/* 🔹 Indicadores de disponibilidad a la izquierda */}
                   <div className="formation-visibility">
-                    {isFullyVisible ? (
-                      <span className="full-visible">
-                        ✅ Disponible en todos los idiomas
+                    <>
+                      <span className={es ? "visible" : "not-visible"}>
+                        🇪spañol {es ? "✅" : " ❌"}
                       </span>
-                    ) : (
-                      <>
-                        <span className={es ? "visible" : "not-visible"}>
-                          🇪spañol {es ? "✅" : " ❌"}
-                        </span>
-                        <span className={en ? "visible" : "not-visible"}>
-                          Inglés {en ? "✅" : " ❌"}
-                        </span>
-                        <span className={fr ? "visible" : "not-visible"}>
-                          🇫rancés {fr ? "✅" : " ❌"}
-                        </span>
-                      </>
-                    )}
+                      <span className={en ? "visible" : "not-visible"}>
+                        Inglés {en ? "✅" : " ❌"}
+                      </span>
+                      <span className={fr ? "visible" : "not-visible"}>
+                        🇫rancés {fr ? "✅" : " ❌"}
+                      </span>
+                    </>
                   </div>
 
                   {/* 🔹 Cabecera con título y flecha */}

@@ -12,7 +12,7 @@ const ClassList = ({ module, setSelectedClass, selectedClass }) => {
   const fetchClasses = async () => {
     try {
       const response = await api.get(`/classes/module/${module._id}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setClasses(response.data);
     } catch (error) {
@@ -21,11 +21,16 @@ const ClassList = ({ module, setSelectedClass, selectedClass }) => {
   };
 
   const handleDeleteClass = async (classId) => {
-    if (!window.confirm("¿Seguro que quieres eliminar esta clase? Esta acción no se puede deshacer.")) return;
+    if (
+      !window.confirm(
+        "¿Seguro que quieres eliminar esta clase? Esta acción no se puede deshacer."
+      )
+    )
+      return;
 
     try {
       await api.delete(`/classes/${classId}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       fetchClasses();
     } catch (error) {
@@ -43,23 +48,28 @@ const ClassList = ({ module, setSelectedClass, selectedClass }) => {
           const enVisible = isVisible.en ?? false;
           const frVisible = isVisible.fr ?? false;
 
-          const isFullyVisible = esVisible && enVisible && frVisible;
-
           return (
-            <div key={cls._id} className={`class-item ${selectedClass?._id === cls._id ? "selected" : ""}`}>
+            <div
+              key={cls._id}
+              className={`class-item ${
+                selectedClass?._id === cls._id ? "selected" : ""
+              }`}
+            >
               {/* 🔹 Nueva estructura con visibilidad de idiomas */}
               <div className="class-content">
                 {/* 🔹 Indicadores de visibilidad */}
                 <div className="class-visibility">
-                  {isFullyVisible ? (
-                    <span className="full-visible">✅ Disponible en todos los idiomas</span>
-                  ) : (
-                    <>
-                      <span className={esVisible ? "visible" : "not-visible"}>Español {esVisible ? "✅" : "✖"}</span>
-                      <span className={enVisible ? "visible" : "not-visible"}>Inglés {enVisible ? "✅" : "✖"}</span>
-                      <span className={frVisible ? "visible" : "not-visible"}>Francés {frVisible ? "✅" : "✖"}</span>
-                    </>
-                  )}
+                  <>
+                    <span className={esVisible ? "visible" : "not-visible"}>
+                      Español {esVisible ? "✅" : "✖"}
+                    </span>
+                    <span className={enVisible ? "visible" : "not-visible"}>
+                      Inglés {enVisible ? "✅" : "✖"}
+                    </span>
+                    <span className={frVisible ? "visible" : "not-visible"}>
+                      Francés {frVisible ? "✅" : "✖"}
+                    </span>
+                  </>
                 </div>
 
                 {/* 🔹 Nombre de la clase */}
@@ -71,7 +81,10 @@ const ClassList = ({ module, setSelectedClass, selectedClass }) => {
 
                 {/* 🔹 Botón de eliminar */}
                 <div className="class-actions">
-                  <button className="delete-btn" onClick={() => handleDeleteClass(cls._id)}>
+                  <button
+                    className="delete-btn"
+                    onClick={() => handleDeleteClass(cls._id)}
+                  >
                     🗑️ Eliminar Clase
                   </button>
                 </div>
@@ -87,9 +100,3 @@ const ClassList = ({ module, setSelectedClass, selectedClass }) => {
 };
 
 export default ClassList;
-
-
-
-
-
-
