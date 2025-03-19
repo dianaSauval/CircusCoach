@@ -119,6 +119,22 @@
   background: #a71d2a;
 }
 
+/* 🔹 Estilo por defecto */
+.module-title,
+.class-title {
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+/* 🔹 Cambiar color cuando están seleccionados */
+.module-title.selected,
+.class-title.selected {
+  color: #0385CC; /* Azul oscuro */
+}
+
+
 /* 🔹 Responsive */
 @media (max-width: 768px) {
   .module-list {

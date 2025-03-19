@@ -9,6 +9,7 @@ const ModuleList = ({
   setSelectedModule,
   setSelectedClass,
   selectedModule,
+  selectedClass, // ✅ Recibimos selectedClass correctamente
 }) => {
   const [modules, setModules] = useState([]);
   const [expandedModules, setExpandedModules] = useState({});
@@ -88,9 +89,19 @@ const ModuleList = ({
 
                 {/* 🔹 Título del módulo y botón de desplegar */}
                 <div className="module-header">
-                  <span onClick={() => setSelectedModule(module)}>
-                    {module.title.es}
-                  </span>
+                <span
+  className={`module-title ${
+    selectedModule?._id === module._id ? "selected" : ""
+  }`}
+  onClick={() => {
+    console.log("Haciendo click en módulo:", module.title.es); // ✅ Debug
+    setSelectedModule(module);
+    setSelectedClass(null); // ✅ Anulamos la clase seleccionada
+  }}
+>
+  {module.title.es}
+</span>
+
                   <button
                     className="toggle-btn"
                     onClick={() => toggleExpandModule(module._id)}
@@ -124,6 +135,7 @@ const ModuleList = ({
                   <ClassList
                     module={module}
                     setSelectedClass={setSelectedClass}
+                    selectedClass={selectedClass} // ✅ Pasamos selectedClass
                   />
                 </div>
               )}

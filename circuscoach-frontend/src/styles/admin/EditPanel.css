@@ -7,7 +7,8 @@
   width: 80%;
   display: flex;
   flex-direction: column;
-  gap: 15px;  
+  gap: 15px; 
+  margin-bottom: 20px; 
 }
 
 /* 🔹 Títulos */
@@ -26,12 +27,16 @@
 /* 🔹 Modo Visualización */
 
 .information{
-  max-height: 450px; /* Altura máxima para evitar que se extienda demasiado */
+  max-height: 500px; /* Altura máxima para evitar que se extienda demasiado */
   overflow-y: auto; /* Permite desplazamiento si el contenido es muy grande */
   padding: 15px;
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.view-mode{
+  max-height: 450px; 
 }
 
 .view-mode p {
@@ -316,6 +321,10 @@ textarea {
   display: block;
   flex-direction: column;
   gap: 10px;
+}
+
+.is-editing .toggle-visibility{
+  display: none;
 }
 
 

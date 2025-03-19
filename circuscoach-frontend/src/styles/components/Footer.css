@@ -1,14 +1,15 @@
-/* 🔹 Estilos del footer */
+  /* 🔹 Footer */
 footer {
-    background-color: #007bff;
-    color: white;
-    text-align: center;
-    padding: 15px;
-    font-size: 0.9rem;
-    font-weight: bold;
-    position: relative; /* Asegura que no se superponga con contenido */
-    width: 100%;
-  }
+  background: linear-gradient(45deg, #010110, #0387CF); /* Fondo con degradado */
+  color: white;
+  text-align: center;
+  padding: 15px;
+  font-size: 0.9rem;
+  margin-top: auto;
+  font-weight: bold;
+  position: relative; /* Asegura que no se superponga con contenido */
+  width: 100%;
+}
   
   /* 🔹 Hace que el footer se mantenga abajo cuando hay poco contenido */
   .app-container {

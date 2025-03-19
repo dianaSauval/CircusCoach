@@ -73,13 +73,13 @@ const ManageFormations = () => {
                   <div className="formation-visibility">
                     <>
                       <span className={es ? "visible" : "not-visible"}>
-                        🇪spañol {es ? "✅" : " ❌"}
+                        Español {es ? "✅" : " ❌"}
                       </span>
                       <span className={en ? "visible" : "not-visible"}>
                         Inglés {en ? "✅" : " ❌"}
                       </span>
                       <span className={fr ? "visible" : "not-visible"}>
-                        🇫rancés {fr ? "✅" : " ❌"}
+                        Francés {fr ? "✅" : " ❌"}
                       </span>
                     </>
                   </div>
@@ -87,6 +87,11 @@ const ManageFormations = () => {
                   {/* 🔹 Cabecera con título y flecha */}
                   <div className="formation-header">
                     <span
+                      className={`formation-title ${
+                        selectedFormation?._id === formation._id
+                          ? "selected"
+                          : ""
+                      }`}
                       onClick={() => {
                         setSelectedFormation(formation);
                         setSelectedModule(null);
@@ -128,15 +133,24 @@ const ManageFormations = () => {
                 {/* 📌 Aquí la lista de módulos ahora se despliega debajo del título */}
                 {expandedFormations[formation._id] && (
                   <div className="formation-modules">
-                    <ModuleList
-                      formation={formation}
-                      setSelectedModule={(module) => {
-                        setSelectedModule(module);
-                        setSelectedFormation(null);
-                        setSelectedClass(null);
-                      }}
-                      setSelectedClass={setSelectedClass}
-                    />
+                  <ModuleList
+  formation={formation}
+  setSelectedModule={(module) => {
+    console.log("Seleccionando módulo:", module.title.es); // ✅ Debug
+    setSelectedModule(module);
+    setSelectedFormation(null); // ✅ Se deselecciona la formación
+    setSelectedClass(null); // ✅ Se deselecciona la clase
+  }}
+  setSelectedClass={(classItem) => {
+    console.log("Seleccionando clase:", classItem.title.es); // ✅ Debug
+    setSelectedClass(classItem);
+    setSelectedModule(null); // ✅ Ahora sí, deseleccionamos el módulo
+  }}
+  selectedModule={selectedModule}
+  selectedClass={selectedClass} // ✅ Pasamos selectedClass a ModuleList
+/>
+
+
                   </div>
                 )}
               </div>

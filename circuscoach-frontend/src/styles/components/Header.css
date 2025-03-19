@@ -1,54 +1,104 @@
-/* 🔹 Navbar principal */
-nav {
-    background-color: #007bff;
-    padding: 15px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    color: white;
-    font-size: 1rem;
+/* 🔹 Estilos Generales */
+.header {
+  display: flex;
+  align-items: center; /* Centrar verticalmente */
+  justify-content: space-between;
+  padding: 10px 20px;
+  background: linear-gradient(45deg, #010110, #0387CF); /* Fondo con degradado */
+  height: 70px; /* Ajusta la altura */
+  max-height: 70px;
+  width: 100%;
+  position: fixed; /* Hace que el header quede fijo */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; /* Asegura que quede por encima de otros elementos */
+}
+
+/* 🔹 Animación del Fondo */
+@keyframes gradientAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* 🔹 Logo */
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+/* 🔹 Estilos para el logo */
+.logo-img {
+  width: 100px; /* Ajusta el tamaño del logo */
+  height: auto;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* 🔹 Animación al pasar el mouse */
+.logo-img:hover {
+  transform: scale(1.1);
+}
+
+
+/* 🔹 Menú Central */
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+}
+
+/* 🔹 Animación al pasar el mouse */
+.nav-links a:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* 🔹 Botón de Autenticación */
+.auth-button a,
+.auth-button button {
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease-in-out;
+}
+
+.auth-button button:hover,
+.auth-button a:hover {
+  background: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+/* 🔹 Responsive */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    text-align: center;
   }
-  
-  /* 🔹 Estilos para los enlaces */
-  nav a {
-    color: white;
-    text-decoration: none;
-    margin: 0 10px;
-    font-weight: bold;
-    transition: color 0.3s ease-in-out;
+
+  .nav-links {
+    margin-top: 10px;
+    flex-direction: column;
   }
-  
-  nav a:hover {
-    color: #f8f9fa;
+
+  .auth-button {
+    margin-top: 10px;
   }
-  
-  /* 🔹 Botón de cerrar sesión */
-  nav button {
-    background: none;
-    border: 1px solid white;
-    color: white;
-    padding: 5px 10px;
-    font-size: 1rem;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: all 0.3s ease-in-out;
-  }
-  
-  nav button:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
-  
-  /* 🔹 Responsive: Ajuste en pantallas pequeñas */
-  @media (max-width: 768px) {
-    nav {
-      flex-direction: column;
-      text-align: center;
-      padding: 10px;
-    }
-  
-    nav a,
-    nav button {
-      margin: 5px 0;
-    }
-  }
-  
+}

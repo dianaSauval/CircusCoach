@@ -93,6 +93,20 @@
   padding: 10px;
 }
 
+/* 🔹 Estilo normal */
+.class-title {
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+/* 🔹 Cambiar color cuando está seleccionada */
+.class-title.selected {
+  color: #02142B; /* Azul oscuro */
+}
+
+
 /* 🔹 Responsive */
 @media (max-width: 480px) {
   .class-item {

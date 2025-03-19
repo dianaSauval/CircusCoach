@@ -74,9 +74,15 @@ const ClassList = ({ module, setSelectedClass, selectedClass }) => {
 
                 {/* 🔹 Nombre de la clase */}
                 <div className="class-header">
-                  <span onClick={() => setSelectedClass(cls)}>
-                    {cls.title?.es || "Sin título"}
-                  </span>
+                  <div className="class-header">
+                  <span
+  className={`class-title ${selectedClass?._id === cls._id ? "selected" : ""}`}
+  onClick={() => setSelectedClass(cls)}
+>
+  {cls.title?.es || "Sin título"}
+</span>
+
+                  </div>
                 </div>
 
                 {/* 🔹 Botón de eliminar */}

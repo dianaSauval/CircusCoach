@@ -11,6 +11,7 @@ import ManageModules from "./pages/admin/ManageModules";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import RequireAuth from "./components/RequireAuth";
+import "./App.css"
 
 function App() {
   return (
@@ -37,8 +38,8 @@ function App() {
           <Route path="/admin/formaciones/:formationId/modulos" element={<ManageModules />} />
         </Route>
       </Routes>
-      <Footer />
       </div>
+      <Footer />
     </Router>
   );
 }
