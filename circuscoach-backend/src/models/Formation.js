@@ -12,12 +12,28 @@ const formationSchema = new mongoose.Schema({
     fr: { type: String }
   },
   price: { type: Number, required: true },
-  modules: [{ type: mongoose.Schema.Types.ObjectId, ref: "Module" }], // Relación con módulos
+  modules: [{ type: mongoose.Schema.Types.ObjectId, ref: "Module" }],
   visible: {
     es: { type: Boolean, default: false },
     en: { type: Boolean, default: false },
     fr: { type: Boolean, default: false }
-  }, 
+  },
+  pdf: {
+    es: { type: String },
+    en: { type: String },
+    fr: { type: String }
+  },
+  video: {
+    es: { type: String },
+    en: { type: String },
+    fr: { type: String }
+  },
+  mode: {
+    type: String,
+    enum: ["presencial", "online"],
+    required: true
+  },
+  image: { type: String }
 });
 
 module.exports = mongoose.model("Formation", formationSchema);
