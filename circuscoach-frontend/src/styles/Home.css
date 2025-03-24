@@ -1,0 +1,118 @@
+.home-container {
+    font-family: "Poppins", sans-serif;
+    color: white;
+    width: 100%;
+  }
+  
+  .banner {
+    height: 100vh;
+    background-image: url("/banner.jpg"); /* Cambia por tu imagen real */
+    background-size: cover;
+    background-position: center;
+    position: relative;
+  }
+  
+  .banner-overlay {
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0.85;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    padding-top: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+  }
+  
+  .banner-title {
+    font-size: 3rem;
+    margin-bottom: 40px;
+    text-align: center;
+    color: white;
+  }
+  
+  .banner-buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    gap: 15px;
+    margin-top: 20px;
+  }
+  
+  .banner-button {
+    background: linear-gradient(90deg, #010110, #0387CF, #010110);
+    background-size: 200% 100%; /* Se expande horizontalmente */
+    background-position: right center;
+    color: white;
+    padding: 15px 25px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-position 0.8s ease-in-out, transform 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    max-width: 300px;
+  }
+  
+  .banner-button:hover {
+    background-position: left center; /* Mueve el gradiente hacia la izquierda */
+    transform: translateY(-2px);
+  }
+  
+  .section {
+    padding: 80px 20px;
+    background-color: #f4f4f4;
+    color: #02142B;
+    text-align: center;
+  }
+  
+  .formation-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+  
+  .formation-card {
+    width: 300px;
+    height: 350px;
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+  
+    background-color: transparent;
+    box-shadow: 4px 6px 12px rgba(0, 0, 0, 0.15);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  
+  .formation-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 8px 12px 20px rgba(0, 0, 0, 0.25);
+  }
+  
+  /* ✨ Al hacer clic: "hundido" */
+  .formation-card:active {
+    transform: translateY(2px);
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* 📸 Imagen rellena y animada */
+  .formation-image-presentation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+  
+  /* 🔍 Zoom suave al hacer hover en la card */
+  .formation-card:hover .formation-image-presentation {
+    transform: scale(1.05);
+  }
+  

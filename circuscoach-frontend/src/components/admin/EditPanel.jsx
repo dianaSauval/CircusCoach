@@ -16,7 +16,25 @@ const EditPanel = ({
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(null);
 
+  const modeLabels = {
+    presencial: {
+      es: "Presencial",
+      en: "In-person",
+      fr: "Présentiel",
+    },
+    online: {
+      es: "Online",
+      en: "Online",
+      fr: "En ligne",
+    },
+  };
+
   useEffect(() => {
+/*     console.log("🧪 Cambios en selección:");
+    console.log("selectedClass:", selectedClass);
+    console.log("selectedModule:", selectedModule);
+    console.log("selectedFormation:", selectedFormation); */
+
     if (selectedClass) {
       setFormData({
         ...selectedClass,
@@ -146,6 +164,73 @@ const EditPanel = ({
                 <p>
                   <strong>Precio:</strong> {formData.price || "No especificado"}
                 </p>
+                <p>
+                  <strong>Modalidad:</strong>{" "}
+                  <span className={`badge ${formData.mode}`}>
+                    {modeLabels[formData.mode]?.[activeTab]}
+                  </span>
+                </p>
+                <div>
+                  <p>
+                    <strong>Imagen de presentación:</strong>
+                  </p>
+                  {formData.image ? (
+                    <img
+                      src={formData.image}
+                      alt="Imagen de la formación"
+                      className="formation-image"
+                    />
+                  ) : (
+                    <p style={{ color: "#777", fontStyle: "italic" }}>
+                      Imagen aún no cargada
+                    </p>
+                  )}
+                </div>
+
+                <div className="pdf-preview-container">
+                  <h3>📄 Documento cargado</h3>
+                  {formData?.pdf?.[activeTab] ? (
+                    <>
+                      <p>
+                        <strong>📌 PDF:</strong>
+                      </p>
+                      <a
+                        href={formData.pdf[activeTab]}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        🔗 Ver PDF
+                      </a>
+                    </>
+                  ) : (
+                    <p className="no-material">
+                      📭 Aún no se ha cargado ningún documento.
+                    </p>
+                  )}
+                </div>
+                <div className="video-preview-container">
+                  <h3>🎥 Video cargado</h3>
+                  {formData?.video?.[activeTab] ? (
+                    <>
+                      <p>
+                        <strong>📌 Video:</strong>
+                      </p>
+                      <div className="video-container">
+                        <iframe
+                          width="100%"
+                          height="200"
+                          src={formData.video[activeTab]}
+                          frameBorder="0"
+                          allowFullScreen
+                        ></iframe>
+                      </div>
+                    </>
+                  ) : (
+                    <p className="no-material">
+                      📭 Aún no se ha cargado ningún video.
+                    </p>
+                  )}
+                </div>
               </>
             )}
 
@@ -248,6 +333,7 @@ const EditPanel = ({
               formData={formData}
               setFormData={setFormData}
               activeTab={activeTab}
+              modeLabels={modeLabels}
             />
           )}
 

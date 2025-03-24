@@ -327,6 +327,35 @@ textarea {
   display: none;
 }
 
+.badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.badge.presencial {
+  background-color: #f5f0ff;
+  color: #0A58CA;
+}
+
+.badge.online {
+  background-color: #e6f9f0;
+  color: #218838;
+}
+
+.formation-image {
+  width: 100%;
+  max-height: 250px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin: 10px 0 20px 0;
+  border: 1px solid #ddd;
+}
+
+
+
 
 
 

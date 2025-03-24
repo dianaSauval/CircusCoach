@@ -5,6 +5,8 @@
   justify-content: space-between;
   padding: 10px 20px;
   background: linear-gradient(45deg, #010110, #0387CF); /* Fondo con degradado */
+  background-size: 200% 200%; /* 👈 Necesario para la animación */
+  animation: gradientAnimation 8s ease infinite; /* 👈 Activa la animación */
   height: 70px; /* Ajusta la altura */
   max-height: 70px;
   width: 100%;

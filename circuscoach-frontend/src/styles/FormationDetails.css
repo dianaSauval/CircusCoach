@@ -1,0 +1,145 @@
+/* FormationDetails.css */
+
+.detalle-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 40px;
+  gap: 80px;
+  flex-wrap: wrap;
+}
+
+.left-section {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.right-column {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 300px;
+  position: relative;
+}
+
+.detalle-title {
+  font-size: 3.2rem;
+  margin-bottom: 20px;
+  color: #02142B;
+}
+
+.detalle-description {
+  font-size: 1.3rem;
+  margin-bottom: 30px;
+  text-align: start;
+  color: #010110;
+}
+
+.inscribite-button {
+  background: linear-gradient(90deg, #010110, #0387CF, #010110);
+  background-size: 200% 100%; /* Se expande horizontalmente */
+  background-position: right center;
+  color: white;
+  padding: 15px 25px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-position 0.8s ease-in-out, transform 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  max-width: 300px;
+}
+
+.inscribite-button:hover {
+  background-position: left center; /* Mueve el gradiente hacia la izquierda */
+  transform: translateY(-2px);
+}
+
+.inscribite-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+
+.pdf-info-text {
+  margin-top: 40px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #010110;
+}
+
+.descargar-button {
+  background: linear-gradient(90deg, #010110, #0387CF, #010110);
+  background-size: 200% 100%; /* Se expande horizontalmente */
+  background-position: right center;
+  color: white;
+  padding: 15px 25px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-position 0.8s ease-in-out, transform 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  max-width: 300px;
+  margin-top: 20px;
+}
+
+.descargar-button:hover {
+  background-position: left center; /* Mueve el gradiente hacia la izquierda */
+  transform: translateY(-2px);
+  -webkit-tap-highlight-color: transparent;
+
+}
+
+.formation-image {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.image-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.play-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 4rem;
+  color: white;
+  text-shadow: 2px 2px 8px black;
+  pointer-events: none;
+}
+
+.video-iframe {
+  width: 100%;
+  max-width: 600px;
+  height: 340px;
+  border-radius: 10px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .detalle-container {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .left-section,
+  .right-column {
+    width: 100%;
+  }
+
+  .play-overlay {
+    font-size: 3rem;
+  }
+}

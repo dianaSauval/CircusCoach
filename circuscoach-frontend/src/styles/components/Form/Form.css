@@ -62,3 +62,27 @@
     box-shadow: 0 0 5px rgba(10, 88, 202, 0.3);
   }
   
+  /* 🔹 Selector de modalidad */
+.mode-select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  background-color: #fff;
+  margin-bottom: 10px;
+  transition: border-color 0.3s ease;
+}
+
+.mode-select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.formation-image {
+  width: 100%;
+  max-height: 250px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}

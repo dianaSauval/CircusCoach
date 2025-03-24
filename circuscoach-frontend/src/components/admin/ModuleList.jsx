@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import api from "../../services/api";
 import "../../styles/admin/ModuleList.css";
 import ClassList from "./ClassList"; // ✅ Importamos el nuevo componente
-import AddItemModal from "./AddItemModal"; // ✅ Importamos el modal para agregar clases
+import AddItemModal from "./AddItemModal";
 
 const ModuleList = ({
   formation,
@@ -10,6 +10,7 @@ const ModuleList = ({
   setSelectedClass,
   selectedModule,
   selectedClass, // ✅ Recibimos selectedClass correctamente
+  setShowModalInParent,
 }) => {
   const [modules, setModules] = useState([]);
   const [expandedModules, setExpandedModules] = useState({});
@@ -89,18 +90,18 @@ const ModuleList = ({
 
                 {/* 🔹 Título del módulo y botón de desplegar */}
                 <div className="module-header">
-                <span
-  className={`module-title ${
-    selectedModule?._id === module._id ? "selected" : ""
-  }`}
-  onClick={() => {
-    console.log("Haciendo click en módulo:", module.title.es); // ✅ Debug
-    setSelectedModule(module);
-    setSelectedClass(null); // ✅ Anulamos la clase seleccionada
-  }}
->
-  {module.title.es}
-</span>
+                  <span
+                    className={`module-title ${
+                      selectedModule?._id === module._id ? "selected" : ""
+                    }`}
+                    onClick={() => {
+                      console.log("Haciendo click en módulo:", module.title.es); // ✅ Debug
+                      setSelectedModule(module);
+                      setSelectedClass(null); // ✅ Anulamos la clase seleccionada
+                    }}
+                  >
+                    {module.title.es}
+                  </span>
 
                   <button
                     className="toggle-btn"
@@ -114,12 +115,17 @@ const ModuleList = ({
                 <div className="module-actions">
                   <button
                     className="small-btn"
-                    onClick={() =>
-                      setShowModal({ type: "class", parentId: module._id })
+                    onClick={
+                      () =>
+                        setShowModalInParent({
+                          type: "class",
+                          parentId: module._id,
+                        }) // 👈 Prop nueva
                     }
                   >
                     ➕ Agregar Clase
                   </button>
+
                   <button
                     className="delete-btn"
                     onClick={() => handleDeleteModule(module._id)}

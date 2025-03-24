@@ -48,6 +48,26 @@ const ManageFormations = () => {
     }));
   };
 
+  const handleSelectModule = (module) => {
+    console.log("Seleccionando módulo:", module.title.es);
+    setSelectedModule(module);
+    setSelectedFormation(null);
+    setSelectedClass(null);
+  };
+
+  const handleSelectClass = (classItem) => {
+    if (classItem) {
+      console.log(
+        "Seleccionando clase:",
+        classItem?.title?.es || "Clase sin título"
+      );
+      setSelectedClass(classItem);
+      setSelectedModule(null); // ✅ Solo si realmente se seleccionó una clase
+    } else {
+      console.log("No se seleccionó ninguna clase, no se borra el módulo");
+    }
+  };
+
   return (
     <div className="manage-formations-container">
       <h1>📚 Formaciones</h1>
@@ -133,24 +153,14 @@ const ManageFormations = () => {
                 {/* 📌 Aquí la lista de módulos ahora se despliega debajo del título */}
                 {expandedFormations[formation._id] && (
                   <div className="formation-modules">
-                  <ModuleList
-  formation={formation}
-  setSelectedModule={(module) => {
-    console.log("Seleccionando módulo:", module.title.es); // ✅ Debug
-    setSelectedModule(module);
-    setSelectedFormation(null); // ✅ Se deselecciona la formación
-    setSelectedClass(null); // ✅ Se deselecciona la clase
-  }}
-  setSelectedClass={(classItem) => {
-    console.log("Seleccionando clase:", classItem.title.es); // ✅ Debug
-    setSelectedClass(classItem);
-    setSelectedModule(null); // ✅ Ahora sí, deseleccionamos el módulo
-  }}
-  selectedModule={selectedModule}
-  selectedClass={selectedClass} // ✅ Pasamos selectedClass a ModuleList
-/>
-
-
+                    <ModuleList
+                      formation={formation}
+                      setSelectedModule={handleSelectModule}
+                      setSelectedClass={handleSelectClass}
+                      selectedModule={selectedModule}
+                      selectedClass={selectedClass}
+                      setShowModalInParent={setShowModal}
+                    />
                   </div>
                 )}
               </div>
