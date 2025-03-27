@@ -1,7 +1,6 @@
 // 📦 COMPONENTE COMPLETO
 import { useEffect, useState } from "react";
 import "../styles/components/TestimonialCarousel.css";
-import bocadillo from "../assets/img/bocadillo.svg";
 
 export default function TestimonialCarousel({ testimonios }) {
   const [slideIndex, setSlideIndex] = useState(0);
@@ -80,14 +79,12 @@ export default function TestimonialCarousel({ testimonios }) {
             
                 {grupo.map((item, index) => (
                   <div key={index} className="testimonial-bloque">
-                    <div className="bubble-svg" style={{ backgroundImage: `url(${bocadillo})` }}>
-                      <div className="bubble-texto">
-                        <p>{item.texto}</p>
-                      </div>
+                    <div className="bubble">
+                        <p>{item.texto}</p>             
                     </div>
                     <div className="autor-oval">
                       <p>{item.nombre}</p>
-                      <span>artiste de cirque</span>
+                      <span>{item.profesion}</span>
                     </div>
                   </div>
                 ))}

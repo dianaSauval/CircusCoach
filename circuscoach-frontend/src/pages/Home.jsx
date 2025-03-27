@@ -2,6 +2,7 @@ import TestimonialCarousel from '../components/TestimonialCarousel';
 import '../styles/pages/Home.css';
 import { useNavigate } from 'react-router-dom';
 import testimonios from "../data/testimonios.json";
+import CategoryButtons from '../components/CategoryButtons';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ export default function Home() {
         </div>
       </div>
     </section>
-
+    <CategoryButtons/>
     <TestimonialCarousel testimonios={testimonios} />
 
     </>

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import '../styles/pages/Formation.css';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import FormacionesGrid from '../components/FormacionesGrid';
 
 // 🔠 Convierte el título en un slug tipo "formacion-en-acrobacia"
 const slugify = (text) =>
@@ -74,7 +75,7 @@ export default function Formation() {
       <section ref={presencialRef} className="section">
         <h2>Formaciones Presenciales</h2>
         <div className="formation-cards">
-          {presencialFormations.length === 0 ? (
+         {/*  {presencialFormations.length === 0 ? (
             <p>No hay formaciones presenciales disponibles.</p>
           ) : (
             presencialFormations.map((formation) => (
@@ -90,32 +91,14 @@ export default function Formation() {
                 />
               </div>
             ))
-          )}
+          )} */}
         </div>
       </section>
 
       {/* 🔹 ONLINE */}
       <section ref={onlineRef} className="section">
-        <h2>Formaciones Online</h2>
-        <div className="formation-cards">
-          {onlineFormations.length === 0 ? (
-            <p>No hay formaciones online disponibles.</p>
-          ) : (
-            onlineFormations.map((formation) => (
-              <div
-                className="formation-card"
-                key={formation._id}
-                onClick={() => handleCardClick(formation)}
-              >
-                <img
-                  src={formation.image}
-                  alt={`Formación ${formation._id}`}
-                  className="formation-image-presentation"
-                />
-              </div>
-            ))
-          )}
-        </div>
+        
+        <FormacionesGrid/>
       </section>
 
       {/* 🔹 ESCUELAS */}

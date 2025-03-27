@@ -3,33 +3,32 @@ import api from "../../services/api";
 import "../../styles/admin/AddItemModal.css";
 
 const AddItemModal = ({ type, parentId, closeModal, onAdd }) => {
-  const [activeTab, setActiveTab] = useState("es"); // 🔹 Controla la pestaña activa
+  const [activeTab, setActiveTab] = useState("es");
   const isFormation = type === "formation";
-const isClass = type === "class";
+  const isClass = type === "class";
 
-const [formData, setFormData] = useState({
-  title: { es: "", en: "", fr: "" },
-  description: { es: "", en: "", fr: "" }, // se usa como content
-  price: isFormation ? "" : undefined,
-  mode: isFormation ? "presencial" : undefined,
-  image: isFormation ? "" : undefined,
-  subtitle: isClass ? { es: "", en: "", fr: "" } : undefined,
-  secondaryContent: isClass ? { es: "", en: "", fr: "" } : undefined,
-  pdf: isFormation
-    ? { es: "", en: "", fr: "" }
-    : {
-        es: { url: "", title: "", description: "" },
-        en: { url: "", title: "", description: "" },
-        fr: { url: "", title: "", description: "" },
-      },
-  video: isFormation
-    ? { es: "", en: "", fr: "" }
-    : {
-        es: { url: "", title: "", description: "" },
-        en: { url: "", title: "", description: "" },
-        fr: { url: "", title: "", description: "" },
-      },
-});
+  const [formData, setFormData] = useState({
+    title: { es: "", en: "", fr: "" },
+    description: { es: "", en: "", fr: "" },
+    price: isFormation ? "" : undefined,
+    image: isFormation ? { es: "", en: "", fr: "" } : undefined,
+    subtitle: isClass ? { es: "", en: "", fr: "" } : undefined,
+    secondaryContent: isClass ? { es: "", en: "", fr: "" } : undefined,
+    pdf: isFormation
+      ? { es: "", en: "", fr: "" }
+      : {
+          es: { url: "", title: "", description: "" },
+          en: { url: "", title: "", description: "" },
+          fr: { url: "", title: "", description: "" },
+        },
+    video: isFormation
+      ? { es: "", en: "", fr: "" }
+      : {
+          es: { url: "", title: "", description: "" },
+          en: { url: "", title: "", description: "" },
+          fr: { url: "", title: "", description: "" },
+        },
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -59,14 +58,12 @@ const [formData, setFormData] = useState({
       let endpoint = "";
       let payload = {};
 
-      // 👉 construir payload según el tipo
       if (type === "formation") {
         endpoint = "/formations";
         payload = {
           title: formData.title,
           description: formData.description,
           price: formData.price,
-          mode: formData.mode,
           image: formData.image,
           pdf: formData.pdf,
           video: formData.video,
@@ -93,21 +90,11 @@ const [formData, setFormData] = useState({
 
       if (!endpoint) throw new Error("Tipo no válido");
 
-      const response = await api.post(endpoint, payload, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
-
-      // ✅ Llama a onAdd (fetchFormations) para refrescar
+      const response = await api.post(endpoint, payload);
       onAdd(response.data);
-
-      // ✅ Cierra el modal
       closeModal();
     } catch (error) {
-      if (error.response) {
-        console.error(`❌ Error al agregar ${type}:`, error.response.data);
-      } else {
-        console.error(`❌ Error al agregar ${type}:`, error.message);
-      }
+      console.error(`❌ Error al agregar ${type}:`, error.response?.data || error.message);
     }
   };
 
@@ -116,11 +103,7 @@ const [formData, setFormData] = useState({
       <div className="modal-content">
         <h2>
           Agregar{" "}
-          {type === "formation"
-            ? "Formación"
-            : type === "module"
-            ? "Módulo"
-            : "Clase"}
+          {type === "formation" ? "Formación" : type === "module" ? "Módulo" : "Clase"}
         </h2>
 
         {/* 🔹 Pestañas de idioma */}
@@ -152,7 +135,6 @@ const [formData, setFormData] = useState({
             placeholder={`Descripción (${activeTab.toUpperCase()})`}
           />
 
-          {/* 🔹 Campos específicos para clases */}
           {type === "class" && (
             <>
               <input
@@ -217,73 +199,57 @@ const [formData, setFormData] = useState({
             </>
           )}
 
-          {/* 🔹 Campo de precio solo para formaciones */}
           {type === "formation" && (
             <>
               <input
                 type="number"
                 name="price"
                 value={formData.price}
-                onChange={(e) =>
-                  setFormData({ ...formData, price: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                 placeholder="Precio"
                 required
               />
-
-              <label>Modalidad</label>
-              <select
-                value={formData.mode}
-                onChange={(e) =>
-                  setFormData({ ...formData, mode: e.target.value })
-                }
-              >
-                <option value="presencial">Presencial</option>
-                <option value="online">Online</option>
-              </select>
-
-              <label>URL de imagen</label>
+              <label>📷 URL de imagen</label>
               <input
                 type="text"
                 name="image"
-                value={formData.image}
+                value={formData.image[activeTab]}
                 onChange={(e) =>
-                  setFormData({ ...formData, image: e.target.value })
+                  setFormData({
+                    ...formData,
+                    image: { ...formData.image, [activeTab]: e.target.value },
+                  })
                 }
-                placeholder="https://example.com/imagen.jpg"
+                placeholder={`URL de imagen (${activeTab.toUpperCase()})`}
               />
 
-              <div className="media-section">
               <h3>📄 PDF</h3>
-    <input
-      className="url-input"
-      type="text"
-      name="pdf"
-      value={formData.pdf[activeTab]}
-      onChange={(e) =>
-        setFormData({
-          ...formData,
-          pdf: { ...formData.pdf, [activeTab]: e.target.value },
-        })
-      }
-      placeholder={`URL del PDF (${activeTab.toUpperCase()})`}
-    />
+              <input
+                type="text"
+                name="pdf"
+                value={formData.pdf[activeTab]}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    pdf: { ...formData.pdf, [activeTab]: e.target.value },
+                  })
+                }
+                placeholder={`URL del PDF (${activeTab.toUpperCase()})`}
+              />
 
-                <h3>🎥 Video</h3>
-                <input
-      className="url-input"
-      type="text"
-      name="video"
-      value={formData.video[activeTab]}
-      onChange={(e) =>
-        setFormData({
-          ...formData,
-          video: { ...formData.video, [activeTab]: e.target.value },
-        })
-      }
-      placeholder={`URL del Video (${activeTab.toUpperCase()})`}
-    />
-  </div>
+              <h3>🎥 Video</h3>
+              <input
+                type="text"
+                name="video"
+                value={formData.video[activeTab]}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    video: { ...formData.video, [activeTab]: e.target.value },
+                  })
+                }
+                placeholder={`URL del Video (${activeTab.toUpperCase()})`}
+              />
             </>
           )}
 

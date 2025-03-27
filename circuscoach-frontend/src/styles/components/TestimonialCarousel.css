@@ -50,32 +50,34 @@
   max-width: 33.3333%;
 }
 
-.bubble-svg {
+.bubble {
   position: relative;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
+  background-color: var(--color-blanco);
+  color: var(--color-azul-profundo);
+  font-family: var(--font-texto);
+  font-size: 1rem;
+  line-height: 1.5;
+  text-align: center;
+  padding: 2rem 1.5rem;
+  border-radius: 16px;
+  max-width: 300px;
   width: 100%;
-  height: 250px;
-  overflow: hidden;
+  margin: 0 auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-.bubble-texto,
-.bubble-texto p {
+.bubble::after {
+  content: "";
   position: absolute;
-  inset: 20px 25px;
-  font-family: var(--font-texto);
-  color: var(--color-azul-profundo);
-  font-size: 0.9rem;
-  line-height: 1.4;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 200px;
-  left: 25px;
-  bottom: 35px;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 15px;
+  border-style: solid;
+  border-color: var(--color-blanco) transparent transparent transparent;
 }
+
+
 
 .autor-oval {
   background-color: var(--color-menta);
@@ -151,38 +153,50 @@
   }
 }
 
+/* 🌐 Desktop (3 por slide) */
+@media (min-width: 1025px) {
+  .testimonial-bloque {
+    flex: 0 0 33.3333%;
+    max-width: 33.3333%;
+  }
+
+  .bubble {
+    max-width: 280px;
+  }
+}
+/* 🌐 Tablet (2 por slide) */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .testimonial-bloque {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+
+  .bubble {
+    max-width: 360px;
+  }
+}
+
 /* 📱 Mobile (1 por slide) */
 @media (max-width: 768px) {
-  .testimonial-contenedor {
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    position: relative;
-  }
-
-  .testimonial-slide {
-    width: 100%;
-    justify-content: center;
-  }
-
   .testimonial-bloque {
     flex: 0 0 100%;
+    justify-content: center;
     max-width: 100%;
-    padding: 0.5rem;
-    box-sizing: border-box;
+    padding: 1rem;
   }
 
-  .bubble-svg {
-    width: 90vw;
-    max-width: 300px;
-    margin: 0 auto;
+  .bubble {
+    font-size: 1rem;
+    padding: 2rem 1.5rem;
+    max-width: 70vw;
+    width: 70vw;
+    text-align: center;
+    line-height: 1.4;
   }
 
-  .bubble-texto, .bubble-texto p {
-    width: 180px;
-    left: 50%;
-    transform: translateX(-50%);
+  .bubble::after {
+    bottom: -18px;
+    border-width: 12px;
   }
 
   .autor-oval {
@@ -191,7 +205,7 @@
 
   .flecha {
     position: absolute;
-    top: 60%;
+    top: 50%;
     transform: translateY(-20%);
     margin: 0;
     padding: 0;

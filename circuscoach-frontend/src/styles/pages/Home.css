@@ -1,9 +1,9 @@
 .home-hero {
   width: 100vw;
-  height: 90vh;
-  background-image: url('https://res.cloudinary.com/dkdhdy9e5/image/upload/v1737762070/La%20Troupe/sala1_4_wwmehx.jpg'); /* Cambiar por la ruta correcta */
+  height: 100vh;
+  background-image: url('https://res.cloudinary.com/dkdhdy9e5/image/upload/v1743084512/CircusCoach/26_tljw6r.jpg'); /* Cambiar por la ruta correcta */
   background-size: cover;
-  background-position: center;
+  background-position: center 30%;
   background-repeat: no-repeat;
   position: relative;
   display: flex;
@@ -68,10 +68,11 @@
 .home-description, .home-description p {
   font-family: var(--font-texto);
   font-size: 1rem;
+  font-weight: bold;
   line-height: 1.7;
   text-align: center;
   padding: 0 1rem;
-  color: var(--color-negro) !important;
+  color: var(--color-azul-profundo);
 }
 
 /* 🌐 Responsive */

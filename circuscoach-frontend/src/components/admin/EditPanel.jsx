@@ -30,10 +30,6 @@ const EditPanel = ({
   };
 
   useEffect(() => {
-/*     console.log("🧪 Cambios en selección:");
-    console.log("selectedClass:", selectedClass);
-    console.log("selectedModule:", selectedModule);
-    console.log("selectedFormation:", selectedFormation); */
 
     if (selectedClass) {
       setFormData({
@@ -164,21 +160,16 @@ const EditPanel = ({
                 <p>
                   <strong>Precio:</strong> {formData.price || "No especificado"}
                 </p>
-                <p>
-                  <strong>Modalidad:</strong>{" "}
-                  <span className={`badge ${formData.mode}`}>
-                    {modeLabels[formData.mode]?.[activeTab]}
-                  </span>
-                </p>
+                
                 <div>
                   <p>
                     <strong>Imagen de presentación:</strong>
                   </p>
-                  {formData.image ? (
+                  {formData.image?.[activeTab]  ? (
                     <img
-                      src={formData.image}
-                      alt="Imagen de la formación"
-                      className="formation-image"
+                    src={formData.image[activeTab]}
+                    alt="Imagen de la formación"
+                    className="formation-image"
                     />
                   ) : (
                     <p style={{ color: "#777", fontStyle: "italic" }}>

@@ -1,0 +1,74 @@
+.formaciones-section {
+    padding: 4rem 2rem;
+    text-align: center;
+  }
+  
+  .formaciones-title {
+    font-family: var(--font-titulo);
+    font-size: 3rem;
+    text-transform: uppercase;
+    color: var(--color-azul-profundo);
+    margin-bottom: 1rem;
+  }
+  
+  .formaciones-subtitle {
+    font-family: var(--font-texto);
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-azul-profundo);
+    margin-bottom: 3rem;
+    max-width: 900px;
+    margin-inline: auto;
+  }
+  
+  .formaciones-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2.5rem;
+    justify-content: center;
+    align-items: stretch;
+  }
+  
+  .formacion-card {
+    background-color: var(--color-azul-profundo);
+    border-radius: 1.2rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+  
+  
+  .formacion-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  }
+  
+  .formacion-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    border: none;
+    vertical-align: bottom; /* 👈 elimina espacio de línea de base */
+  }
+  
+  
+  .formacion-description {
+    margin-top: -1px; /* 👈 ¡la clave mágica! */
+    background-color: var(--color-azul-profundo);
+    color: var(--color-blanco);
+    font-family: var(--font-texto);
+    font-size: 1rem;
+    padding: 1rem 1.2rem;
+    text-align: left;
+    z-index: 1;
+    position: relative;
+  }
+  
+  
