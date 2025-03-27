@@ -28,13 +28,13 @@ const formationSchema = new mongoose.Schema({
     en: { type: String },
     fr: { type: String }
   },
-  mode: {
-    type: String,
-    enum: ["presencial", "online"],
-    required: true
-  },
-  image: { type: String }
+  image: {
+    es: { type: String },
+    en: { type: String },
+    fr: { type: String }
+  }
 });
 
 module.exports = mongoose.model("Formation", formationSchema);
+
 

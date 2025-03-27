@@ -5,12 +5,11 @@ const Class = require("../models/Class");
 // 🔹 Middleware para verificar si el usuario es admin
 const isAdmin = (req) => req.user && req.user.role === "admin";
 
-// 🔹 Obtener formaciones (solo las visibles para alumnos)
+// 🔹 Obtener formaciones visibles por idioma
 exports.getFormations = async (req, res) => {
+  const lang = req.query.lang || "es";
   try {
-    const formations = await Formation.find({ visible: true }).populate(
-      "modules"
-    );
+    const formations = await Formation.find({ [`visible.${lang}`]: true });
     res.json(formations);
   } catch (error) {
     console.error("Error obteniendo formaciones:", error);
@@ -18,7 +17,7 @@ exports.getFormations = async (req, res) => {
   }
 };
 
-// 🔹 Obtener todas las formaciones (para el administrador)
+// 🔹 Obtener todas las formaciones (admin)
 exports.getAllFormations = async (req, res) => {
   try {
     const formations = await Formation.find().populate("modules");
@@ -29,47 +28,72 @@ exports.getAllFormations = async (req, res) => {
   }
 };
 
-// 🔹 Obtener las formaciones visibles por modo y por lenguaje
-exports.getFormationsByMode = async (req, res) => {
-  const mode = req.params.mode; // 'presencial' o 'online'
-  const lang = req.query.lang || "es"; // por defecto 'es'
-
-  if (!["presencial", "online"].includes(mode)) {
-    return res.status(400).json({ error: "Modo inválido" });
-  }
-
+// 🔹 Obtener formación por ID
+exports.getFormationById = async (req, res) => {
   try {
-    const formations = await Formation.find({
-      mode,
-      [`visible.${lang}`]: true,
-    });
+    const { id } = req.params;
+    const formation = await Formation.findById(id).populate("modules");
 
-    res.json(formations);
+    if (!formation) {
+      return res.status(404).json({ error: "Formación no encontrada" });
+    }
+
+    res.json(formation);
   } catch (error) {
-    console.error(`Error obteniendo formaciones ${mode}:`, error);
+    console.error("Error obteniendo formación por ID:", error);
     res.status(500).json({ error: "Error en el servidor" });
   }
 };
 
+// 🔹 Obtener formación con módulos y títulos de clases visibles
+exports.getFormationVisibleContent = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const lang = req.query.lang || "es";
 
-// 🔹 Crear una formación con soporte multilenguaje
+    const formation = await Formation.findById(id);
+    if (!formation) {
+      return res.status(404).json({ error: "Formación no encontrada" });
+    }
+
+    const modules = await Module.find({ formation: id, [`visible.${lang}`]: true });
+
+    const modulesConClases = await Promise.all(
+      modules.map(async (mod) => {
+        const classes = await Class.find({ module: mod._id, [`visible.${lang}`]: true }).select("title");
+        return {
+          _id: mod._id,
+          title: mod.title,
+          description: mod.description,
+          classes,
+        };
+      })
+    );
+
+    res.json({
+      formation: {
+        _id: formation._id,
+        title: formation.title,
+        description: formation.description,
+        image: formation.image,
+      },
+      modules: modulesConClases,
+    });
+  } catch (error) {
+    console.error("❌ Error en getFormationVisibleContent:", error);
+    res.status(500).json({ error: "Error en el servidor", details: error.message });
+  }
+};
+
+// 🔹 Crear formación
 exports.createFormation = async (req, res) => {
   if (!isAdmin(req)) return res.status(403).json({ error: "No autorizado" });
 
   try {
-    const { title, description, price, pdf, video, mode, image } = req.body;
+    const { title, description, price, pdf, video, image } = req.body;
 
     if (!title?.es || !description?.es || !price) {
-      return res
-        .status(400)
-        .json({
-          error: "Título en español, descripción y precio son obligatorios",
-        });
-    }
-    if (!["presencial", "online"].includes(mode)) {
-      return res
-        .status(400)
-        .json({ error: "El modo debe ser 'presencial' o 'online'" });
+      return res.status(400).json({ error: "Título en español, descripción y precio son obligatorios" });
     }
 
     const newFormation = new Formation({
@@ -100,26 +124,27 @@ exports.createFormation = async (req, res) => {
         en: video?.en || "",
         fr: video?.fr || "",
       },
-      mode,
-      image,
+      image: {
+        es: image?.es || "",
+        en: image?.en || "",
+        fr: image?.fr || "",
+      },
     });
 
     await newFormation.save();
     res.status(201).json(newFormation);
   } catch (error) {
     console.error("❌ ERROR en createFormation:", error);
-    res
-      .status(500)
-      .json({ error: "Error en el servidor", details: error.message });
+    res.status(500).json({ error: "Error en el servidor", details: error.message });
   }
 };
 
-// 🔹 Actualizar una formación (soporta múltiples idiomas y visibilidad)
+// 🔹 Actualizar formación
 exports.updateFormation = async (req, res) => {
   if (!isAdmin(req)) return res.status(403).json({ error: "No autorizado" });
 
   try {
-    const { title, description, price, visible, pdf, video, mode, image } = req.body;
+    const { title, description, price, visible, pdf, video, image } = req.body;
     const { id } = req.params;
 
     const formation = await Formation.findById(id);
@@ -167,76 +192,62 @@ exports.updateFormation = async (req, res) => {
       };
     }
 
-    if (mode && ["presencial", "online"].includes(mode)) {
-      formation.mode = mode;
-    }
-
-    if (image !== undefined) {
-      formation.image = image;
+    if (image) {
+      formation.image = {
+        ...formation.image,
+        es: image.es ?? formation.image?.es,
+        en: image.en ?? formation.image?.en,
+        fr: image.fr ?? formation.image?.fr,
+      };
     }
 
     await formation.save();
-    res
-      .status(200)
-      .json({ message: "Formación actualizada correctamente", formation });
+    res.status(200).json({ message: "Formación actualizada correctamente", formation });
   } catch (error) {
     console.error("❌ ERROR en updateFormation:", error);
-    res
-      .status(500)
-      .json({ error: "Error en el servidor", details: error.message });
+    res.status(500).json({ error: "Error en el servidor", details: error.message });
   }
 };
 
-// 🔹 Poner visibles TODOS los idiomas
+// 🔹 Hacer visible en todos los idiomas
 exports.makeFormationVisibleInAllLanguages = async (req, res) => {
   if (!isAdmin(req)) return res.status(403).json({ error: "No autorizado" });
 
   try {
     const { id } = req.params;
-
     const formation = await Formation.findById(id);
-    if (!formation)
-      return res.status(404).json({ error: "Formación no encontrada" });
+    if (!formation) return res.status(404).json({ error: "Formación no encontrada" });
 
-    // 🔄 Hacer visible en todos los idiomas
     formation.visible = { es: true, en: true, fr: true };
-
     await formation.save();
 
-    res.json({
-      message: "Formación ahora es visible en todos los idiomas.",
-    });
+    res.json({ message: "Formación ahora es visible en todos los idiomas." });
   } catch (error) {
     console.error("Error haciendo visible en todos los idiomas:", error);
     res.status(500).json({ error: "Error en el servidor" });
   }
 };
 
-// 🔹 Cambiar visibilidad de un solo idioma
+// 🔹 Alternar visibilidad por idioma
 exports.toggleFormationVisibilityByLanguage = async (req, res) => {
   if (!isAdmin(req)) return res.status(403).json({ error: "No autorizado" });
 
   try {
     const { id } = req.params;
-    const { language } = req.body; // 📌 El frontend debe enviar el idioma a modificar
+    const { language } = req.body;
 
     if (!["es", "en", "fr"].includes(language)) {
       return res.status(400).json({ error: "Idioma no válido" });
     }
 
     const formation = await Formation.findById(id);
-    if (!formation)
-      return res.status(404).json({ error: "Formación no encontrada" });
+    if (!formation) return res.status(404).json({ error: "Formación no encontrada" });
 
-    // 🔄 Alternar visibilidad del idioma especificado
     formation.visible[language] = !formation.visible[language];
-
     await formation.save();
 
     res.json({
-      message: `Formación en ${language.toUpperCase()} ahora es ${
-        formation.visible[language] ? "visible" : "oculta"
-      }`,
+      message: `Formación en ${language.toUpperCase()} ahora es ${formation.visible[language] ? "visible" : "oculta"}`,
     });
   } catch (error) {
     console.error("Error cambiando visibilidad por idioma:", error);
@@ -244,7 +255,7 @@ exports.toggleFormationVisibilityByLanguage = async (req, res) => {
   }
 };
 
-// 🔹 Eliminar una formación (solo admins)
+// 🔹 Eliminar formación (junto con módulos y clases asociadas)
 exports.deleteFormation = async (req, res) => {
   if (!isAdmin(req)) return res.status(403).json({ error: "No autorizado" });
 
@@ -254,26 +265,16 @@ exports.deleteFormation = async (req, res) => {
       return res.status(404).json({ error: "Formación no encontrada" });
     }
 
-    // 🔹 Buscar los módulos asociados a la formación
     const modules = await Module.find({ formation: formation._id });
-
-    // 🔹 Eliminar todas las clases asociadas a esos módulos
     const moduleIds = modules.map((mod) => mod._id);
+
     await Class.deleteMany({ module: { $in: moduleIds } });
-
-    // 🔹 Luego, eliminar los módulos
     await Module.deleteMany({ formation: formation._id });
-
-    // 🔹 Finalmente, eliminar la formación
     await Formation.findByIdAndDelete(req.params.id);
 
-    res.json({
-      message: "Formación, módulos y clases eliminados correctamente",
-    });
+    res.json({ message: "Formación, módulos y clases eliminados correctamente" });
   } catch (error) {
     console.error("❌ ERROR en deleteFormation:", error);
-    res
-      .status(500)
-      .json({ error: "Error en el servidor", details: error.message });
+    res.status(500).json({ error: "Error en el servidor", details: error.message });
   }
 };

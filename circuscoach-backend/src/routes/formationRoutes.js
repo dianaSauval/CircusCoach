@@ -2,7 +2,8 @@ const express = require("express");
 const {
   getFormations,
   getAllFormations,
-  getFormationsByMode,
+  getFormationById,
+  getFormationVisibleContent,
   createFormation,
   updateFormation,
   makeFormationVisibleInAllLanguages,
@@ -32,8 +33,11 @@ router.delete("/:id", authMiddleware, isAdminMiddleware, deleteFormation);
 // 🔹 Crear una formación (solo admin)
 router.post("/", authMiddleware, isAdminMiddleware, createFormation);
 
-// 🔹 Obtener formaciones por modo (presencial u online) con lang
-router.get("/:mode", getFormationsByMode);
+// 🔹 Obtener formación por ID (usuario autenticado)
+router.get("/id/:id", authMiddleware, getFormationById);
+
+// 🔹 Obtener formación con contenido visible (módulos y clases) por idioma
+router.get("/visible/:id", authMiddleware, getFormationVisibleContent);
 
 // 🔹 Obtener formaciones visibles para alumnos (pública)
 router.get("/", getFormations);
