@@ -1,9 +1,12 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, NavLink } from "react-router-dom";
 import { isAuthenticated, removeToken } from "../services/auth";
 import "../styles/components/Header.css";
 import logo from "../assets/img/logo.png";
+import { FaSearch, FaShoppingBag, FaBars, FaTimes } from "react-icons/fa";
+import { useState } from "react";
 
-function Header() {
+export default function Header() {
+  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -13,31 +16,39 @@ function Header() {
 
   return (
     <header className="header">
-      {/* 🔹 Logo */}
-      <div className="logo"><img src={logo} alt="Logo" className="logo-img" />
+      <div className="header-logo">
+        <img src={logo} alt="Circus Coach Logo" />
       </div>
 
-      {/* 🔹 Menú Central */}
-      <nav className="nav-links">
-        <Link to="/">Inicio</Link>
-        <Link to="/courses">Cursos</Link>
-        <Link to="/formaciones">Formaciones</Link>
-        {isAuthenticated()&& (<Link to="/admin">Admin</Link>)}
-      </nav>
+      <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+        {menuOpen ? <FaTimes /> : <FaBars />}
+      </button>
 
-      {/* 🔹 Botón de Sesión */}
-      <div className="auth-button">
+      <nav className={`header-nav ${menuOpen ? 'open' : ''}`}>
+      <NavLink to="/" className="nav-link" onClick={() => setMenuOpen(false)}>INICIO</NavLink>
+        <NavLink to="/cursos" className="nav-link" onClick={() => setMenuOpen(false)}>CURSOS</NavLink>
+        <NavLink to="/formaciones" className="nav-link" onClick={() => setMenuOpen(false)}>FORMACIONES</NavLink>
+        <NavLink to="/nosotros" className="nav-link" onClick={() => setMenuOpen(false)}>NOSOTROS</NavLink>
+
+        {isAuthenticated() && (
+          <>
+            <Link to="/admin">Admin</Link>
+            <Link to="/mis-cursos">Mis Cursos</Link>
+          </>
+        )}
+        {/* 🔹 Botón de Sesión */}
+
         {isAuthenticated() ? (
-      
           <button onClick={handleLogout}>Cerrar Sesión</button>
-          
         ) : (
           <Link to="/login">Iniciar Sesión</Link>
         )}
+      </nav>
+
+      <div className="header-icons">
+        <FaSearch className="header-icon" />
+        <FaShoppingBag className="header-icon" />
       </div>
     </header>
   );
 }
-
-export default Header;
-

@@ -31,6 +31,19 @@ export const getCourseById = async (id) => {
   return response.data;
 };
 
+// Obtener una formación por ID (ruta protegida)
+export const getFormationById = async (id) => {
+  const response = await api.get(`/formations/id/${id}`);
+  return response.data;
+};
+
+// Obtener una formación por ID y su contenido VISIBLE
+export const getFormationVisibleContent = async (id, lang = "es") => {
+  const res = await api.get(`/formations/visible/${id}?lang=${lang}`);
+  return res.data;
+};
+
+
 // Obtener los cursos protegidos (para admin)
 export const getAdminCourses = async () => {
   const response = await api.get("/courses");

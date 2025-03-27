@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
-import "../styles/FormationDetails.css";
+import "../styles/pages/FormationDetails.css";
 
 // 🔹 Función para convertir URL normal de YouTube a formato embebido
 const getYoutubeEmbedUrl = (url) => {

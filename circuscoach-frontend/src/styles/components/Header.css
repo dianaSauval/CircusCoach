@@ -1,106 +1,144 @@
 /* 🔹 Estilos Generales */
 .header {
-  display: flex;
-  align-items: center; /* Centrar verticalmente */
-  justify-content: space-between;
-  padding: 10px 20px;
-  background: linear-gradient(45deg, #010110, #0387CF); /* Fondo con degradado */
-  background-size: 200% 200%; /* 👈 Necesario para la animación */
-  animation: gradientAnimation 8s ease infinite; /* 👈 Activa la animación */
-  height: 70px; /* Ajusta la altura */
-  max-height: 70px;
-  width: 100%;
-  position: fixed; /* Hace que el header quede fijo */
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000; /* Asegura que quede por encima de otros elementos */
-}
-
-/* 🔹 Animación del Fondo */
-@keyframes gradientAnimation {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* 🔹 Logo */
-.logo {
-  display: flex;
+  background-color: var(--color-petroleo);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
+  padding: 0.5rem 1rem;
+  color: var(--color-blanco);
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 80px;
+  box-sizing: border-box;
 }
 
-/* 🔹 Estilos para el logo */
-.logo-img {
-  width: 100px; /* Ajusta el tamaño del logo */
-  height: auto;
-  cursor: pointer;
-  transition: transform 0.3s ease-in-out;
+.header-logo img {
+  height: 65px;
+  transform: scale(1.8);
+  transform-origin: left center;
+  max-height: 80px;
 }
 
-/* 🔹 Animación al pasar el mouse */
-.logo-img:hover {
-  transform: scale(1.1);
-}
-
-
-/* 🔹 Menú Central */
-.nav-links {
+/* Menú de navegación */
+.header-nav {
   display: flex;
-  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  font-family: var(--font-titulo);
+  font-size: 1.1rem;
+  letter-spacing: 1.5px;
 }
 
-.nav-links a {
+.nav-link,
+.header-nav a,
+.header-nav button {
+  color: var(--color-blanco);
   text-decoration: none;
-  color: white;
-  font-size: 1.1rem;
-  font-weight: bold;
-  padding: 8px 16px;
-  border-radius: 5px;
-  transition: all 0.3s ease-in-out;
   position: relative;
-}
-
-/* 🔹 Animación al pasar el mouse */
-.nav-links a:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
-}
-
-/* 🔹 Botón de Autenticación */
-.auth-button a,
-.auth-button button {
-  background: rgba(255, 255, 255, 0.3);
+  background: none;
   border: none;
-  color: white;
-  font-size: 1.1rem;
-  font-weight: bold;
-  padding: 8px 16px;
-  border-radius: 5px;
+  font: inherit;
   cursor: pointer;
-  text-decoration: none;
-  transition: all 0.3s ease-in-out;
+  transition: color 0.3s ease;
 }
 
-.auth-button button:hover,
-.auth-button a:hover {
-  background: rgba(255, 255, 255, 0.5);
-  transform: translateY(-2px);
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  background-color: var(--color-menta);
+  bottom: -4px;
+  left: 0;
+  transition: width 0.3s ease;
 }
 
-/* 🔹 Responsive */
+.nav-link:hover,
+.header-nav a:hover,
+.header-nav button:hover {
+  color: var(--color-menta);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+
+.header-icons {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.header-icon {
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.header-icon:hover {
+  transform: scale(1.2);
+  color: var(--color-menta);
+}
+
+/* Botón hamburguesa */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: var(--color-blanco);
+  cursor: pointer;
+  z-index: 1001;
+}
+
+/* 🌐 Responsive */
 @media (max-width: 768px) {
   .header {
+    grid-template-columns: 1fr auto;
+    padding: 0.5rem 1rem;
+    height: 80px;
+    align-items: center;
+  }
+
+  .header-logo {
+    grid-column: 1 / 2;
+  }
+
+  .menu-toggle {
+    display: block;
+    grid-column: 2 / 3;
+    justify-self: end;
+  }
+
+  .header-icons {
+    display: none;
+  }
+
+  /* Menú desplegable */
+  .header-nav {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    right: 0;
+    background-color: var(--color-petroleo);
     flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem 1rem;
+    display: none;
+    z-index: 999;
+  }
+
+  .header-nav.open {
+    display: flex;
+  }
+
+  .header-nav a,
+  .header-nav button {
     text-align: center;
-  }
-
-  .nav-links {
-    margin-top: 10px;
-    flex-direction: column;
-  }
-
-  .auth-button {
-    margin-top: 10px;
+    font-size: 1.1rem;
   }
 }
