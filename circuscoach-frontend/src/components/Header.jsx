@@ -1,4 +1,4 @@
-import { Link, useNavigate, NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { isAuthenticated, removeToken } from "../services/auth";
 import "../styles/components/Header.css";
 import logo from "../assets/img/logo.png";
@@ -24,30 +24,31 @@ export default function Header() {
         {menuOpen ? <FaTimes /> : <FaBars />}
       </button>
 
-      <nav className={`header-nav ${menuOpen ? 'open' : ''}`}>
-      <NavLink to="/" className="nav-link" onClick={() => setMenuOpen(false)}>INICIO</NavLink>
+      <nav className={`header-nav ${menuOpen ? "open" : ""}`}>
+        <NavLink to="/" className="nav-link" onClick={() => setMenuOpen(false)}>INICIO</NavLink>
         <NavLink to="/cursos" className="nav-link" onClick={() => setMenuOpen(false)}>CURSOS</NavLink>
         <NavLink to="/formaciones" className="nav-link" onClick={() => setMenuOpen(false)}>FORMACIONES</NavLink>
         <NavLink to="/nosotros" className="nav-link" onClick={() => setMenuOpen(false)}>NOSOTROS</NavLink>
 
-        {isAuthenticated() && (
-          <>
-            <Link to="/admin">Admin</Link>
-            <Link to="/mis-cursos">Mis Cursos</Link>
-          </>
-        )}
-        {/* 🔹 Botón de Sesión */}
-
         {isAuthenticated() ? (
-          <button onClick={handleLogout}>Cerrar Sesión</button>
-        ) : (
-          <Link to="/login">Iniciar Sesión</Link>
-        )}
+  <NavLink to="/" className="nav-link mobile-only" onClick={handleLogout}>CERRAR SESIÓN</NavLink>
+) : (
+  <NavLink to="/login" className="nav-link mobile-only">INICIAR SESIÓN</NavLink>
+)}
+
       </nav>
 
       <div className="header-icons">
         <FaSearch className="header-icon" />
         <FaShoppingBag className="header-icon" />
+
+
+        {isAuthenticated() ? (
+  <NavLink to="/login" className="nav-link login desktop-only" onClick={handleLogout}>CERRAR SESIÓN</NavLink>
+) : (
+  <NavLink to="/login" className="nav-link desktop-only">INICIAR SESIÓN</NavLink>
+)}
+
       </div>
     </header>
   );

@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import Courses from "./pages/Courses";
+import CoursesPage from "./pages/CoursesPage";
 import CourseDetail from "./pages/CourseDetail";
 import Login from "./pages/Login";
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -15,7 +15,7 @@ import "./assets/styles/App.css";
 import FormationDetails from "./pages/FormationDetails";
 import MyCourses from "./pages/MyCourses";
 import MyCourseDetail from "./pages/MyCourseDetail";
-import Formation from "./pages/Formation";
+import FormationPage from "./pages/FormationPage";
 import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
@@ -26,12 +26,12 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/courses" element={<Courses />} />
+          <Route path="/cursos" element={<CoursesPage />} />
           <Route path="/courses/:id" element={<CourseDetail />} />
           <Route path="/mis-cursos" element={<MyCourses />} />
           <Route path="/mis-cursos/:id" element={<MyCourseDetail />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/formaciones" element={<Formation />}/>
+          <Route path="/formaciones" element={<FormationPage />}/>
 
           {/* Protegemos las rutas de administración */}
           <Route element={<RequireAuth />}>

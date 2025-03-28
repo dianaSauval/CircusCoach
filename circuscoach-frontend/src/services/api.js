@@ -25,8 +25,8 @@ api.interceptors.request.use(
 //
 
 // Cursos públicos
-export const getCourses = async () => {
-  const response = await api.get("/courses");
+export const getCourses = async (lang) => {
+  const response = await api.get(`/courses/visible?lang=${lang}`);
   return response.data;
 };
 

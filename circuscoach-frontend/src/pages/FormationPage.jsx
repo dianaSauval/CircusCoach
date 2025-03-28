@@ -14,7 +14,7 @@ const slugify = (text) =>
     .replace(/\s+/g, "-");
 
 
-export default function Formation() {
+export default function FormationPage() {
   const presencialRef = useRef(null);
   const onlineRef = useRef(null);
   const escuelasRef = useRef(null);
