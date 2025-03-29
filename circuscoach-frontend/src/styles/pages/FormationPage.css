@@ -12,7 +12,8 @@
     box-sizing: border-box;
     overflow: hidden;
   }
-  
+
+ 
   /* 👇 Overlay para oscurecer la imagen */
   .formation-hero::before {
     content: '';
@@ -59,6 +60,15 @@
     background-color: #f4f4f4;
     color: #02142B;
     text-align: center;
+    width: 100% !important;    
+  }
+
+  .school{
+    background: linear-gradient(
+      rgba(255, 255, 255, 0.55),
+      rgba(255, 255, 255, 0.55)
+    ), url('https://res.cloudinary.com/dkdhdy9e5/image/upload/v1743203344/CircusCoach/20230317_122348_chhvjn.jpg') center/cover no-repeat;
+    
   }
   
   .formation-cards {

@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import '../styles/pages/Formation.css';
+import '../styles/pages/FormationPage.css';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import FormacionesGrid from '../components/FormacionesGrid';
+import PresentialFormation from '../components/PresentialFormation';
+import PresentialFormationsList from '../components/PresentialFormation';
+import TrainingSchools from '../components/TrainingSchools';
 
 // 🔠 Convierte el título en un slug tipo "formacion-en-acrobacia"
 const slugify = (text) =>
@@ -68,44 +71,25 @@ export default function FormationPage() {
       <div className="formation-buttons">
         <button onClick={() => scrollToSection(onlineRef)}>FORMACIONES ONLINE</button>
         <button onClick={() => scrollToSection(presencialRef)}>FORMACIONES PRESENCIALES</button>
-        <button onClick={() => navigate('/formaciones/escuelas')}>FORMACIONES PARA ESCUELAS PROFESIONALES</button>
+        <button onClick={() => scrollToSection(escuelasRef)}>FORMACIONES PARA ESCUELAS PROFESIONALES</button>
       </div>
     </div>
-      {/* 🔹 PRESENCIALES */}
-      <section ref={presencialRef} className="section">
-        <h2>Formaciones Presenciales</h2>
-        <div className="formation-cards">
-         {/*  {presencialFormations.length === 0 ? (
-            <p>No hay formaciones presenciales disponibles.</p>
-          ) : (
-            presencialFormations.map((formation) => (
-              <div
-                className="formation-card"
-                key={formation._id}
-                onClick={() => handleCardClick(formation)}
-              >
-                <img
-                  src={formation.image}
-                  alt={`Formación ${formation._id}`}
-                  className="formation-image-presentation"
-                />
-              </div>
-            ))
-          )} */}
-        </div>
-      </section>
-
       {/* 🔹 ONLINE */}
       <section ref={onlineRef} className="section">
         
         <FormacionesGrid/>
       </section>
+        {/* 🔹 PRESENCIALES */}
+            <section ref={presencialRef} className="section">
+              <PresentialFormationsList/>
+        
+        </section>
 
       {/* 🔹 ESCUELAS */}
-      <section ref={escuelasRef} className="section">
-        <h2>Formaciones para Escuelas</h2>
-        <p>Contenido de la sección para escuelas...</p>
+      <section ref={escuelasRef} className="section school">
+        <TrainingSchools/>
       </section>
+          
     </>
   );
 }

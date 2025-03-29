@@ -57,7 +57,7 @@ export const deleteCourse = async (id) => {
 };
 
 //
-// 🔹 FORMACIONES
+// 🔹 FORMACIONES ONLINE
 //
 
 // Obtener todas las formaciones visibles (públicas)
@@ -109,6 +109,14 @@ export const toggleFormationVisibilityByLanguage = async (id, language) => {
 
 export const makeFormationVisibleInAllLanguages = async (id) => {
   const response = await api.patch(`/formations/${id}/visibility/all`);
+  return response.data;
+};
+
+
+/// FORMACIONES PRESENCIALES ///
+// Obtener todas las formaciones visibles (públicas)
+export const getPresentialFormations = async () => {
+  const response = await api.get("/presential-formations");
   return response.data;
 };
 
