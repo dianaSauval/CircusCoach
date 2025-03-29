@@ -3,9 +3,9 @@ import '../styles/pages/FormationPage.css';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import FormacionesGrid from '../components/FormacionesGrid';
-import PresentialFormation from '../components/PresentialFormation';
 import PresentialFormationsList from '../components/PresentialFormation';
 import TrainingSchools from '../components/TrainingSchools';
+import VideoTrainingSchool from '../components/VideoTrainingSchool';
 
 // 🔠 Convierte el título en un slug tipo "formacion-en-acrobacia"
 const slugify = (text) =>
@@ -89,7 +89,9 @@ export default function FormationPage() {
       <section ref={escuelasRef} className="section school">
         <TrainingSchools/>
       </section>
-          
+      <section className="section">
+      <VideoTrainingSchool/>
+      </section>  
     </>
   );
 }

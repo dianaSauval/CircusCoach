@@ -1,6 +1,6 @@
 import "../styles/components/Footer.css";
 import logo from "../assets/img/logo.png";
-import { FaEnvelope, FaWhatsapp, FaPhone } from "react-icons/fa";
+import { FaEnvelope, FaWhatsapp, FaInstagram } from "react-icons/fa";
 
 function Footer() {
   return (
@@ -9,12 +9,31 @@ function Footer() {
         <div className="logo-wrapper">
           <img src={logo} alt="Circus Coach" className="footer-logo" />
           <div className="floating-icons">
-            <div className="circle-icon">
+            <a
+              href="https://www.instagram.com/circuscoachbyrociogarrote"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="circle-icon"
+            >
+              <FaInstagram />
+            </a>
+
+            <a
+              href="mailto:circuscoachbyrociogarrote@gmail.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="circle-icon"
+            >
               <FaEnvelope />
-            </div>
-            <div className="circle-icon">
-              <FaPhone />
-            </div>
+            </a>
+            <a
+              href="https://wa.me/32455113039"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="circle-icon"
+            >
+              <FaWhatsapp />
+            </a>
           </div>
         </div>
       </div>
@@ -22,13 +41,29 @@ function Footer() {
       <div className="footer-right">
         <h3>¿HABLAMOS?</h3>
         <div className="footer-contact">
-          <FaEnvelope />
-          <span>circuscoachbyrociogarrote@gmail.com</span>
-        </div>
-        <div className="footer-contact">
-          <FaWhatsapp />
-          <span>+32455113039</span>
-        </div>
+  <FaEnvelope className="footer-icon" />
+  <a
+    href="mailto:circuscoachbyrociogarrote@gmail.com"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="footer-link"
+  >
+    circuscoachbyrociogarrote@gmail.com
+  </a>
+</div>
+
+<div className="footer-contact">
+  <FaWhatsapp className="footer-icon" />
+  <a
+    href="https://wa.me/32455113039"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="footer-link"
+  >
+    +32(0)455.11.30.39
+  </a>
+</div>
+
       </div>
     </footer>
   );

@@ -1,7 +1,5 @@
 import React from "react";
 import "../styles/components/TrainingSchools.css";
-import { FaLightbulb, FaRegLightbulb, FaTools } from "react-icons/fa";
-import img from "../assets/img/lamparita2.svg";
 
 const TrainingSchools = () => {
   return (

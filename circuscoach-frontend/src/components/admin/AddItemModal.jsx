@@ -252,11 +252,12 @@ const AddItemModal = ({ type, parentId, closeModal, onAdd }) => {
               />
             </>
           )}
-
+<div className="content-button-modal">
           <button type="submit">✅ Agregar</button>
           <button type="button" onClick={closeModal}>
             ❌ Cancelar
           </button>
+          </div>
         </form>
       </div>
     </div>

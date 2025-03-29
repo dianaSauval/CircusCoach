@@ -1,28 +1,27 @@
-/* 🔹 Contenedor principal de la lista de clases */
 .class-list {
   margin-top: 10px;
-  background: #f8f9fa;
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: #dbedeb;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
 }
 
 /* 🔹 Cada clase en la lista */
 .class-item {
   display: flex;
   flex-direction: column;
-  background: white;
-  padding: 10px;
-  margin: 5px 0;
-  border-radius: 5px;
-  border: 1px solid #ddd;
+  background: var(--color-blanco);
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 10px;
+  border: 1px solid var(--color-menta);
   transition: all 0.3s ease-in-out;
 }
 
 /* 🔹 Si la clase está seleccionada */
 .class-item.selected {
-  background: #dff0ff;
-  border: 2px solid #007bff;
+  background: #e0f8f2;
+  border: 2px solid var(--color-azul-profundo);
 }
 
 /* 🔹 Contenido de la clase */
@@ -30,6 +29,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
 }
 
 /* 🔹 Indicadores de visibilidad */
@@ -37,75 +37,61 @@
   display: flex;
   flex-direction: column;
   text-align: end;
-  gap: 5px;
-  font-size: small;
-}
-
-/* ✅ Si la clase está completamente visible */
-.full-visible {
-  color: green;
+  gap: 4px;
+  font-size: 0.85rem;
   font-weight: bold;
 }
 
-/* 🟢 Visibilidad por idioma */
 .visible {
-  color: green;
-  font-weight: bold;
+  color: var(--color-petroleo);
 }
 
-/* 🔴 No visible */
 .not-visible {
   color: red;
-  font-weight: bold;
 }
 
-/* 🔹 Nombre de la clase */
+/* 🔹 Cabecera y título */
 .class-header {
   flex: 1;
-  font-size: 14px;
-  font-weight: 500;
-  color: #333;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: var(--font-texto);
+  color: var(--color-azul-profundo);
   cursor: pointer;
-  
 }
 
-/* 🔹 Botón de eliminar */
-.delete-btn {
-  background: #dc3545;
-  color: white;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 4px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-}
-
-.delete-btn:hover {
-  background: #c82333;
-}
-
-/* 🔹 Mensaje cuando no hay clases */
-.no-classes {
-  font-size: 14px;
-  color: #888;
-  text-align: center;
-  padding: 10px;
-}
-
-/* 🔹 Estilo normal */
 .class-title {
-  color: #000;
-  font-weight: bold;
-  cursor: pointer;
   transition: color 0.3s ease;
 }
 
-/* 🔹 Cambiar color cuando está seleccionada */
 .class-title.selected {
-  color: #02142B; /* Azul oscuro */
+  color: var(--color-azul-profundo);
 }
 
+/* 🔹 Botón eliminar */
+.delete-btn {
+  background-color: #DC3545;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.delete-btn:hover {
+  background-color: #c1303f;
+}
+
+/* 🔹 Sin clases */
+.no-classes {
+  font-size: 1rem;
+  color: var(--color-azul-profundo);
+  text-align: center;
+  padding: 10px;
+  font-style: italic;
+}
 
 /* 🔹 Responsive */
 @media (max-width: 480px) {
@@ -114,8 +100,13 @@
     align-items: flex-start;
   }
 
+  .class-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
   .delete-btn {
-    margin-top: 5px;
     width: 100%;
     text-align: center;
   }

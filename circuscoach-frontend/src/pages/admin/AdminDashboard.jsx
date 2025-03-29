@@ -1,76 +1,49 @@
-import { useEffect, useState } from "react";
-import { getAdminCourses, deleteCourse } from "../../services/api";
+import { useEffect } from "react";
 import { isAuthenticated } from "../../services/auth";
 import { useNavigate, Link } from "react-router-dom";
 import "../../styles/admin/AdminDashboard.css";
 
 function AdminDashboard() {
-  const [courses, setCourses] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!isAuthenticated()) {
-      navigate("/login"); // Redirige si el usuario no está autenticado
-    } else {
-      fetchCourses();
+      navigate("/login");
     }
   }, []);
 
-  const fetchCourses = async () => {
-    try {
-      const data = await getAdminCourses();
-      setCourses(data);
-    } catch (error) {
-      console.error("Error al obtener cursos:", error);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    if (window.confirm("¿Seguro que quieres eliminar este curso?")) {
-      try {
-        await deleteCourse(id);
-        setCourses(courses.filter((course) => course._id !== id));
-      } catch (error) {
-        console.error("Error al eliminar curso:", error);
-      }
-    }
-  };
-
   return (
     <div className="admin-dashboard">
-      <h1>Panel de Administración</h1>
+      <h1 className="admin-title">Panel de Administración</h1>
 
-      {/* Sección para gestionar formaciones */}
-      <div className="admin-section">
-        <h2>🎓 Gestión de Formaciones</h2>
-        <Link to="/admin/formaciones" className="admin-button">📚 Ver Formaciones</Link>
-      </div>
+      <div className="admin-sections">
+        {/* Formaciones Online */}
+        <div className="admin-card">
+          <h2 className="admin-card-title">Formaciones Online</h2>
+          <p className="admin-card-desc">Gestioná el contenido, módulos y clases de tus formaciones online.</p>
+          <Link to="/admin/formaciones" className="admin-card-button">Ver Formaciones</Link>
+        </div>
 
-      {/* Sección para gestionar cursos sueltos */}
-      <div className="admin-section">
-        <h2>📖 Gestión de Cursos</h2>
-        <button onClick={() => navigate("/admin/create")} className="admin-button">➕ Crear Nuevo Curso</button>
-        <ul>
-          {courses.length > 0 ? (
-            courses.map((course) => (
-              <li key={course._id} className="course-item">
-                <h3>{course.title}</h3>
-                <p>{course.description}</p>
-                <p>💰 Precio: ${course.price}</p>
-                <button onClick={() => navigate(`/admin/edit/${course._id}`)} className="edit-button">✏️ Editar</button>
-                <button onClick={() => handleDelete(course._id)} className="delete-button">🗑️ Eliminar</button>
-              </li>
-            ))
-          ) : (
-            <p>No hay cursos disponibles.</p>
-          )}
-        </ul>
+        {/* Formaciones Presenciales */}
+        <div className="admin-card">
+          <h2 className="admin-card-title">Formaciones Presenciales</h2>
+          <p className="admin-card-desc">Agregá, editá o eliminá tus formaciones presenciales y workshops.</p>
+          <Link to="/admin/formaciones-presenciales" className="admin-card-button">Ver Presenciales</Link>
+        </div>
+
+        {/* Cursos */}
+        <div className="admin-card">
+          <h2 className="admin-card-title">Cursos Sueltos</h2>
+          <p className="admin-card-desc">Accedé a la gestión de cursos individuales disponibles para los alumnos.</p>
+          <Link to="/admin/cursos" className="admin-card-button">Ver Cursos</Link>
+        </div>
       </div>
     </div>
   );
 }
 
 export default AdminDashboard;
+
 
 
 

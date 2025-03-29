@@ -7,7 +7,7 @@ const CategoryButtons = () => {
     <div className="category-buttons">
       <NavLink to="/cursos" className="category-button">CURSOS CORTOS</NavLink>
       <NavLink to="/formaciones" className="category-button">FORMACIONES COMPLETAS</NavLink>
-      <NavLink to="/formaciones-escuelas" className="category-button">FORMACIONES PARA ESCUELAS PROFESIONALES</NavLink>
+      <NavLink to="/formaciones" className="category-button">FORMACIONES PARA ESCUELAS PROFESIONALES</NavLink>
     </div>
   );
 };

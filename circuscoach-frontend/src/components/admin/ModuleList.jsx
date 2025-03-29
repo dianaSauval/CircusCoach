@@ -77,13 +77,13 @@ const ModuleList = ({
                 <div className="module-visibility">
                   <>
                     <span className={es ? "visible" : "not-visible"}>
-                      🇪spañol {es ? " ✅" : "✖"}
+                      Español {es ? " ✅" : "✖"}
                     </span>
                     <span className={en ? "visible" : "not-visible"}>
                       Inglés {en ? "✅" : "✖"}
                     </span>
                     <span className={fr ? "visible" : "not-visible"}>
-                      🇫rancés {fr ? "✅" : "✖"}
+                      Francés {fr ? "✅" : "✖"}
                     </span>
                   </>
                 </div>

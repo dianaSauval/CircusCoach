@@ -1,14 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
 import "../styles/pages/FormationDetails.css";
-
-// 🔹 Función para convertir URL normal de YouTube a formato embebido
-const getYoutubeEmbedUrl = (url) => {
-  const match = url?.match(
-    /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([^\s&?]+)/
-  );
-  return match ? `https://www.youtube.com/embed/${match[1]}` : null;
-};
+import { getYoutubeEmbedUrl } from "../utils/youtube";
 
 function FormationDetails() {
   const location = useLocation();

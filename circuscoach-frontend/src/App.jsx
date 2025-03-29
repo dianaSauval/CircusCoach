@@ -17,6 +17,8 @@ import MyCourses from "./pages/MyCourses";
 import MyCourseDetail from "./pages/MyCourseDetail";
 import FormationPage from "./pages/FormationPage";
 import ScrollToTop from "./components/ScrollToTop";
+import BioRocioGarrote from "./pages/BioRocioGarrote";
+import Register from "./pages/Register";
 
 function App() {
   return (
@@ -31,7 +33,9 @@ function App() {
           <Route path="/mis-cursos" element={<MyCourses />} />
           <Route path="/mis-cursos/:id" element={<MyCourseDetail />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/formaciones" element={<FormationPage />}/>
+          <Route path="/nosotros" element={<BioRocioGarrote />}/>
 
           {/* Protegemos las rutas de administración */}
           <Route element={<RequireAuth />}>
