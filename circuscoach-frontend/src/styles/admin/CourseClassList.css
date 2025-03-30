@@ -1,0 +1,75 @@
+/* 📘 Estilos para CourseClassList */
+.course-class-list {
+    margin-top: 1rem;
+    padding-left: 1rem;
+    border-left: 3px solid var(--color-petroleo);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .course-class-item {
+    background: var(--white);
+    padding: 1rem 1.5rem;
+    border-radius: 1rem;
+    border: 1px solid var(--gray-light);
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    transition: all 0.3s;
+  }
+  
+  .course-class-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  }
+  
+  .course-class-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .course-class-title {
+    font-size: 1.05rem;
+    font-weight: bold;
+    color: var(--color-azul-profundo);
+    cursor: pointer;
+  }
+  
+  .course-class-title.selected {
+    color: var(--color-petroleo);
+  }
+  
+  .course-class-visibility {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .course-class-visibility span {
+    display: inline-block;
+  }
+  
+  .course-class-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .delete-class-btn {
+    background: var(--danger);
+    color: var(--white);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    font-family: var(--font-texto);
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .delete-class-btn:hover {
+    background: #a71d2a;
+  }
+  

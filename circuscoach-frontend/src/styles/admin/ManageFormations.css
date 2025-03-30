@@ -17,6 +17,7 @@
   box-sizing: border-box;
   background: var(--background-color);
   font-family: var(--font-texto);
+  position: relative;
 }
 
 .manage-formations-container h1 {
@@ -38,7 +39,7 @@
   background: var(--white);
   padding: 2rem;
   border-radius: 16px;
-  overflow-y: auto;
+  overflow-y: hidden;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
@@ -116,6 +117,7 @@
 .formation-title {
   cursor: pointer;
   transition: color 0.3s ease;
+  color: var(--color-azul-profundo);
 }
 
 .formation-title.selected {
@@ -175,6 +177,50 @@
   padding-left: 1rem;
   border-left: 3px solid var(--color-petroleo);
 }
+
+/* 👉 Nueva clase para colapsar el panel lateral */
+/* 🎯 Flechita flotante estilizada */
+.collapse-toggle {
+  position: absolute;
+  top: 9rem;
+  left: 42%;
+  background-color: var(--color-menta);
+  color: var(--color-azul-profundo);
+  border: none;
+  font-size: 1.3rem;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  transition: background-color 0.3s ease, left 0.3s ease;
+  z-index: 10;
+}
+
+.collapse-toggle:hover {
+  background-color: #5cc8b2;
+}
+
+/* Cuando está colapsado, cambiamos la posición hacia el costado izquierdo */
+.collapsed-position {
+  left: 2.5rem;
+}
+
+/* 🔽 Cuando está colapsado */
+.formations-list.collapsed {
+  width: 30px;
+  padding: 1rem 0.5rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.formations-layout.collapsed {
+  grid-template-columns: 5% 95%;
+}
+
 
 /* 📱 Responsive */
 @media (max-width: 768px) {

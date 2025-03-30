@@ -21,7 +21,7 @@ function AdminDashboard() {
         <div className="admin-card">
           <h2 className="admin-card-title">Formaciones Online</h2>
           <p className="admin-card-desc">Gestioná el contenido, módulos y clases de tus formaciones online.</p>
-          <Link to="/admin/formaciones" className="admin-card-button">Ver Formaciones</Link>
+          <Link to="/admin/formaciones-online" className="admin-card-button">Ver Formaciones</Link>
         </div>
 
         {/* Formaciones Presenciales */}

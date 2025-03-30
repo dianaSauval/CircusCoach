@@ -19,6 +19,10 @@ import FormationPage from "./pages/FormationPage";
 import ScrollToTop from "./components/ScrollToTop";
 import BioRocioGarrote from "./pages/BioRocioGarrote";
 import Register from "./pages/Register";
+import RegisterSuccess from "./pages/RegisterSuccess";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+import ManageCourses from "./pages/admin/ManageCourses";
 
 function App() {
   return (
@@ -34,6 +38,9 @@ function App() {
           <Route path="/mis-cursos/:id" element={<MyCourseDetail />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/registro-exitoso" element={<RegisterSuccess />} />
+          <Route path="/olvidaste-tu-contraseña" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="/formaciones" element={<FormationPage />}/>
           <Route path="/nosotros" element={<BioRocioGarrote />}/>
 
@@ -42,7 +49,8 @@ function App() {
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/create" element={<CreateCourse />} />
             <Route path="/admin/edit/:id" element={<EditCourse />} />
-            <Route path="/admin/formaciones" element={<ManageFormations />} />
+            <Route path="/admin/formaciones-online" element={<ManageFormations />} />
+            <Route path="/admin/cursos" element={<ManageCourses />} />
           </Route>
 
           {/* ⛔ Esta debe ir al final para no interferir con otras rutas */}

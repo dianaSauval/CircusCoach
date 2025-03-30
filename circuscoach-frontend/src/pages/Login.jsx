@@ -50,7 +50,7 @@ function Login() {
         <button type="submit">Ingresar</button>
 
         <div className="login-links">
-          <button type="button" className="link-button" onClick={() => navigate("/forgot-password")}>¿Olvidaste tu contraseña?</button>
+          <button type="button" className="link-button" onClick={() => navigate("/olvidaste-tu-contraseña")}>¿Olvidaste tu contraseña?</button>
           <button type="button" className="link-button" onClick={() => navigate("/register")}>¿Aún no tenés cuenta? Registrate</button>
         </div>
       </form>

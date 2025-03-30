@@ -1,3 +1,16 @@
+/* 🔹 Box-sizing global para evitar sobresaltos en responsive */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+
 /* 🔹 Estilos generales */
 body {
   font-family: 'Arial', sans-serif;
@@ -6,6 +19,7 @@ body {
   background-color: #f5f7fa;
   color: #333;
 }
+
 
 /* 🔹 Contenedor principal */
 .app-container {
@@ -25,45 +39,3 @@ body {
   margin: 0 auto;
 }
 
-/* 🔹 Header */
-header {
-  background-color: #007bff;
-  color: white;
-  padding: 15px 20px;
-  text-align: center;
-}
-
-
-
-/* 🔹 Botones */
-button {
-  padding: 8px 12px;
-  font-size: 14px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-}
-
-button:hover {
-  opacity: 0.8;
-}
-
-/* 🔹 Botón principal */
-.primary-btn {
-  background-color: #007bff;
-  color: white;
-}
-
-/* 🔹 Botón secundario */
-.secondary-btn {
-  background-color: #6c757d;
-  color: white;
-}
-
-/* 🔹 Responsive */
-@media (max-width: 768px) {
-  .main-content {
-    padding: 15px;
-  }
-}

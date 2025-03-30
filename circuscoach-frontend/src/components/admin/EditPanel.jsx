@@ -5,6 +5,7 @@ import LanguageTabs from "../../components/admin/LanguageTabs";
 import ClassForm from "./Form/ClassForm";
 import FormationForm from "./Form/FormationForm";
 import ModuleForm from "./Form/ModuleForm";
+import { getYoutubeEmbedUrl } from "../../utils/youtube";
 
 const EditPanel = ({
   selectedFormation,
@@ -124,6 +125,12 @@ const EditPanel = ({
     ? "Ocultar en este idioma"
     : "Hacer visible en este idioma";
 
+    const rawVideo = formData.video?.[activeTab];
+    const videoUrl = typeof rawVideo === "string" ? rawVideo : rawVideo?.url || "";
+    const embedUrl = getYoutubeEmbedUrl(videoUrl);
+
+console.log("🔍 Embed URL:", embedUrl);
+
   return (
     <div className={isEditing ? "edit-panel is-editing" : "edit-panel"}>
       <LanguageTabs activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -151,7 +158,7 @@ const EditPanel = ({
               </>
             )}
 
-            {selectedFormation && (
+            {selectedFormation && !selectedClass && (
               <>
                 <p>
                   {formData.description?.[activeTab] ||
@@ -204,13 +211,13 @@ const EditPanel = ({
                   {formData?.video?.[activeTab] ? (
                     <>
                       <p>
-                        <strong>📌 Video:</strong>
+                        <strong>📌 Video de presentación:</strong>
                       </p>
                       <div className="video-container">
                         <iframe
                           width="100%"
                           height="200"
-                          src={formData.video[activeTab]}
+                          src={embedUrl}
                           frameBorder="0"
                           allowFullScreen
                         ></iframe>
@@ -278,7 +285,7 @@ const EditPanel = ({
                         <iframe
                           width="100%"
                           height="200"
-                          src={formData.video[activeTab].url}
+                          src={embedUrl}
                           title={formData.video[activeTab].title || "Video"}
                           frameBorder="0"
                           allowFullScreen

@@ -35,11 +35,12 @@ export const getCourseById = async (id) => {
   return response.data;
 };
 
-// Cursos protegidos (solo admin)
-export const getAdminCourses = async () => {
-  const response = await api.get("/courses");
+// 🔹 Obtener todos los cursos (admin)
+export const getAllCourses = async () => {
+  const response = await api.get("/courses/admin");
   return response.data;
 };
+
 
 export const createCourse = async (courseData) => {
   const response = await api.post("/courses", courseData);
@@ -133,6 +134,26 @@ export const registerUser = async (userData) => {
   const response = await api.post("/users", userData);
   return response.data;
 };
+
+// Solicita el envío de un email con el link de recuperación
+export const requestPasswordReset = async (email) => {
+  const response = await api.post("/auth/forgot-password", { email });
+  return response.data;
+};
+
+// Envía la nueva contraseña al backend, usando el token
+export const resetPassword = async (token, newPassword) => {
+  const response = await api.post(`/auth/reset-password/${token}`, {
+    newPassword,
+  });
+  return response.data;
+};
+
+export const forgotPassword = async (email) => {
+  const response = await api.post("/auth/forgot-password", { email });
+  return response.data;
+};
+
 
 
 export default api;

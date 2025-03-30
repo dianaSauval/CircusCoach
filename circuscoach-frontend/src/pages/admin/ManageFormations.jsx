@@ -15,6 +15,7 @@ const ManageFormations = () => {
   const [selectedClass, setSelectedClass] = useState(null);
   const [expandedFormations, setExpandedFormations] = useState({});
   const [showModal, setShowModal] = useState(null);
+  const [isListCollapsed, setIsListCollapsed] = useState(false);
 
   useEffect(() => {
     fetchFormations();
@@ -22,7 +23,7 @@ const ManageFormations = () => {
 
   const fetchFormations = async () => {
     try {
-      const data = await getAllFormations(); // ✅ Ya incluye el token automáticamente
+      const data = await getAllFormations();
       setFormations(data);
     } catch (error) {
       console.error("Error al cargar formaciones:", error);
@@ -66,91 +67,104 @@ const ManageFormations = () => {
     <div className="manage-formations-container">
       <h1>📚 Formaciones</h1>
 
-      <div className="formations-layout">
-        <div className="formations-list">
-          <h2>📌 Formaciones</h2>
-          <button
-            className="add-button"
-            onClick={() => setShowModal({ type: "formation", parentId: null })}
-          >
-            ➕ Crear nueva formación
-          </button>
+      <div className={`formations-layout ${isListCollapsed ? "collapsed" : ""}`}>
+      <button
+  className={`collapse-toggle ${isListCollapsed ? "collapsed-position" : ""}`}
+  onClick={() => setIsListCollapsed(!isListCollapsed)}
+  title={isListCollapsed ? "Expandir panel lateral" : "Colapsar panel lateral"}
+>
+  {isListCollapsed ? "🡢" : "🡠"}
+</button>
+        <div className={`formations-list ${isListCollapsed ? "collapsed" : ""}`}>
 
-          {formations.map((formation) => {
-            const { es, en, fr } = formation.visible;
 
-            return (
-              <div key={formation._id} className="formation-item">
-                <div className="formation-content">
-                  <div className="formation-visibility">
-                    <span className={es ? "visible" : "not-visible"}>
-                      Español {es ? "✅" : " ❌"}
-                    </span>
-                    <span className={en ? "visible" : "not-visible"}>
-                      Inglés {en ? "✅" : " ❌"}
-                    </span>
-                    <span className={fr ? "visible" : "not-visible"}>
-                      Francés {fr ? "✅" : " ❌"}
-                    </span>
+          {!isListCollapsed && (
+            <>
+              <h2>📌 Formaciones</h2>
+              <button
+                className="add-button"
+                onClick={() => setShowModal({ type: "formation", parentId: null })}
+              >
+                ➕ Crear nueva formación
+              </button>
+
+              {formations.map((formation) => {
+                const { es, en, fr } = formation.visible;
+
+                return (
+                  <div key={formation._id} className="formation-item">
+                    <div className="formation-content">
+                      <div className="formation-visibility">
+                        <span className={es ? "visible" : "not-visible"}>
+                          Español {es ? "✅" : " ❌"}
+                        </span>
+                        <span className={en ? "visible" : "not-visible"}>
+                          Inglés {en ? "✅" : " ❌"}
+                        </span>
+                        <span className={fr ? "visible" : "not-visible"}>
+                          Francés {fr ? "✅" : " ❌"}
+                        </span>
+                      </div>
+
+                      <div className="formation-header">
+                        <span
+                          className={`formation-title ${
+                            selectedFormation?._id === formation._id ? "selected" : ""
+                          }`}
+                          onClick={() => {
+                            setSelectedFormation(formation);
+                            setSelectedModule(null);
+                            setSelectedClass(null);
+                          }}
+                        >
+                          {formation.title.es}
+                        </span>
+                        <button
+                          className="toggle-btn"
+                          onClick={() => toggleExpandFormation(formation._id)}
+                        >
+                          {expandedFormations[formation._id] ? "⬆️" : "⬇️"}
+                        </button>
+                      </div>
+
+                      <div className="formation-actions">
+                        <button
+                          className="small-btn"
+                          onClick={() =>
+                            setShowModal({
+                              type: "module",
+                              parentId: formation._id,
+                            })
+                          }
+                        >
+                          ➕ Agregar módulo
+                        </button>
+                        <button
+                          className="delete-btn"
+                          onClick={() => handleDeleteFormation(formation._id)}
+                        >
+                          🗑️ Eliminar Formación
+                        </button>
+                      </div>
+                    </div>
+
+                    {expandedFormations[formation._id] && (
+                      <div className="formation-modules">
+                        <ModuleList
+                          formation={formation}
+                          setSelectedModule={handleSelectModule}
+                          setSelectedClass={handleSelectClass}
+                          selectedModule={selectedModule}
+                          selectedClass={selectedClass}
+                          setShowModalInParent={setShowModal}
+                        />
+                      </div>
+                    )}
                   </div>
-
-                  <div className="formation-header">
-                    <span
-                      className={`formation-title ${
-                        selectedFormation?._id === formation._id ? "selected" : ""
-                      }`}
-                      onClick={() => {
-                        setSelectedFormation(formation);
-                        setSelectedModule(null);
-                        setSelectedClass(null);
-                      }}
-                    >
-                      {formation.title.es}
-                    </span>
-                    <button
-                      className="toggle-btn"
-                      onClick={() => toggleExpandFormation(formation._id)}
-                    >
-                      {expandedFormations[formation._id] ? "⬆️" : "⬇️"}
-                    </button>
-                  </div>
-
-                  <div className="formation-actions">
-                    <button
-                      className="small-btn"
-                      onClick={() =>
-                        setShowModal({
-                          type: "module",
-                          parentId: formation._id,
-                        })
-                      }
-                    >
-                      ➕ Agregar módulo
-                    </button>
-                    <button
-                      className="delete-btn"
-                      onClick={() => handleDeleteFormation(formation._id)}
-                    >
-                      🗑️ Eliminar Formación
-                    </button>
-                  </div>
-                </div>
-
-                {expandedFormations[formation._id] && (
-                  <div className="formation-modules">
-                    <ModuleList
-                      formation={formation}
-                      setSelectedModule={handleSelectModule}
-                      setSelectedClass={handleSelectClass}
-                      selectedModule={selectedModule}
-                      selectedClass={selectedClass}
-                      setShowModalInParent={setShowModal}
-                    />
-                  </div>
-                )}
-              </div>
-            );
-          })}
+                );
+              })}
+            </>
+          )}
         </div>
 
         <EditPanel
@@ -174,4 +188,3 @@ const ManageFormations = () => {
 };
 
 export default ManageFormations;
-

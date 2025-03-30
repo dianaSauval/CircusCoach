@@ -11,28 +11,45 @@ function Register() {
     password: "",
     confirmPassword: "",
   });
-  const [error, setError] = useState(null);
+
+  const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(null);
   const navigate = useNavigate();
 
+  const validate = () => {
+    const newErrors = {};
+
+    if (!formData.name.trim()) newErrors.name = "El nombre es obligatorio.";
+    if (!formData.surname.trim()) newErrors.surname = "El apellido es obligatorio.";
+    if (!formData.email) {
+      newErrors.email = "El correo es obligatorio.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "El correo no es válido.";
+    }
+    if (!formData.password) {
+      newErrors.password = "La contraseña es obligatoria.";
+    } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(formData.password)) {
+      newErrors.password = "Debe tener 8 caracteres, una mayúscula, una minúscula y un número.";
+    }
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = "Repetí la contraseña.";
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = "Las contraseñas no coinciden.";
+    }
+
+    return newErrors;
+  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setError(null);
+    setErrors({ ...errors, [e.target.name]: null });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
-    setSuccess(null);
-
-    if (formData.password !== formData.confirmPassword) {
-      setError("Las contraseñas no coinciden.");
-      return;
-    }
-
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
-    if (!passwordRegex.test(formData.password)) {
-      setError("La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número.");
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
 
@@ -45,62 +62,80 @@ function Register() {
       });
       setSuccess("Usuario creado con éxito. Ya podés iniciar sesión.");
       setFormData({ name: "", surname: "", email: "", password: "", confirmPassword: "" });
-      setTimeout(() => navigate("/login"), 2000);
+      setTimeout(() => navigate("/registro-exitoso"), 2000);
     } catch (err) {
-        console.error("Error al registrar:", err?.response?.data || err.message);
-        setError(err?.response?.data?.error || "Hubo un error al registrar. Intentalo nuevamente.");
-      }
-      
+      console.error("Error al registrar:", err?.response?.data || err.message);
+      setErrors({ general: err?.response?.data?.error || "Hubo un error al registrar. Intentalo nuevamente." });
+    }
   };
 
   return (
     <div className="login-container">
       <h1 className="login-title">Crear cuenta</h1>
 
-      {error && <p className="login-error">{error}</p>}
-      {success && <p className="login-success">{success}</p>}
+      {errors.general && <p className="login-error">{errors.general}</p>}
 
       <form onSubmit={handleSubmit} className="login-form">
-        <input
-          type="text"
-          name="name"
-          placeholder="Nombre"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="surname"
-          placeholder="Apellido"
-          value={formData.surname}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Correo electrónico"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Contraseña"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="password"
-          name="confirmPassword"
-          placeholder="Repetir contraseña"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          required
-        />
+        <div className="input-group">
+          <input
+            type="text"
+            name="name"
+            placeholder="Nombre"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+          {errors.name && <p className="field-error">{errors.name}</p>}
+        </div>
+
+        <div className="input-group">
+          <input
+            type="text"
+            name="surname"
+            placeholder="Apellido"
+            value={formData.surname}
+            onChange={handleChange}
+            required
+          />
+          {errors.surname && <p className="field-error">{errors.surname}</p>}
+        </div>
+
+        <div className="input-group">
+          <input
+            type="email"
+            name="email"
+            placeholder="Correo electrónico"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+          {errors.email && <p className="field-error">{errors.email}</p>}
+        </div>
+
+        <div className="input-group">
+          <input
+            type="password"
+            name="password"
+            placeholder="Contraseña"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+          {errors.password && <p className="field-error">{errors.password}</p>}
+        </div>
+
+        <div className="input-group">
+          <input
+            type="password"
+            name="confirmPassword"
+            placeholder="Repetir contraseña"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            required
+          />
+          {errors.confirmPassword && <p className="field-error">{errors.confirmPassword}</p>}
+        </div>
+
         <button type="submit">Registrarse</button>
       </form>
     </div>
