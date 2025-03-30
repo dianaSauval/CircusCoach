@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { isAuthenticated, removeToken } from "../services/auth";
 import "../styles/components/Header.css";
-import logo from "../assets/img/logo.png";
+import logo from "../assets/img/Logo.png";
 import { FaSearch, FaShoppingBag, FaBars, FaTimes } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";

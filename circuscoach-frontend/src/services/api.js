@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getToken } from "./auth";
 
-const API_URL = "http://localhost:5000/api"; // Cambiar si estás en producción
+const API_URL = import.meta.env.VITE_API_URL; // Cambiar si estás en producción
 
 // Crear instancia de Axios
 const api = axios.create({
