@@ -1,9 +1,14 @@
-const Course = require("../models/Course"); // Asegurate de importar el modelo
+const Course = require("../models/Course");
+const CourseClass = require("../models/CourseClass");
 
-// Obtener todos los cursos
-exports.getCourses = async (req, res) => {
+const isAdmin = (req) => req.user && req.user.role === "admin";
+
+// 🔹 Obtener todos los cursos (admin)
+exports.getAllCourses = async (req, res) => {
+  if (!isAdmin(req)) return res.status(403).json({ error: "No autorizado" });
+
   try {
-    const courses = await Course.find();
+    const courses = await Course.find().populate("classes");
     res.json(courses);
   } catch (error) {
     console.error("Error obteniendo cursos:", error);
@@ -11,61 +16,128 @@ exports.getCourses = async (req, res) => {
   }
 };
 
-// Obtener un curso por ID
-exports.getCourseById = async (req, res) => {
-  try {
-    const course = await Course.findById(req.params.id);
-    if (!course) return res.status(404).json({ error: "Curso no encontrado" });
+// 🔹 Obtener cursos visibles por idioma (alumnos)
+exports.getVisibleCoursesByLanguage = async (req, res) => {
+  const lang = req.query.lang || "es";
 
-    res.json(course);
+  if (!["es", "en", "fr"].includes(lang)) {
+    return res.status(400).json({ error: "Idioma no válido" });
+  }
+
+  try {
+    const courses = await Course.find({ [`visible.${lang}`]: true }).populate("classes");
+    res.json(courses);
   } catch (error) {
-    console.error("Error obteniendo curso:", error);
+    console.error("Error obteniendo cursos visibles:", error);
     res.status(500).json({ error: "Error en el servidor" });
   }
 };
 
-// Crear un nuevo curso
+// 🔹 Crear un curso (admin)
 exports.createCourse = async (req, res) => {
+  if (!isAdmin(req)) return res.status(403).json({ error: "No autorizado" });
+
   try {
-    const { title, description, price } = req.body;
+    const { title, description, price, image, pdf, video } = req.body;
+
+    if (!title?.es || !description?.es || !price) {
+      return res.status(400).json({ error: "Faltan campos obligatorios" });
+    }
 
     const newCourse = new Course({
       title,
       description,
       price,
+      image,
+      pdf,
+      video,
+      classes: [],
     });
 
     await newCourse.save();
     res.status(201).json(newCourse);
   } catch (error) {
-    console.error("Error creando curso:", error);
+    console.error("Error al crear curso:", error);
     res.status(500).json({ error: "Error en el servidor" });
   }
 };
 
-// Editar un curso
+// 🔹 Actualizar un curso (admin)
 exports.updateCourse = async (req, res) => {
+  if (!isAdmin(req)) return res.status(403).json({ error: "No autorizado" });
+
   try {
-    const updatedCourse = await Course.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const { id } = req.params;
+    const updatedData = req.body;
 
-    if (!updatedCourse) return res.status(404).json({ error: "Curso no encontrado" });
+    const course = await Course.findByIdAndUpdate(id, updatedData, {
+      new: true,
+      runValidators: true,
+    });
 
-    res.json(updatedCourse);
+    if (!course) {
+      return res.status(404).json({ error: "Curso no encontrado" });
+    }
+
+    res.json(course);
   } catch (error) {
-    console.error("Error actualizando curso:", error);
+    console.error("Error al actualizar curso:", error);
     res.status(500).json({ error: "Error en el servidor" });
   }
 };
 
-// Eliminar un curso
-exports.deleteCourse = async (req, res) => {
-  try {
-    const course = await Course.findByIdAndDelete(req.params.id);
-    if (!course) return res.status(404).json({ error: "Curso no encontrado" });
+// 🔄 Cambiar visibilidad de un curso por idioma
+exports.toggleCourseVisibilityByLanguage = async (req, res) => {
+  if (!isAdmin(req)) return res.status(403).json({ error: "No autorizado" });
 
-    res.json({ message: "Curso eliminado correctamente" });
+  try {
+    const { id } = req.params;
+    const { language } = req.body;
+
+    if (!["es", "en", "fr"].includes(language)) {
+      return res.status(400).json({ error: "Idioma no válido" });
+    }
+
+    const course = await Course.findById(id);
+    if (!course)
+      return res.status(404).json({ error: "Curso no encontrado" });
+
+    course.visible[language] = !course.visible[language];
+    await course.save({ validateBeforeSave: false }); // 👈 Aca está la clave
+
+    res.json({
+      message: `Curso en ${language.toUpperCase()} ahora está ${
+        course.visible[language] ? "visible" : "oculto"
+      }`,
+    });
   } catch (error) {
-    console.error("Error eliminando curso:", error);
+    console.error("Error al cambiar visibilidad del curso:", error);
+    res.status(500).json({ error: "Error en el servidor" });
+  }
+};
+
+
+// 🔹 Eliminar un curso y sus clases (admin)
+exports.deleteCourse = async (req, res) => {
+  if (!isAdmin(req)) return res.status(403).json({ error: "No autorizado" });
+
+  try {
+    const { id } = req.params;
+    const course = await Course.findById(id);
+
+    if (!course) {
+      return res.status(404).json({ error: "Curso no encontrado" });
+    }
+
+    // 🔹 Eliminar las clases asociadas al curso (usando su array de referencias)
+    await CourseClass.deleteMany({ _id: { $in: course.classes } });
+
+    // 🔹 Eliminar el curso
+    await Course.findByIdAndDelete(id);
+
+    res.json({ message: "Curso y clases asociadas eliminados correctamente" });
+  } catch (error) {
+    console.error("Error al eliminar curso:", error);
     res.status(500).json({ error: "Error en el servidor" });
   }
 };

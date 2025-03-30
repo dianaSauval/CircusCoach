@@ -17,6 +17,8 @@ const formationRoutes = require("./routes/formationRoutes");
 const moduleRoutes = require("./routes/moduleRoutes");
 const classRoutes = require("./routes/classRoutes");
 const courseRoutes = require("./routes/courseRoutes");
+const courseClassRoutes = require("./routes/courseClassRoutes");
+const presentialRoutes = require('./routes/presentialFormationsRoutes');
 
 // Configuración de rutas principales
 app.use("/api/auth", authRoutes);
@@ -25,6 +27,8 @@ app.use("/api/formations", formationRoutes);
 app.use("/api/modules", moduleRoutes);
 app.use("/api/classes", classRoutes);
 app.use("/api/courses", courseRoutes);
+app.use("/api/course-classes", courseClassRoutes);
+app.use('/api/presential-formations', presentialRoutes);
 
 // Ruta de prueba para verificar el estado del servidor
 app.get("/", (req, res) => {

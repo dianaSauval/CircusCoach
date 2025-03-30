@@ -13,7 +13,7 @@ const { authMiddleware, isAdminMiddleware } = require("../middlewares/authMiddle
 
 const router = express.Router();
 
-// 🔹 Verificar si los controladores están bien importados
+/* // 🔹 Verificar si los controladores están bien importados
 console.log("🛠️ Controllers importados en classRoutes:", {
   getAllClasses,
   getClassesByModule,
@@ -22,7 +22,7 @@ console.log("🛠️ Controllers importados en classRoutes:", {
   makeClassVisibleInAllLanguages,
   toggleClassVisibilityByLanguage,
   deleteClass,
-});
+}); */
 
 // 🔹 Obtener todas las clases (solo admin)
 router.get("/admin", authMiddleware, isAdminMiddleware, getAllClasses);

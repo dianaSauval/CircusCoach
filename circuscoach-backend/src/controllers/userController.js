@@ -1,5 +1,7 @@
 const User = require("../models/User");
 
+const bcrypt = require("bcrypt");
+
 // Obtener todos los usuarios (solo admin)
 const getUsers = async (req, res) => {
   try {
@@ -29,33 +31,38 @@ const createUser = async (req, res) => {
   try {
     const { name, surname, email, password, role } = req.body;
 
-    // 🔹 Validar que los campos obligatorios estén presentes
     if (!name || !surname || !email || !password) {
       return res.status(400).json({ error: "Todos los campos son obligatorios" });
     }
 
-    // 🔹 Hashear la contraseña antes de guardarla
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: "Ya existe una cuenta con ese correo electrónico" });
+    }
 
-    // 🔹 Si no se especifica un rol, asignar "user" por defecto
+    const hashedPassword = await bcrypt.hash(password, 10);
     const userRole = role || "user";
 
-    // 🔹 Crear el nuevo usuario con la contraseña encriptada
     const newUser = new User({
       name,
       surname,
       email,
-      password: hashedPassword, // Guardar la contraseña encriptada
+      password: hashedPassword,
       role: userRole,
     });
 
     await newUser.save();
     res.status(201).json({ message: "Usuario creado con éxito", user: newUser });
+
   } catch (error) {
     console.error("Error creando usuario:", error);
-    res.status(500).json({ error: "Error en el servidor", details: error.message });
+    res.status(500).json({
+      error: "Error en el servidor",
+      details: error.message
+    });
   }
 };
+
 
 // Editar un usuario
 const updateUser = async (req, res) => {

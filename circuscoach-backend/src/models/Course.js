@@ -1,13 +1,39 @@
 const mongoose = require("mongoose");
 
-const CourseSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  description: { type: String, required: true },
+const courseSchema = new mongoose.Schema({
+  title: {
+    es: { type: String, required: true },
+    en: { type: String },
+    fr: { type: String },
+  },
+  description: {
+    es: { type: String, required: true },
+    en: { type: String },
+    fr: { type: String },
+  },
   price: { type: Number, required: true },
-  pdfUrl: { type: String },  // URL del PDF en Firebase
-  videoUrl: { type: String }, // URL del video en Firebase
-  language: { type: String, enum: ["es", "en", "fr"], required: true }, // Idiomas disponibles
-  createdAt: { type: Date, default: Date.now }
+  image: {
+    es: { type: String },
+    en: { type: String },
+    fr: { type: String },
+  },
+  pdf: {
+    es: { type: String },
+    en: { type: String },
+    fr: { type: String },
+  },
+  video: {
+    es: { type: String },
+    en: { type: String },
+    fr: { type: String },
+  },
+  visible: {
+    es: { type: Boolean, default: false },
+    en: { type: Boolean, default: false },
+    fr: { type: Boolean, default: false },
+  },
+  classes: [{ type: mongoose.Schema.Types.ObjectId, ref: "CourseClass" }]
 });
 
-module.exports = mongoose.model("Course", CourseSchema);
+module.exports = mongoose.model("Course", courseSchema);
+

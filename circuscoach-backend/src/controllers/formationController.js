@@ -19,6 +19,7 @@ exports.getFormations = async (req, res) => {
 
 // 🔹 Obtener todas las formaciones (admin)
 exports.getAllFormations = async (req, res) => {
+  if (!isAdmin(req)) return res.status(403).json({ error: "No autorizado" });
   try {
     const formations = await Formation.find().populate("modules");
     res.json(formations);

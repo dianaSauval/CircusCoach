@@ -1,6 +1,11 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
+const { sendRecoveryEmail } = require("../utils/emailService");
+
+
 
 const register = async (req, res) => {
   try {
@@ -67,5 +72,64 @@ const login = async (req, res) => {
   }
 };
 
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ error: "No se encontró un usuario con ese email." });
+
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const resetTokenExpire = Date.now() + 1000 * 60 * 30;
+
+    user.resetToken = resetToken;
+    user.resetTokenExpire = resetTokenExpire;
+    await user.save();
+    console.log("📨 Preparando envío de email a:", user.email); // 👉 LOG 1
+    await sendRecoveryEmail(user.email, resetToken);
+    console.log("✅ Email enviado (al menos intentado)");
+
+    res.json({ message: "Correo de recuperación enviado correctamente." });
+  } catch (error) {
+    console.error("Error en forgotPassword:", error);
+    res.status(500).json({ error: "Error en el servidor." });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const { newPassword } = req.body;
+
+    // Buscar al usuario con el token válido y no expirado
+    const user = await User.findOne({
+      resetToken: token,
+      resetTokenExpire: { $gt: Date.now() },
+    });
+
+    console.log("👤 Usuario encontrado:", user);
+
+    if (!user) {
+      return res.status(400).json({ error: "Token inválido o expirado." });
+    }
+
+    // Hashear y guardar la nueva contraseña
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+
+    // Limpiar los campos del token
+    user.resetToken = undefined;
+    user.resetTokenExpire = undefined;
+
+    await user.save();
+
+    res.json({ message: "Contraseña actualizada correctamente." });
+  } catch (error) {
+    console.error("Error en resetPassword:", error);
+    res.status(500).json({ error: "Error en el servidor." });
+  }
+};
+
+
 // EXPORTAMOS AMBAS FUNCIONES
-module.exports = { register, login };
+module.exports = { register, login , forgotPassword, resetPassword};
