@@ -24,8 +24,7 @@ const FormacionesGrid = ({ lang = "es" }) => {
       <div className="formaciones-subtitle">
         <p>PROFUNDIZÁ TU PROFESIÓN:</p>
         <p>PERFECCIONÁ TUS HABILIDADES Y ALCANZÁ TU MÁXIMO POTENCIAL.</p>
-      </div>
-
+      </div>    
       {formaciones.length === 0 ? (
   <div className="formaciones-empty-message">
     <h3>ESTAMOS PREPARANDO LOS PRÓXIMOS ENCUENTROS PRESENCIALES</h3>
