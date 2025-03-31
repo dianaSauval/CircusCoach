@@ -154,6 +154,20 @@
   outline: none;
 }
 
+/* 🔴 Borde rojo para campos con error */
+.input-error {
+  border: 2px solid #d72638 !important; /* rojo intenso */
+}
+
+/* ⚠️ Mensaje de error individual debajo del campo */
+.field-error {
+  color: #d72638 !important;
+  font-size: 0.9rem;
+  margin: -0.3rem 0 0.5rem 0.2rem;
+  text-align: left;
+}
+
+
 @media (max-width: 480px) {
   .modal-content {
     width: 95%;

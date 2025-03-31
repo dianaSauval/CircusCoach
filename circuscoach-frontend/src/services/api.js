@@ -47,8 +47,8 @@ export const createCourse = async (courseData) => {
   return response.data;
 };
 
-export const updateCourse = async (id, courseData) => {
-  const response = await api.put(`/courses/${id}`, courseData);
+export const updateCourse = async (courseId, courseData) => {
+  const response = await api.put(`/courses/${courseId}`, courseData);
   return response.data;
 };
 
@@ -56,6 +56,24 @@ export const deleteCourse = async (id) => {
   const response = await api.delete(`/courses/${id}`);
   return response.data;
 };
+
+export const deleteCourseClass = async (classId) => {
+  const response = await api.delete(`/course-classes/${classId}`);
+  return response.data;
+};
+
+export const updateCourseClass = async (classId, classData) => {
+  const response = await api.put(`/course-classes/${classId}`, classData);
+  return response.data;
+};
+
+export const createCourseClass = async (courseId, classData) => {
+  const response = await api.post(`/course-classes/${courseId}`, classData);
+  return response.data;
+};
+
+
+
 
 //
 // 🔹 FORMACIONES ONLINE
