@@ -26,22 +26,34 @@ const FormacionesGrid = ({ lang = "es" }) => {
         <p>PERFECCIONÁ TUS HABILIDADES Y ALCANZÁ TU MÁXIMO POTENCIAL.</p>
       </div>
 
-      <div className="formaciones-grid">
-        {formaciones.map((formacion) => (
-          <div key={formacion._id} className="formacion-card">
-            <img
-              src={formacion.image?.[lang]}
-              alt={formacion.title?.[lang]}
-              className="formacion-img"
-            />
-            <div className="formacion-description">
-              {formacion.description?.[lang]}
-            </div>
-          </div>
-        ))}
+      {formaciones.length === 0 ? (
+  <div className="formaciones-empty-message">
+    <h3>ESTAMOS PREPARANDO LOS PRÓXIMOS ENCUENTROS PRESENCIALES</h3>
+    <p>
+      Pronto compartiremos más propuestas presenciales para que sigas entrenando,
+      aprendiendo y creando.
+    </p>
+  </div>
+) : (
+  <div className="formaciones-grid">
+    {formaciones.map((formacion) => (
+      <div key={formacion._id} className="formacion-card">
+        <img
+          src={formacion.image?.[lang]}
+          alt={formacion.title?.[lang]}
+          className="formacion-img"
+        />
+        <div className="formacion-description">
+          {formacion.description?.[lang]}
+        </div>
       </div>
+    ))}
+  </div>
+)}
+
     </div>
   );
 };
 
 export default FormacionesGrid;
+

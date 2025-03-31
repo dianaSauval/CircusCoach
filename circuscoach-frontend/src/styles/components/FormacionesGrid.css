@@ -74,5 +74,30 @@
     z-index: 1;
     position: relative;
   }
+
+  .formaciones-empty-message {
+    background-color: var(--color-verde-claro);
+    padding: 3rem 2rem;
+    text-align: center;
+    border-radius: 1.5rem;
+    max-width: 700px;
+    margin: 3rem auto;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  }
+  
+  .formaciones-empty-message h3 {
+    font-family: var(--font-titulo);
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--color-azul-profundo);
+    line-height: 1.2;
+  }
+  
+  .formaciones-empty-message p {
+    font-family: var(--font-texto);
+    font-size: 1.1rem;
+    color: var(--color-azul-profundo);
+    margin: 0;
+  }
   
   
