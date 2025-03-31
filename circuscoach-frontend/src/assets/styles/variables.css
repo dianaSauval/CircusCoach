@@ -1,5 +1,5 @@
 @font-face {
-    font-family: 'Bebas Neue Cyrillic';
+    font-family: 'Bebas Neue Cyrillic', sans-serif;
     src: url('../../../public/fonts/bebasneuecyrillic.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
