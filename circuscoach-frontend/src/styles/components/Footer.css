@@ -2,6 +2,7 @@
 .footer {
   display: flex;
   justify-content: space-between;
+  font-family: var(--font-texto);
   align-items: center;
   background-color: var(--color-azul-profundo);
   padding: 3rem;

@@ -12,30 +12,30 @@ export default function Home() {
     <section className="home-hero">
       <div className="home-content">
         <h1>
-          15 AÑOS DE EXPERIENCIA EN ESCUELAS DE CIRCO DE RENOMBRE, DESARROLLANDO
-          FORMACIONES RESPALDADAS POR METODOLOGÍAS COMPROBADAS PARA OPTIMIZAR
-          EL RENDIMIENTO FÍSICO Y ARTÍSTICO.
+        15 años formando estudiantes y artistas profesionales de circo con técnicas efectivas y comprobadas para optimizar el rendimiento físico y artístico
         </h1>
 
         <button onClick={() => navigate('/formaciones')}>QUIERO FORMARME</button>
 
         <div className="home-description">
           <p>
-            En nuestras formaciones, combinamos la experiencia artística con el conocimiento teórico para potenciar tu nivel.
+          En nuestras formaciones, combinamos la experiencia artística con el conocimiento teórico para potenciarte.
+Nos especializamos en aplicar principios de biomecánica, neurociencias, psicología del deporte e innovación educativa en cada proceso de enseñanza, adaptándonos a las necesidades individuales de cada alumno y al contexto artístico.
+
             
           </p>
-          <p>Nos especializamos en aplicar principios de biomecánica, neurociencia, psicología del deporte e innovación educativa
-          en cada proceso de enseñanza, adaptándonos a las necesidades individuales de cada alumno y al contexto artístico.</p>
+          <p>Te ofrecemos la oportunidad de perfeccionar tu técnica y comprensión del movimiento a través de una formación integral que abarca todos los aspectos de las artes circenses.
+          </p>
           <p>
-            Te ofrecemos la oportunidad de perfeccionar tu técnica y comprensión del movimiento a través de una formación integral
-            que abarca todos los aspectos de las artes circenses.
+          Con más de 10 años de experiencia en las principales escuelas de circo de Argentina y Europa, y una base teórica sólida, te brindamos una formación que marcará la diferencia en tu profesión.
           </p>
           <p>
             Con más de 10 años de experiencia en las principales escuelas de circo de Argentina y Europa, y una base teórica sólida,
             te brindamos una formación que marcará la diferencia en tu profesión.
             
           </p>
-          <p>Tu potencial está en tus manos!</p>
+          <p>Tu potencial está en tus manos… y nosotros estamos aquí para ayudarte a desbloquearlo.
+          </p>
         </div>
       </div>
     </section>
