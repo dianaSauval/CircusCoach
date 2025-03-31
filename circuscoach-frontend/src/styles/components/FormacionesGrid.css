@@ -1,11 +1,12 @@
 .formaciones-section {
   display: flex;
-  flex-direction: column;
   justify-content: center;
+  flex-direction: column;
   align-items: center;
-    padding: 4rem 2rem;
-    text-align: center;
-  }
+  padding: 4rem 2rem;
+  text-align: center;
+  width: 100%;
+}
   
   .formaciones-title {
     font-family: var(--font-titulo);
@@ -28,14 +29,20 @@
   }
   
   .formaciones-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2.5rem;
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    align-items: stretch;
+    gap: 2.5rem;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
   }
   
+  
+  
   .formacion-card {
+    flex: 1 1 300px;
+    max-width: 350px;
     background-color: var(--color-azul-profundo);
     border-radius: 1.2rem;
     overflow: hidden;
@@ -45,7 +52,7 @@
     margin: 0;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     position: relative;
-    max-height: 480px;
+    max-height: 390px;
     min-height: 420px;
   }
   
@@ -106,4 +113,21 @@
     line-height: 1.5;
   }
   
+  @media (min-width: 1024px) {
+    .formaciones-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  @media (min-width: 600px) and (max-width: 1023px) {
+    .formaciones-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 599px) {
+    .formaciones-grid {
+      grid-template-columns: 1fr;
+    }
+  }
   
