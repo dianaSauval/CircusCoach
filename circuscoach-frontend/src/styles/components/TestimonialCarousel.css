@@ -99,6 +99,7 @@
   display: block;
   font-family: var(--font-texto);
   font-size: 0.9rem;
+  font-weight: bold;
   color: var(--color-azul-profundo);
 }
 
