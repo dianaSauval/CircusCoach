@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "../../../styles/components/Form/CourseForm.css";
+import "./CourseForm.css";
 
 const CourseForm = ({ initialData, isClass, onCancel, onSave, activeTab }) => {
   const [formData, setFormData] = useState({ ...initialData });

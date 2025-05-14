@@ -1,28 +1,34 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../services/api";
-import { saveToken } from "../services/auth";
+import { saveToken } from "../services/authService";
 import "../styles/pages/Login.css";
+import { loginUser } from "../services/authService";
+import { useAuth } from "../context/AuthContext";
+
 
 function Login() {
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    setError(null);
+  e.preventDefault();
+  setError(null);
 
-    try {
-      const response = await loginUser(email, password);
-      saveToken(response.token);
-      navigate("/");
-    } catch (err) {
-      console.error("Error en el login:", err);
-      setError("Error al iniciar sesión. Verifica tus datos e intenta nuevamente.");
-    }
-  };
+  try {
+    const response = await loginUser(email, password);
+    saveToken(response.token);
+
+    await login(); // ⚠️ Este login() del contexto carga el perfil y actualiza el header
+    navigate("/");
+  } catch (err) {
+    console.error("Error en el login:", err);
+    setError("Error al iniciar sesión. Verifica tus datos e intenta nuevamente.");
+  }
+};
+
 
   return (
     <div className="login-container">

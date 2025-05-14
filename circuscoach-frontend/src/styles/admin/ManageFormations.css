@@ -218,7 +218,7 @@
 }
 
 .formations-layout.collapsed {
-  grid-template-columns: 5% 95%;
+  grid-template-columns: 100%;
 }
 
 
@@ -237,4 +237,21 @@
   .formation-actions {
     justify-content: flex-start;
   }
+  .collapse-toggle{
+    top: 8rem;
+    left: 82%;
+
+  }
+
+  .formations-list.collapsed{
+    width: 0px;
+    padding: 0;
+  }
+
+  .collapsed-position {
+    left: 0.3rem;
+  }
+
+ 
+
 }

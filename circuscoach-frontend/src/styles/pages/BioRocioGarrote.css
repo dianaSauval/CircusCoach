@@ -28,22 +28,19 @@
   
   .biografia-pdf {
     display: inline-flex;
-    align-items: center;
     gap: 0.6rem;
     font-weight: bold;
     color: var(--color-azul-profundo);
-    margin-top: 8rem;
+    margin-top: 2rem;
     font-size: 1rem;
     text-decoration: none;
     transition: color 0.3s ease;
-    justify-content: flex-start;
   }
   
   /* Este bloque es la clave 👇 */
   .biografia-texto .biografia-pdf {
     display: flex;
-    justify-content: flex-start;
-    text-align: left;
+    justify-content: flex-end;
   }
   
   

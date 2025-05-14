@@ -1,117 +1,69 @@
+/* === 📘 COURSES PAGE CSS === */
+
 .courses-container {
-    padding: 2rem 1rem;
-    width: 100%;
-    margin: 0 auto;
-    text-align: center;
-    color: var(--color-azul-profundo);
-  }
-  
-  .courses-title {
-    font-family: var(--font-titulo);
-    font-size: 3rem;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    border-bottom: 4px solid var(--color-azul-profundo);
-    display: inline-block;
-    margin-bottom: 2.5rem;
-    color: var(--color-azul-profundo);
-  }
-  
-  .courses-subtitle {
-    font-family: var(--font-texto);
-    font-size: 1.25rem;
-    margin-bottom: 2rem;
-    line-height: 1.6;
-  }
-  
-  .courses-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 2rem;
-  }
-  
-  /* Asegura que las cards tengan tamaño consistente y se alineen bien */
-.course-card {
-    background: var(--color-blanco);
-    border-radius: 1rem;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    width: calc(33.333% - 1rem); /* 3 columnas con gap */
-    max-width: 320px;
-    min-width: 260px;
-  }
-  
-  /* Imagen con proporción vertical (flyer) */
-.course-image {
-    width: 100%;
-    height: 380px;
-    object-fit: cover;
-    object-position: center;
-  }
-  
-  /* Descripción */
-.course-description {
-    background-color: var(--color-azul-profundo);
-    color: var(--color-blanco);
-    padding: 1rem;
-    font-size: 1rem;
-    font-family: var(--font-texto);
-    text-align: left;
-    line-height: 1.5;
-  }
-  
-  .no-courses {
-    font-family: var(--font-texto);
-    font-size: 1.2rem;
-    background-color: var(--color-verde-claro);
-    padding: 2rem;
-    border-radius: 1rem;
-    color: var(--color-azul-profundo);
-    max-width: 600px;
-    margin: 2rem auto;
-    line-height: 1.6;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    text-align: center;
-  }
+  padding: 2rem 1rem;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  color: var(--color-azul-profundo);
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* ✅ Asegura que todo el contenido se centre horizontalmente */
+}
 
-  /* Responsive: 2 columnas en tablets */
+.courses-title {
+  font-family: var(--font-titulo);
+  font-size: 3rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-bottom: 4px solid var(--color-azul-profundo);
+  display: inline-block;
+  margin-bottom: 2.5rem;
+  color: var(--color-azul-profundo);
+}
+
+.courses-subtitle {
+  font-family: var(--font-texto);
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+/* ✅ GRID que se adapta automáticamente y centra incluso una sola card */
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  justify-items: center; /* ✅ Centra cada card en su columna */
+  gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.no-courses {
+  font-family: var(--font-texto);
+  font-size: 1.2rem;
+  background-color: var(--color-verde-claro);
+  padding: 2rem;
+  border-radius: 1rem;
+  color: var(--color-azul-profundo);
+  max-width: 600px;
+  margin: 2rem auto;
+  line-height: 1.6;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+/* 📱 Responsive ajustes */
+
 @media (max-width: 900px) {
-    .course-card {
-      width: calc(50% - 1rem);
-    }
+  .courses-title {
+    font-size: 2.6rem;
   }
+}
 
-  /* Responsive: 1 columna en móviles */
 @media (max-width: 600px) {
-    .course-card {
-      width: 100%;
-    }
-  
-    .course-image {
-      height: 320px;
-    }
-  
-    .course-description {
-      font-size: 0.95rem;
-    }
+  .courses-title {
+    font-size: 2.2rem;
   }
-  
-  /* 📱 Mobile ajustes extra si querés */
-  @media (max-width: 480px) {
-    .courses-title {
-      font-size: 2.2rem;
-    }
-  
-    .course-image {
-      height: 320px;
-    }
-  
-    .course-description {
-      font-size: 0.95rem;
-    }
-  }
-  
+}

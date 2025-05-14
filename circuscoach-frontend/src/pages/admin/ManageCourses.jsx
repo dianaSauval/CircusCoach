@@ -1,12 +1,9 @@
 import { useState, useEffect } from "react";
-import {
-  getAllCourses,
-  deleteCourse
-} from "../../services/api";
 import "../../styles/admin/ManageCourses.css";
-import CourseEditPanel from "../../components/admin/CourseEditPanel";
-import CourseClassList from "../../components/admin/CourseClassList";
-import AddCoursesModal from "../../components/admin/AddCoursesModal";
+import CourseEditPanel from "../../components/admin/CourseEditPanel/CourseEditPanel";
+import CourseClassList from "../../components/admin/CourseClassList/CourseClassList";
+import AddCoursesModal from "../../components/admin/ModalAdmin/AddCoursesModal";
+import { deleteCourse, getAllCourses } from "../../services/courseService";
 
 const ManageCourses = () => {
   const [courses, setCourses] = useState([]);
@@ -108,7 +105,7 @@ const ManageCourses = () => {
       <div className={`courses-layout ${isCollapsed ? "collapsed" : ""}`}>
         <div className={`courses-list ${isCollapsed ? "collapsed" : ""}`}>
           <button
-            className={`collapse-toggle ${isCollapsed ? "collapsed-position" : ""}`}
+            className={`collapse-toggleCourses ${isCollapsed ? "collapsed-positionCourses" : ""}`}
             onClick={() => setIsCollapsed(!isCollapsed)}
           >
             {isCollapsed ? "🡠" : "🡢"}

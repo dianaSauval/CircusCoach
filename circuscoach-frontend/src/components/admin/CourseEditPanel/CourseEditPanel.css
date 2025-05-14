@@ -1,0 +1,102 @@
+/* CourseEditPanel.css */
+
+.course-edit-panel {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    overflow-y: auto;
+    height: fit-content;
+    transition: all 0.3s ease;
+    font-family: var(--font-texto);
+  }
+  
+  .course-edit-panel h2 {
+    font-size: 1.6rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-family: var(--font-titulo);
+  }
+  
+  .course-edit-panel h3 {
+    font-size: 1.3rem;
+    color: var(--secondary-color);
+    margin-top: 1.5rem;
+  }
+  
+  .course-edit-panel p {
+    margin-bottom: 0.5rem;
+  }
+  
+  .course-edit-panel strong {
+    font-weight: bold;
+  }
+  
+  .language-tabs {
+    display: flex;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+  }
+  
+  .language-tabs button {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    border: 2px solid var(--color-azul-profundo);
+    background-color: var(--white);
+    color: var(--color-azul-profundo);
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
+    font-family: var(--font-texto);
+  }
+  
+  .language-tabs button.active {
+    background-color: var(--color-azul-profundo);
+    color: var(--white);
+  }
+  
+  .course-edit-panel img.course-image {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 12px;
+    margin-top: 1rem;
+  }
+  
+  .pdf-preview-container,
+  .video-preview-container {
+    margin-top: 1rem;
+    background-color: #f5f7fa;
+    padding: 1rem;
+    border-radius: 12px;
+  }
+  
+  .no-material {
+    color: #888;
+    font-style: italic;
+  }
+  
+  .video-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    height: 0;
+    margin-top: 0.5rem;
+  }
+  
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+  }
+
+  .informationCourse{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  

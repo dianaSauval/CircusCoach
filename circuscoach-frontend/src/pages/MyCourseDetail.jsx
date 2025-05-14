@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getFormationVisibleContent  } from "../services/api";
 import "../styles/pages/MyCourseDetail.css";
+import { getFormationVisibleContent } from "../services/formationService";
 
 function MyCourseDetail() {
   const { id } = useParams();

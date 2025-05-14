@@ -1,6 +1,5 @@
 import { useState } from "react";
 import "../styles/pages/Login.css";
-import { forgotPassword } from "../services/api";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -13,7 +12,7 @@ function ForgotPassword() {
     setMessage(null);
 
     try {
-      await forgotPassword(email);
+      await ForgotPassword(email);
       setMessage("📩 Te enviamos un correo con instrucciones para recuperar tu contraseña.");
     } catch (err) {
       setError(err.response?.data?.error || "Ocurrió un error. Intentalo nuevamente.");

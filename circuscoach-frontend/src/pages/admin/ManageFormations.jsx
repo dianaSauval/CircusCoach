@@ -1,12 +1,9 @@
 import { useState, useEffect } from "react";
-import {
-  getAllFormations,
-  deleteFormation
-} from "../../services/api";
 import "../../styles/admin/ManageFormations.css";
-import ModuleList from "../../components/admin/ModuleList";
-import EditPanel from "../../components/admin/EditPanel";
-import AddItemModal from "../../components/admin/AddItemModal";
+import ModuleList from "../../components/admin/ModuleList/ModuleList";
+import EditPanel from "../../components/admin/EditPanel/EditPanel";
+import AddItemModal from "../../components/admin/ModalAdmin/AddItemModal";
+import { deleteFormation, getAllFormations } from "../../services/formationService";
 
 const ManageFormations = () => {
   const [formations, setFormations] = useState([]);

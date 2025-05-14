@@ -3,7 +3,6 @@
 .admin-dashboard {
   padding: 4rem 2rem;
   max-width: 1200px;
-  margin: 0 auto;
   font-family: var(--font-texto);
   color: var(--color-azul-profundo);
   text-align: center;

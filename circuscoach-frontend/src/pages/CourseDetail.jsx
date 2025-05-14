@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getCourseById } from "../services/api";
+import { getCourseById } from "../services/courseService";
+import "../styles/pages/CourseDetail.css";
 
 function CourseDetail() {
   const { id } = useParams();
   const [course, setCourse] = useState(null);
+  const [showVideo, setShowVideo] = useState(false);
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -19,22 +21,70 @@ function CourseDetail() {
     fetchCourse();
   }, [id]);
 
+  const getAvailableLanguages = (visible) => {
+    return Object.entries(visible || {})
+      .filter(([_, value]) => value)
+      .map(([lang]) => lang.toUpperCase())
+      .join(", ");
+  };
+
   return (
-    <div>
+    <div className="course-detail-container">
       {course ? (
-        <>
-          <h1>{course.title}</h1>
-          <p>{course.description}</p>
-          <p>Precio: ${course.price}</p>
-          <a href={course.pdfUrl} target="_blank" rel="noopener noreferrer">Descargar PDF</a>
-          <br />
-          <video width="600" controls>
-            <source src={course.videoUrl} type="video/mp4" />
-            Tu navegador no soporta el elemento de video.
-          </video>
-        </>
+        <div className="course-detail-flex">
+          <div className="course-info">
+            <h1 className="course-title">{course.title?.es}</h1>
+            <p className="course-price">💰 Precio: ${course.price}</p>
+            <p className="course-description">{course.description?.es}</p>
+            <p className="course-langs">
+              🌍 Disponible en: {getAvailableLanguages(course.visible)}
+            </p>
+
+            <button className="course-buy-button">Comprar curso</button>
+
+            {course.pdfUrl && (
+              <div className="course-pdf">
+                <a
+                  href={course.pdfUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="pdf-button"
+                >
+                  📄 Ver PDF informativo
+                </a>
+              </div>
+            )}
+          </div>
+
+          <div className="course-media">
+            <div className={`media-wrapper ${showVideo ? "video-visible" : ""}`}>
+              {!showVideo && (
+                <div className="image-wrapper">
+                  <img
+                    src={course.image?.es}
+                    alt="Imagen del curso"
+                    className="course-image"
+                  />
+                  <button className="play-button" onClick={() => setShowVideo(true)}>
+                    ▶
+                  </button>
+                </div>
+              )}
+
+              {showVideo && course.video?.es && (
+                <div className="video-wrapper fade-in">
+                  <iframe
+                    src={course.video.es.replace("watch?v=", "embed/")}
+                    title="Video del curso"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       ) : (
-        <p>Cargando curso...</p>
+        <p className="loading-message">Cargando curso...</p>
       )}
     </div>
   );

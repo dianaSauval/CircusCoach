@@ -1,16 +1,17 @@
 import { useEffect } from "react";
-import { isAuthenticated } from "../../services/auth";
 import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import "../../styles/admin/AdminDashboard.css";
 
 function AdminDashboard() {
   const navigate = useNavigate();
+  const { isAuthenticated, isAdmin, loading } = useAuth();
 
   useEffect(() => {
-    if (!isAuthenticated()) {
+    if (!loading && (!isAuthenticated || !isAdmin)) {
       navigate("/login");
     }
-  }, []);
+  }, [isAuthenticated, isAdmin, loading, navigate]);
 
   return (
     <div className="admin-dashboard">
@@ -43,7 +44,3 @@ function AdminDashboard() {
 }
 
 export default AdminDashboard;
-
-
-
-

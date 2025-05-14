@@ -1,16 +1,17 @@
 @font-face {
-    font-family: 'Bebas Neue Cyrillic', sans-serif;
-    src: url('../../../public/fonts/BebasNeueCyrillicRegular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-  }
-  
-  @font-face {
-    font-family: 'Amsterdam Three', cursive;
-    src: url('../../../public/fonts/Amsterdam.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-  }
+  font-family: 'Bebas Neue Cyrillic';
+  src: url('/fonts/BebasNeueCyrillicRegular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Amsterdam Three';
+  src: url('/fonts/Amsterdam.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
   
   :root {
     /* 🎨 Colores */

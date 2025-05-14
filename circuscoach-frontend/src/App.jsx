@@ -7,22 +7,24 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import CreateCourse from "./pages/admin/CreateCourse";
 import EditCourse from "./pages/admin/EditCourse";
 import ManageFormations from "./pages/admin/ManageFormations";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import RequireAuth from "./components/RequireAuth";
-import './assets/styles/variables.css' 
+import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
+import RequireAuth from "./components/routes/RequireAuth/RequireAuth";
+import "./assets/styles/variables.css";
 import "./assets/styles/App.css";
 import FormationDetails from "./pages/FormationDetails";
 import MyCourses from "./pages/MyCourses";
 import MyCourseDetail from "./pages/MyCourseDetail";
 import FormationPage from "./pages/FormationPage";
-import ScrollToTop from "./components/ScrollToTop";
+import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import BioRocioGarrote from "./pages/BioRocioGarrote";
 import Register from "./pages/Register";
 import RegisterSuccess from "./pages/RegisterSuccess";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import ManageCourses from "./pages/admin/ManageCourses";
+import ManagePresentialFormations from "./pages/admin/ManagePresentialFormations";
+import RequireAdmin from "./components/routes/RequireAdmin/RequireAdmin";
 
 function App() {
   return (
@@ -41,20 +43,25 @@ function App() {
           <Route path="/registro-exitoso" element={<RegisterSuccess />} />
           <Route path="/olvidaste-tu-contraseña" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
-          <Route path="/formaciones" element={<FormationPage />}/>
-          <Route path="/nosotros" element={<BioRocioGarrote />}/>
+          <Route path="/formaciones" element={<FormationPage />} />
+          <Route path="/nosotros" element={<BioRocioGarrote />} />
+          <Route path="/formaciones/:id/:slug" element={<FormationDetails />} />
 
-          {/* Protegemos las rutas de administración */}
-          <Route element={<RequireAuth />}>
+          {/* 🔒 Rutas protegidas para admins */}
+          <Route element={<RequireAdmin/>}>
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/create" element={<CreateCourse />} />
             <Route path="/admin/edit/:id" element={<EditCourse />} />
-            <Route path="/admin/formaciones-online" element={<ManageFormations />} />
+            <Route
+              path="/admin/formaciones-online"
+              element={<ManageFormations />}
+            />
             <Route path="/admin/cursos" element={<ManageCourses />} />
+            <Route
+              path="/admin/formaciones-presenciales"
+              element={<ManagePresentialFormations />}
+            />
           </Route>
-
-          {/* ⛔ Esta debe ir al final para no interferir con otras rutas */}
-          <Route path="/:slug" element={<FormationDetails />} />
         </Routes>
       </div>
       <Footer />

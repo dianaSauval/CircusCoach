@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { createCourse } from "../../services/api";
 import { uploadFile } from "../../services/uploadFile";
 import { useNavigate } from "react-router-dom";
+import { createCourse } from "../../services/courseService";
 
 function CreateCourse() {
   const [title, setTitle] = useState("");
