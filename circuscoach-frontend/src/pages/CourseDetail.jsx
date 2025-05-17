@@ -1,92 +1,152 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getCourseById } from "../services/courseService";
+import "../styles/pages/DetailLayout.css";
 import "../styles/pages/CourseDetail.css";
+import { useLanguage } from "../context/LanguageContext";
+import translations from "../i18n/translations";
+import EmptyState from "../components/EmptyState/EmptyState";
+import { getYoutubeEmbedUrl } from "../utils/youtube";
 
 function CourseDetail() {
   const { id } = useParams();
+  const { language: lang } = useLanguage();
+  const tc = translations.courseDetail[lang];
+
   const [course, setCourse] = useState(null);
   const [showVideo, setShowVideo] = useState(false);
+  const [idiomaNoDisponible, setIdiomaNoDisponible] = useState(false);
+  const [idiomasDisponibles, setIdiomasDisponibles] = useState([]);
 
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const data = await getCourseById(id);
-        setCourse(data);
+        const data = await getCourseById(id, lang);
+
+        if (!data.visible?.[lang]) {
+          setIdiomaNoDisponible(true);
+          const langs = Object.entries(data.visible || {})
+            .filter(([_, visible]) => visible)
+            .map(([idioma]) => idioma.toUpperCase());
+          setIdiomasDisponibles(langs);
+        } else {
+          setCourse(data);
+          setIdiomaNoDisponible(false);
+          const langs = Object.entries(data.visible || {})
+            .filter(([_, visible]) => visible)
+            .map(([idioma]) => idioma.toUpperCase());
+          setIdiomasDisponibles(langs);
+        }
       } catch (error) {
         console.error("Error al obtener detalles del curso:", error);
       }
     };
 
     fetchCourse();
-  }, [id]);
+  }, [id, lang]);
 
-  const getAvailableLanguages = (visible) => {
-    return Object.entries(visible || {})
-      .filter(([_, value]) => value)
-      .map(([lang]) => lang.toUpperCase())
-      .join(", ");
+  const handleDownload = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (course?.pdfUrl) {
+      window.open(course.pdfUrl, "_blank", "noopener,noreferrer");
+    }
   };
 
-  return (
-    <div className="course-detail-container">
-      {course ? (
-        <div className="course-detail-flex">
-          <div className="course-info">
-            <h1 className="course-title">{course.title?.es}</h1>
-            <p className="course-price">💰 Precio: ${course.price}</p>
-            <p className="course-description">{course.description?.es}</p>
-            <p className="course-langs">
-              🌍 Disponible en: {getAvailableLanguages(course.visible)}
-            </p>
+  if (idiomaNoDisponible) {
+    return (
+      <EmptyState
+        title={`😢 ${tc.unavailableTitle}`}
+        subtitle={tc.unavailable.replace(
+          "{{lang}}",
+          tc.languageNames[lang] || lang.toUpperCase()
+        )}
+      />
+    );
+  }
 
-            <button className="course-buy-button">Comprar curso</button>
+  if (!course) return <p className="loading-message">{tc.loading}</p>;
 
-            {course.pdfUrl && (
-              <div className="course-pdf">
-                <a
-                  href={course.pdfUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="pdf-button"
-                >
-                  📄 Ver PDF informativo
-                </a>
-              </div>
-            )}
+  const embedUrl = course.video?.[lang]
+    ? getYoutubeEmbedUrl(course.video[lang])
+    : null;
+
+  return (<>
+    <div className="detalle-container">
+      <div className="left-section">
+        <h1 className="detalle-title">{course.title?.[lang]}</h1>
+        <p className="detalle-description">{course.description?.[lang]}</p>
+
+        <p className="course-price">
+          💰 {tc.priceLabel}: ${course.price}
+        </p>
+
+        <button className="inscribite-button">{tc.enrollNow}</button>
+
+        {course.pdfUrl && (
+          <>
+            <p className="pdf-info-text">{tc.downloadInfoCurso}</p>
+            <button className="descargar-button" onClick={handleDownload}>
+              {tc.downloadButton}
+            </button>
+          </>
+        )}
+
+        {idiomasDisponibles.length > 0 && (
+          <p className="detalle-idiomas">
+            🌐 {tc.availableLanguages}:{" "}
+            {idiomasDisponibles
+              .map((code) => tc.languageNames[code.toLowerCase()] || code)
+              .join(" / ")}
+          </p>
+        )}
+      </div>
+
+      <div className="right-column">
+        {embedUrl && showVideo ? (
+          <iframe
+            className="video-iframe"
+            src={embedUrl}
+            title="Video del curso"
+            frameBorder="0"
+            allowFullScreen
+          ></iframe>
+        ) : (
+          <div
+            className="image-container"
+            onClick={() => setShowVideo(true)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => e.key === "Enter" && setShowVideo(true)}
+          >
+            <img
+              src={course.image?.[lang]}
+              alt="Imagen del curso"
+              className="formation-image"
+            />
+            {embedUrl && <div className="play-overlay">▶️</div>}
           </div>
-
-          <div className="course-media">
-            <div className={`media-wrapper ${showVideo ? "video-visible" : ""}`}>
-              {!showVideo && (
-                <div className="image-wrapper">
-                  <img
-                    src={course.image?.es}
-                    alt="Imagen del curso"
-                    className="course-image"
-                  />
-                  <button className="play-button" onClick={() => setShowVideo(true)}>
-                    ▶
-                  </button>
-                </div>
-              )}
-
-              {showVideo && course.video?.es && (
-                <div className="video-wrapper fade-in">
-                  <iframe
-                    src={course.video.es.replace("watch?v=", "embed/")}
-                    title="Video del curso"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      ) : (
-        <p className="loading-message">Cargando curso...</p>
-      )}
+        )}
+      </div>
+      
     </div>
+    <div className="detalle-caracteristicas">
+        <div className="caracteristica">
+          <i className="fas fa-wifi"></i>
+          <span>{tc.feature_online}</span>
+        </div>
+
+        <div className="caracteristica">
+          <i className="fas fa-file-download"></i>
+          <span>{tc.feature_downloadable}</span>
+        </div>
+
+        <div className="caracteristica">
+          <i className="fas fa-comments"></i>
+          <span>{tc.feature_support}</span>
+        </div>
+      </div>
+    </>
   );
 }
 

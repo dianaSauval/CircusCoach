@@ -32,6 +32,7 @@
   font-family: var(--font-texto);
   text-align: left;
   line-height: 1.5;
+  height: 100%;
 }
 
 /* Responsive ajustes */

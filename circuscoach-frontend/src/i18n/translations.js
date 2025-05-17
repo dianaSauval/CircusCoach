@@ -156,15 +156,21 @@ const translations = {
         "Estamos preparando los próximos encuentros presenciales",
       noPresentialText:
         "Pronto compartiremos más propuestas presenciales para que sigas entrenando, aprendiendo y creando.",
-        trainingSchools: {
-            title: "Formaciones para escuelas profesionales",
-            paragraph1: "Con años de experiencia como estudiante de una escuela profesional, artista en el ámbito profesional, intérprete y creadora de espectáculos, he desarrollado una visión integral que me permite guiar a los estudiantes en su camino hacia una carrera profesional sólida y auténtica.",
-            paragraph2: "Creo firmemente que, como artista y docente, tengo la capacidad y el conocimiento técnico y pedagógico para acompañar a los estudiantes en su proceso de transformación, ayudándolos a desarrollar la fuerza física y mental que necesitan para afrontar los desafíos de esta profesión.",
-            paragraph3: "Mi enfoque se basa en las necesidades individuales y colectivas de cada alumno, siempre considerando las particularidades y objetivos de cada escuela y el contexto artístico actual. Trabajo para crear un espacio donde los estudiantes puedan explorar, crecer y superar sus propios límites, encontrando su estilo personal mientras fortalecen su técnica y expresión.",
-            paragraph4: "Me mantengo en constante formación y actualización en áreas como biomecánica, neurociencia, psicología del deporte e innovación educativa, para ofrecer una enseñanza que no solo sea efectiva, sino también respetuosa con el cuerpo y las emociones de cada estudiante.",
-            highlight: "Más que enseñar técnica, busco ayudar a los artistas a descubrir y potenciar su identidad artística, construyendo una base sólida para una carrera profesional exitosa.",
-            contact: "Para solicitar los programas de estudio según disciplina, puedes contactarme por email"
-        }      
+      trainingSchools: {
+        title: "Formaciones para escuelas profesionales",
+        paragraph1:
+          "Con años de experiencia como estudiante de una escuela profesional, artista en el ámbito profesional, intérprete y creadora de espectáculos, he desarrollado una visión integral que me permite guiar a los estudiantes en su camino hacia una carrera profesional sólida y auténtica.",
+        paragraph2:
+          "Creo firmemente que, como artista y docente, tengo la capacidad y el conocimiento técnico y pedagógico para acompañar a los estudiantes en su proceso de transformación, ayudándolos a desarrollar la fuerza física y mental que necesitan para afrontar los desafíos de esta profesión.",
+        paragraph3:
+          "Mi enfoque se basa en las necesidades individuales y colectivas de cada alumno, siempre considerando las particularidades y objetivos de cada escuela y el contexto artístico actual. Trabajo para crear un espacio donde los estudiantes puedan explorar, crecer y superar sus propios límites, encontrando su estilo personal mientras fortalecen su técnica y expresión.",
+        paragraph4:
+          "Me mantengo en constante formación y actualización en áreas como biomecánica, neurociencia, psicología del deporte e innovación educativa, para ofrecer una enseñanza que no solo sea efectiva, sino también respetuosa con el cuerpo y las emociones de cada estudiante.",
+        highlight:
+          "Más que enseñar técnica, busco ayudar a los artistas a descubrir y potenciar su identidad artística, construyendo una base sólida para una carrera profesional exitosa.",
+        contact:
+          "Para solicitar los programas de estudio según disciplina, puedes contactarme por email",
+      },
     },
     en: {
       online: "ONLINE TRAINING PROGRAMS",
@@ -180,15 +186,21 @@ const translations = {
       noPresentialTitle: "We’re preparing the next in-person events",
       noPresentialText:
         "We'll soon share more in-person opportunities to keep training, learning, and creating.",
-        trainingSchools: {
-            title: "Programs for professional schools",
-            paragraph1: "With years of experience as a student in a professional school, a performer in the professional field, and a creator of shows, I’ve developed a comprehensive vision that allows me to guide students toward building a solid and authentic professional career.",
-            paragraph2: "I firmly believe that as an artist and teacher, I have the technical and pedagogical knowledge to support students through their transformation process, helping them build the physical and mental strength they need to face the challenges of this profession.",
-            paragraph3: "My approach is based on the individual and collective needs of each student, always considering the goals and particularities of each school and the current artistic context. I work to create a space where students can explore, grow, and surpass their own limits while discovering their personal style and strengthening their technique and expression.",
-            paragraph4: "I constantly train and update myself in fields such as biomechanics, neuroscience, sports psychology, and educational innovation to offer a teaching approach that is not only effective but also respectful of each student's body and emotions.",
-            highlight: "More than teaching technique, I aim to help artists discover and enhance their artistic identity, building a strong foundation for a successful professional career.",
-            contact: "To request the study programs by discipline, you can contact me by email."
-          }
+      trainingSchools: {
+        title: "Programs for professional schools",
+        paragraph1:
+          "With years of experience as a student in a professional school, a performer in the professional field, and a creator of shows, I’ve developed a comprehensive vision that allows me to guide students toward building a solid and authentic professional career.",
+        paragraph2:
+          "I firmly believe that as an artist and teacher, I have the technical and pedagogical knowledge to support students through their transformation process, helping them build the physical and mental strength they need to face the challenges of this profession.",
+        paragraph3:
+          "My approach is based on the individual and collective needs of each student, always considering the goals and particularities of each school and the current artistic context. I work to create a space where students can explore, grow, and surpass their own limits while discovering their personal style and strengthening their technique and expression.",
+        paragraph4:
+          "I constantly train and update myself in fields such as biomechanics, neuroscience, sports psychology, and educational innovation to offer a teaching approach that is not only effective but also respectful of each student's body and emotions.",
+        highlight:
+          "More than teaching technique, I aim to help artists discover and enhance their artistic identity, building a strong foundation for a successful professional career.",
+        contact:
+          "To request the study programs by discipline, you can contact me by email.",
+      },
     },
     fr: {
       online: "FORMATIONS EN LIGNE",
@@ -206,40 +218,114 @@ const translations = {
         "Nous préparons les prochaines rencontres en présentiel",
       noPresentialText:
         "Nous partagerons bientôt de nouvelles propositions en présentiel pour continuer à t'entraîner, apprendre et créer.",
-        trainingSchools: {
-            title: "Formations pour écoles professionnelles",
-            paragraph1: "Avec des années d'expérience en tant qu'élève dans une école professionnelle, artiste dans le domaine professionnel, interprète et créatrice de spectacles, j'ai développé une vision globale qui me permet d'accompagner les élèves dans leur cheminement vers une carrière solide et authentique.",
-            paragraph2: "Je suis convaincue qu'en tant qu'artiste et pédagogue, j'ai les compétences techniques et pédagogiques nécessaires pour accompagner les étudiants dans leur processus de transformation, en les aidant à développer la force physique et mentale requise pour faire face aux défis de cette profession.",
-            paragraph3: "Mon approche est centrée sur les besoins individuels et collectifs de chaque élève, en tenant compte des particularités et objectifs de chaque école ainsi que du contexte artistique actuel. Je travaille à créer un espace où les élèves peuvent explorer, évoluer et dépasser leurs propres limites, tout en découvrant leur style personnel et en renforçant leur technique et leur expression.",
-            paragraph4: "Je reste en formation continue dans des domaines comme la biomécanique, les neurosciences, la psychologie du sport et l’innovation pédagogique, afin de proposer un enseignement efficace et respectueux du corps et des émotions de chaque élève.",
-            highlight: "Au-delà de l'enseignement technique, je cherche à aider les artistes à découvrir et à renforcer leur identité artistique, en construisant une base solide pour une carrière professionnelle réussie.",
-            contact: "Pour demander les programmes d'étude par discipline, vous pouvez me contacter par email."
-          }
+      trainingSchools: {
+        title: "Formations pour écoles professionnelles",
+        paragraph1:
+          "Avec des années d'expérience en tant qu'élève dans une école professionnelle, artiste dans le domaine professionnel, interprète et créatrice de spectacles, j'ai développé une vision globale qui me permet d'accompagner les élèves dans leur cheminement vers une carrière solide et authentique.",
+        paragraph2:
+          "Je suis convaincue qu'en tant qu'artiste et pédagogue, j'ai les compétences techniques et pédagogiques nécessaires pour accompagner les étudiants dans leur processus de transformation, en les aidant à développer la force physique et mentale requise pour faire face aux défis de cette profession.",
+        paragraph3:
+          "Mon approche est centrée sur les besoins individuels et collectifs de chaque élève, en tenant compte des particularités et objectifs de chaque école ainsi que du contexte artistique actuel. Je travaille à créer un espace où les élèves peuvent explorer, évoluer et dépasser leurs propres limites, tout en découvrant leur style personnel et en renforçant leur technique et leur expression.",
+        paragraph4:
+          "Je reste en formation continue dans des domaines comme la biomécanique, les neurosciences, la psychologie du sport et l’innovation pédagogique, afin de proposer un enseignement efficace et respectueux du corps et des émotions de chaque élève.",
+        highlight:
+          "Au-delà de l'enseignement technique, je cherche à aider les artistes à découvrir et à renforcer leur identité artistique, en construisant une base solide pour une carrière professionnelle réussie.",
+        contact:
+          "Pour demander les programmes d'étude par discipline, vous pouvez me contacter par email.",
+      },
     },
   },
   about: {
     es: {
-      paragraph1: "Rocío Garrote comenzó su camino en el circo a los 16 años en Argentina, donde dio sus primeros pasos como artista y profesora de circo. Su formación artística y pedagógica es amplia y diversa, abarcando reconocidas instituciones en Argentina y Europa. En Argentina, se formó en Circo Soq, La Arena, la Universidad Nacional de San Martín (Unsam) en la carrera de circo, y en la Escuela Superior de Educación Física ISEF II, completando con una formación de danza contemporánea en CDC- IFA con Luciano Cejas. Además, completó la formación en Flexibilidad Segura y obtuvo un Diplomado Universitario en Neurociencias y Neuropsicología aplicadas a deportes de alto rendimiento, así como estudios en Psicología del Deporte en la Universidad Austral. En Europa, perfeccionó su formación en la prestigiosa École Supérieure des Arts du Cirque (ESAC) en Bélgica.",
-      paragraph2: "Con más de diez años de experiencia como docente, Rocío ha enseñado en numerosas escuelas de circo en Argentina y Europa, entre ellas La Arena, Maroma, Club Nueva Chicago, Circus Zonder Handen, la Escuela de Circo de Bruselas y Up Circus & Performing Arts. También ha trabajado en reconocidas escuelas profesionales de circo pertenecientes a la FEDEC, como ESAC (Bélgica), CRAC (Francia), ACaPA (Países Bajos) y Le CNAC (Francia).",
-      paragraph3: "Rocío ha desarrollado formaciones y talleres que ofrecen herramientas sólidas, basadas en una metodología pedagógica adaptada a cada persona, ya sea en el trabajo individual o colectivo. Su enfoque busca que los alumnos comprendan su disciplina de manera teórica y práctica, integrándola como un elemento clave en su proceso de aprendizaje y en su vida cotidiana.",
-      downloadCV: "Descargar CV"
+      paragraph1:
+        "Rocío Garrote comenzó su camino en el circo a los 16 años en Argentina, donde dio sus primeros pasos como artista y profesora de circo. Su formación artística y pedagógica es amplia y diversa, abarcando reconocidas instituciones en Argentina y Europa. En Argentina, se formó en Circo Soq, La Arena, la Universidad Nacional de San Martín (Unsam) en la carrera de circo, y en la Escuela Superior de Educación Física ISEF II, completando con una formación de danza contemporánea en CDC- IFA con Luciano Cejas. Además, completó la formación en Flexibilidad Segura y obtuvo un Diplomado Universitario en Neurociencias y Neuropsicología aplicadas a deportes de alto rendimiento, así como estudios en Psicología del Deporte en la Universidad Austral. En Europa, perfeccionó su formación en la prestigiosa École Supérieure des Arts du Cirque (ESAC) en Bélgica.",
+      paragraph2:
+        "Con más de diez años de experiencia como docente, Rocío ha enseñado en numerosas escuelas de circo en Argentina y Europa, entre ellas La Arena, Maroma, Club Nueva Chicago, Circus Zonder Handen, la Escuela de Circo de Bruselas y Up Circus & Performing Arts. También ha trabajado en reconocidas escuelas profesionales de circo pertenecientes a la FEDEC, como ESAC (Bélgica), CRAC (Francia), ACaPA (Países Bajos) y Le CNAC (Francia).",
+      paragraph3:
+        "Rocío ha desarrollado formaciones y talleres que ofrecen herramientas sólidas, basadas en una metodología pedagógica adaptada a cada persona, ya sea en el trabajo individual o colectivo. Su enfoque busca que los alumnos comprendan su disciplina de manera teórica y práctica, integrándola como un elemento clave en su proceso de aprendizaje y en su vida cotidiana.",
+      downloadCV: "Descargar CV",
     },
-  
+
     en: {
-      paragraph1: "Rocío Garrote began her circus journey at the age of 16 in Argentina, where she took her first steps as a circus artist and teacher. Her artistic and pedagogical training is broad and diverse, covering prestigious institutions in both Argentina and Europe. In Argentina, she trained at Circo Soq, La Arena, the National University of San Martín (UNSAM) in the circus program, and at ISEF II for Physical Education, complementing her education with contemporary dance training at CDC-IFA with Luciano Cejas. She also completed training in Safe Flexibility, earned a university diploma in Neuroscience and Neuropsychology applied to high-performance sports, and studied Sports Psychology at Universidad Austral. In Europe, she refined her training at the prestigious École Supérieure des Arts du Cirque (ESAC) in Belgium.",
-      paragraph2: "With over ten years of teaching experience, Rocío has taught in numerous circus schools across Argentina and Europe, including La Arena, Maroma, Club Nueva Chicago, Circus Zonder Handen, Brussels Circus School, and Up Circus & Performing Arts. She has also worked in well-known professional circus schools affiliated with FEDEC, such as ESAC (Belgium), CRAC (France), ACaPA (Netherlands), and Le CNAC (France).",
-      paragraph3: "Rocío has developed training programs and workshops that offer solid tools, based on a pedagogical methodology adapted to each individual, whether in solo or group work. Her approach seeks to help students understand their discipline both theoretically and practically, integrating it as a key element in their learning process and daily life.",
-      downloadCV: "Download CV"
+      paragraph1:
+        "Rocío Garrote began her circus journey at the age of 16 in Argentina, where she took her first steps as a circus artist and teacher. Her artistic and pedagogical training is broad and diverse, covering prestigious institutions in both Argentina and Europe. In Argentina, she trained at Circo Soq, La Arena, the National University of San Martín (UNSAM) in the circus program, and at ISEF II for Physical Education, complementing her education with contemporary dance training at CDC-IFA with Luciano Cejas. She also completed training in Safe Flexibility, earned a university diploma in Neuroscience and Neuropsychology applied to high-performance sports, and studied Sports Psychology at Universidad Austral. In Europe, she refined her training at the prestigious École Supérieure des Arts du Cirque (ESAC) in Belgium.",
+      paragraph2:
+        "With over ten years of teaching experience, Rocío has taught in numerous circus schools across Argentina and Europe, including La Arena, Maroma, Club Nueva Chicago, Circus Zonder Handen, Brussels Circus School, and Up Circus & Performing Arts. She has also worked in well-known professional circus schools affiliated with FEDEC, such as ESAC (Belgium), CRAC (France), ACaPA (Netherlands), and Le CNAC (France).",
+      paragraph3:
+        "Rocío has developed training programs and workshops that offer solid tools, based on a pedagogical methodology adapted to each individual, whether in solo or group work. Her approach seeks to help students understand their discipline both theoretically and practically, integrating it as a key element in their learning process and daily life.",
+      downloadCV: "Download CV",
     },
-  
+
     fr: {
-      paragraph1: "Rocío Garrote a commencé son parcours dans le cirque à l'âge de 16 ans en Argentine, où elle a fait ses premiers pas en tant qu'artiste et professeure de cirque. Sa formation artistique et pédagogique est vaste et variée, couvrant des institutions reconnues en Argentine et en Europe. En Argentine, elle s’est formée au Circo Soq, à La Arena, à l’Université Nationale de San Martín (UNSAM) dans le cursus de cirque, et à l'ISEF II en éducation physique. Elle a complété cette formation par de la danse contemporaine au CDC-IFA avec Luciano Cejas. Elle a également suivi une formation en flexibilité sécuritaire, obtenu un diplôme universitaire en neurosciences et neuropsychologie appliquées aux sports de haut niveau, et a étudié la psychologie du sport à l’Université Austral. En Europe, elle a perfectionné sa formation à la prestigieuse École Supérieure des Arts du Cirque (ESAC) en Belgique.",
-      paragraph2: "Avec plus de dix ans d'expérience en tant qu'enseignante, Rocío a enseigné dans de nombreuses écoles de cirque en Argentine et en Europe, dont La Arena, Maroma, Club Nueva Chicago, Circus Zonder Handen, l'École de Cirque de Bruxelles et Up Circus & Performing Arts. Elle a également travaillé dans des écoles professionnelles affiliées à la FEDEC telles que l'ESAC (Belgique), le CRAC (France), ACaPA (Pays-Bas) et Le CNAC (France).",
-      paragraph3: "Rocío a développé des formations et des ateliers qui offrent des outils solides, basés sur une méthodologie pédagogique adaptée à chaque personne, en travail individuel ou collectif. Son approche vise à permettre aux élèves de comprendre leur discipline de manière théorique et pratique, en l'intégrant comme un élément clé de leur processus d'apprentissage et de leur vie quotidienne.",
-      downloadCV: "Télécharger le CV"
-    }
-  }
-  
+      paragraph1:
+        "Rocío Garrote a commencé son parcours dans le cirque à l'âge de 16 ans en Argentine, où elle a fait ses premiers pas en tant qu'artiste et professeure de cirque. Sa formation artistique et pédagogique est vaste et variée, couvrant des institutions reconnues en Argentine et en Europe. En Argentine, elle s’est formée au Circo Soq, à La Arena, à l’Université Nationale de San Martín (UNSAM) dans le cursus de cirque, et à l'ISEF II en éducation physique. Elle a complété cette formation par de la danse contemporaine au CDC-IFA avec Luciano Cejas. Elle a également suivi une formation en flexibilité sécuritaire, obtenu un diplôme universitaire en neurosciences et neuropsychologie appliquées aux sports de haut niveau, et a étudié la psychologie du sport à l’Université Austral. En Europe, elle a perfectionné sa formation à la prestigieuse École Supérieure des Arts du Cirque (ESAC) en Belgique.",
+      paragraph2:
+        "Avec plus de dix ans d'expérience en tant qu'enseignante, Rocío a enseigné dans de nombreuses écoles de cirque en Argentine et en Europe, dont La Arena, Maroma, Club Nueva Chicago, Circus Zonder Handen, l'École de Cirque de Bruxelles et Up Circus & Performing Arts. Elle a également travaillé dans des écoles professionnelles affiliées à la FEDEC telles que l'ESAC (Belgique), le CRAC (France), ACaPA (Pays-Bas) et Le CNAC (France).",
+      paragraph3:
+        "Rocío a développé des formations et des ateliers qui offrent des outils solides, basés sur une méthodologie pédagogique adaptée à chaque personne, en travail individuel ou collectif. Son approche vise à permettre aux élèves de comprendre leur discipline de manière théorique et pratique, en l'intégrant comme un élément clé de leur processus d'apprentissage et de leur vie quotidienne.",
+      downloadCV: "Télécharger le CV",
+    },
+  },
+  courseDetail: {
+    es: {
+      enrollNow: "Inscribite ahora",
+      downloadInfo: "Descargá toda la información de esta formación en PDF:",
+      downloadInfoCurso: "Descargá toda la información de este curso en PDF:",
+      downloadButton: "Descargar",
+      availableLanguages: "Idiomas disponibles",
+      loading: "Cargando formación...",
+      notFound: "Error: No se encontró la formación.",
+      unavailableTitle: "Contenido no disponible",
+      unavailable: "Esta formación aún no está disponible en {{lang}}.",
+      feature_online: "Modalidad Online",
+      feature_downloadable: "Contenido descargable",
+      feature_support: "Consultas por WhatsApp o Mail",
+      languageNames: {
+        es: "Español",
+        en: "Inglés",
+        fr: "Francés",
+      },
+    },
+    en: {
+      enrollNow: "Enroll now",
+      downloadInfo: "Download all the information of this training in PDF:",
+      downloadInfoCurso: "Download all the information of this course in PDF:",
+      downloadButton: "Download",
+      availableLanguages: "Available languages",
+      loading: "Loading training...",
+      notFound: "Error: Training not found.",
+      unavailableTitle: "Content not available",
+      unavailable: "This training is not yet available in {{lang}}.",
+      feature_online: "Online Modality",
+      feature_downloadable: "Downloadable content",
+      feature_support: "Support via WhatsApp or Email",
+      languageNames: {
+        es: "Spanish",
+        en: "English",
+        fr: "French",
+      },
+    },
+    fr: {
+      enrollNow: "Inscris-toi maintenant",
+      downloadInfo:
+        "Télécharge toutes les informations de cette formation en PDF :",
+        downloadInfoCurso: "Télécharge toutes les informations de ce cours en PDF :",
+      downloadButton: "Télécharger",
+      availableLanguages: "Langues disponibles",
+      loading: "Chargement de la formation...",
+      notFound: "Erreur : Formation introuvable.",
+      unavailableTitle: "Contenu non disponible",
+      unavailable: "Cette formation n'est pas encore disponible en {{lang}}.",
+      feature_online: "Modalité en ligne",
+      feature_downloadable: "Contenu téléchargeable",
+      feature_support: "Contact par WhatsApp ou Email",
+      languageNames: {
+        es: "Espagnol",
+        en: "Anglais",
+        fr: "Français",
+      },
+    },
+  },
 };
 
 export default translations;

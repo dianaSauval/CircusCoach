@@ -36,7 +36,7 @@ function MyCourseDetail() {
   const progresoModulos = (modulosCompletados / totalModulos) * 100;
 
   return (
-    <div className="course-detail-container">
+    <div className="myCourse-detail-container">
       <h1>{formacion.title?.es}</h1>
       <p>{formacion.description?.es}</p>
 

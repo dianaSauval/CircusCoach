@@ -1,22 +1,22 @@
-.course-detail-container {
+.myCourse-detail-container {
     padding: 2rem;
     max-width: 900px;
     margin: 0 auto;
     font-family: sans-serif;
   }
   
-  .course-detail-container h1 {
+  .myCourse-detail-container h1 {
     font-size: 2rem;
     margin-bottom: 0.5rem;
   }
   
-  .course-detail-container p {
+  .myCourse-detail-container p {
     font-size: 1.1rem;
     color: #333;
     margin-bottom: 2rem;
   }
   
-  .course-detail-container h2 {
+  .myCourse-detail-container h2 {
     font-size: 1.5rem;
     margin-bottom: 1.5rem;
     margin-top: 3rem;

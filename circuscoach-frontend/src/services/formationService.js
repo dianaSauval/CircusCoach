@@ -7,9 +7,16 @@ export const getVisibleFormations = async (lang = "es") => {
 };
 
 export const getFormationById = async (id, lang = "es") => {
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/formations/${id}?lang=${lang}`);
-  if (!res.ok) throw new Error("No se pudo obtener la formación");
-  return res.json();
+  try {
+    const res = await api.get(`/formations/${id}?lang=${lang}`);
+    return res.data;
+  } catch (error) {
+    if (error.response) {
+      throw error; // reenvía el error con el response completo (403, 404, etc.)
+    } else {
+      throw new Error("No se pudo obtener la formación");
+    }
+  }
 };
 
 export const getFormationByIdAllInformation = async (id) => {
