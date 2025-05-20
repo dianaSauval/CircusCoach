@@ -309,7 +309,8 @@ const translations = {
       enrollNow: "Inscris-toi maintenant",
       downloadInfo:
         "Télécharge toutes les informations de cette formation en PDF :",
-        downloadInfoCurso: "Télécharge toutes les informations de ce cours en PDF :",
+      downloadInfoCurso:
+        "Télécharge toutes les informations de ce cours en PDF :",
       downloadButton: "Télécharger",
       availableLanguages: "Langues disponibles",
       loading: "Chargement de la formation...",
@@ -324,6 +325,75 @@ const translations = {
         en: "Anglais",
         fr: "Français",
       },
+    },
+  },
+  detail: {
+    es: {
+      priceTitle: "Precio Internacional",
+      month: "mes",
+      benefit_access: "Acceso al contenido grabado",
+      benefit_downloadable: "Material descargable",
+      benefit_24hs: "Disponible las 24 hs",
+      benefit_support: "Consultas personalizadas por WhatsApp o Mail",
+      benefit_duration: "Acceso por 1 año",
+      addToCart: "Agregar al carrito",
+      addedToCart: "¡Agregado al carrito!",
+    },
+    en: {
+      priceTitle: "International Price",
+      month: "month",
+      benefit_access: "Access to recorded content",
+      benefit_downloadable: "Downloadable materials",
+      benefit_24hs: "Available 24/7",
+      benefit_support: "Support via WhatsApp or Email",
+      benefit_duration: "1 year access",
+      addToCart: "Add to cart",
+      addedToCart: "Added to cart!",
+    },
+    fr: {
+      priceTitle: "Prix International",
+      month: "mois",
+      benefit_access: "Accès au contenu enregistré",
+      benefit_downloadable: "Matériel téléchargeable",
+      benefit_24hs: "Disponible 24h/24",
+      benefit_support: "Assistance via WhatsApp ou Email",
+      benefit_duration: "Accès pendant 1 an",
+      addToCart: "Ajouter au panier",
+      addedToCart: "Ajouté au panier !",
+    },
+  },
+  loadingSpinner: {
+    es: {
+      default: "Cargando...",
+    },
+    en: {
+      default: "Loading...",
+    },
+    fr: {
+      default: "Chargement...",
+    },
+  },
+  cart: {
+    es: {
+      title: "Tu carrito",
+      empty: "Todavía no agregaste ningún producto.",
+      clear: "Vaciar carrito",
+      course: "Curso",
+      formation: "Formación",
+    },
+    en: {
+      title: "Your cart",
+      empty: "You haven't added any products yet.",
+      clear: "Clear cart",
+      course: "Course",
+      formation: "Training",
+    },
+    fr: {
+      title: "Ton panier",
+      empty: "Tu n’as encore rien ajouté.",
+      clear: "Vider le panier",
+      course: "Cours",
+      formation: "Formation",
     },
   },
 };

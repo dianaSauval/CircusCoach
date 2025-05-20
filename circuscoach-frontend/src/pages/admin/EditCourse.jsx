@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getCourseById, updateCourse } from "../../services/courseService";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 
 function EditCourse() {
   const { id } = useParams(); // Obtenemos el ID del curso desde la URL
@@ -58,7 +59,7 @@ console.log("ID del curso:", id);
     }
   };
 
-  if (loading) return <p>Cargando curso...</p>;
+  if (loading) return <LoadingSpinner />    ;
 
   return (
     <div>

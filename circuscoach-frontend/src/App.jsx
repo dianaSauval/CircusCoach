@@ -25,6 +25,7 @@ import ResetPassword from "./pages/ResetPassword";
 import ManageCourses from "./pages/admin/ManageCourses";
 import ManagePresentialFormations from "./pages/admin/ManagePresentialFormations";
 import RequireAdmin from "./components/routes/RequireAdmin/RequireAdmin";
+import CartPage from "./pages/CartPage";
 
 function App() {
   return (
@@ -35,7 +36,6 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/cursos" element={<CoursesPage />} />
-          <Route path="/courses/:id" element={<CourseDetail />} />
           <Route path="/mis-cursos" element={<MyCourses />} />
           <Route path="/mis-cursos/:id" element={<MyCourseDetail />} />
           <Route path="/login" element={<Login />} />
@@ -45,7 +45,9 @@ function App() {
           <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="/formaciones" element={<FormationPage />} />
           <Route path="/nosotros" element={<BioRocioGarrote />} />
+          <Route path="/carrito" element={<CartPage />} />
           <Route path="/formaciones/:id/:slug" element={<FormationDetails />} />
+          <Route path="/courses/:id/:slug" element={<CourseDetail />} />
 
           {/* 🔒 Rutas protegidas para admins */}
           <Route element={<RequireAdmin/>}>

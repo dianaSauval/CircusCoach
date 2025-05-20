@@ -46,3 +46,9 @@ export const deleteCourseClass = async (classId) => {
   const res = await api.delete(`/course-classes/${classId}`);
   return res.data;
 };
+
+export const toggleCourseClassVisibility = async (classId, lang) => {
+  const res = await api.patch(`/course-classes/${classId}/visibility/${lang}`);
+  return res.data;
+};
+

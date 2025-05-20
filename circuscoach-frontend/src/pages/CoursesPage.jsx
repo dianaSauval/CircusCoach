@@ -44,8 +44,14 @@ const CoursesPage = () => {
             <Card
               key={course._id}
               image={course.image}
-              description={course.title} // 👈 Mejor mostrar el título
-              onClick={() => navigate(`/courses/${course._id}`)} // 👈 Va al detalle
+              description={course.description}
+              onClick={() => {
+                const slug = course.title?.[lang]
+                  ?.toLowerCase()
+                  .replace(/\s+/g, "-")
+                  .replace(/[^\w-]/g, "");
+                navigate(`/courses/${course._id}/${slug}`);
+              }}
             />
           ))}
         </div>
@@ -55,4 +61,3 @@ const CoursesPage = () => {
 };
 
 export default CoursesPage;
-

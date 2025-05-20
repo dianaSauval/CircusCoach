@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "../styles/pages/MyCourseDetail.css";
 import { getFormationVisibleContent } from "../services/formationService";
+import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
 
 function MyCourseDetail() {
   const { id } = useParams();
@@ -28,7 +29,7 @@ function MyCourseDetail() {
     fetchData();
   }, [id]);
 
-  if (!formacion) return <p>Cargando...</p>;
+  if (!formacion) return <LoadingSpinner />    ;
 
   const porcentaje = progress.porcentajeContenido;
   const modulosCompletados = progress.modulosCompletados;

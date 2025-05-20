@@ -6,7 +6,7 @@
     border-radius: 16px;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
     overflow-y: auto;
-    height: fit-content;
+    max-height: calc(100vh - 120px); /* se adapta a pantallas grandes */
     transition: all 0.3s ease;
     font-family: var(--font-texto);
   }
@@ -100,3 +100,136 @@
     align-items: center;
   }
   
+  /* ... tu CSS actual permanece igual ... */
+
+.pdf-preview-item,
+.video-preview-item {
+  margin-bottom: 1.2rem;
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  border-left: 5px solid var(--color-petroleo);
+}
+
+.pdf-preview-item p,
+.video-preview-item p {
+  margin: 0.3rem 0;
+}
+
+.pdf-preview-item a {
+  display: inline-block;
+  margin-top: 0.4rem;
+  text-decoration: none;
+  color: var(--color-azul-profundo);
+  font-weight: bold;
+}
+
+.pdf-preview-item a:hover {
+  text-decoration: underline;
+}
+
+.video-preview-item iframe {
+  width: 100%;
+  height: 250px;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.video-preview-item h4 {
+  margin: 0.8rem 0 0.4rem;
+  font-size: 1.1rem;
+  color: var(--color-azul-profundo);
+}
+
+.video-preview-item p {
+  font-size: 0.95rem;
+  color: var(--color-negro);
+}
+
+button.toggle-visibility {
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  margin-left: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease, border 0.3s ease;
+}
+
+button.toggle-visibility.visible {
+  background: #e74c3c;
+  border-color: #c0392b;
+}
+
+button.toggle-visibility.visible:hover {
+  background: #c0392b;
+}
+
+button.toggle-visibility.hidden {
+  background: #2ecc71;
+  border-color: #27ae60;
+}
+
+button.toggle-visibility.hidden:hover {
+  background: #27ae60;
+}
+
+/* 📱 Para pantallas más chicas */
+@media (max-width: 768px) {
+  .course-edit-panel {
+    max-height: none;
+    height: auto;
+    padding: 1rem;
+  }
+}
+
+/* 📱 Responsive extra: Ajustes para mejor experiencia en mobile */
+@media (max-width: 768px) {
+  .language-tabs {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .pdf-preview-container,
+  .video-preview-container {
+    padding: 0.8rem;
+  }
+
+  .pdf-preview-item,
+  .video-preview-item {
+    padding: 0.8rem;
+  }
+
+  .video-preview-item iframe {
+    height: 180px;
+  }
+
+  .course-edit-panel h2 {
+    font-size: 1.3rem;
+  }
+
+  .course-edit-panel h3 {
+    font-size: 1.1rem;
+  }
+
+  .course-edit-panel p,
+  .video-preview-item p {
+    font-size: 0.95rem;
+  }
+
+  .button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    align-items: center;
+  }
+
+  button.toggle-visibility {
+    width: 100%;
+    max-width: 300px;
+  }
+}

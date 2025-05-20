@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import "../styles/pages/DetailLayout.css";
 import { getYoutubeEmbedUrl } from "../utils/youtube";
 import { getFormationById } from "../services/formationService";
 import { useLanguage } from "../context/LanguageContext";
 import translations from "../i18n/translations";
 import EmptyState from "../components/EmptyState/EmptyState";
+import InternationalPriceCard from "../components/InternationalPriceCard/InternationalPriceCard";
+import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
+import slugify from "slugify"; // Asegurate de tenerlo instalado: npm i slugify
 
 function FormationDetails() {
-  const { id } = useParams();
+  const { id, slug } = useParams();
+  const navigate = useNavigate();
   const { language: lang } = useLanguage();
   const tc = translations.courseDetail[lang];
 
@@ -22,23 +26,30 @@ function FormationDetails() {
     const fetchFormation = async () => {
       try {
         const data = await getFormationById(id, lang);
-        setFormation(data);
-        setIdiomaNoDisponible(false);
-        const langs = Object.entries(data.visible || {})
-          .filter(([_, visible]) => visible)
-          .map(([idioma]) => idioma.toUpperCase());
-        setIdiomasDisponibles(langs);
-      } catch (error) {
-        if (error.response?.status === 403) {
+        if (!data.visible?.[lang]) {
           setFormation(null);
           setIdiomaNoDisponible(true);
-          const langs = Object.entries(error.response.data.availableLanguages || {})
+          const langs = Object.entries(data.visible || {})
             .filter(([_, visible]) => visible)
             .map(([idioma]) => idioma.toUpperCase());
           setIdiomasDisponibles(langs);
         } else {
-          console.error("Error al obtener la formación:", error);
+          setFormation(data);
+          setIdiomaNoDisponible(false);
+
+          // 🔁 Si falta el slug en la URL, redireccionamos
+          const generatedSlug = slugify(data.title, { lower: true });
+          if (!slug || slug !== generatedSlug) {
+            navigate(`/formaciones/${id}/${generatedSlug}`, { replace: true });
+          }
+
+          const langs = Object.entries(data.visible || {})
+            .filter(([_, visible]) => visible)
+            .map(([idioma]) => idioma.toUpperCase());
+          setIdiomasDisponibles(langs);
         }
+      } catch (error) {
+        console.error("Error al obtener la formación:", error);
       } finally {
         setLoading(false);
       }
@@ -55,13 +66,16 @@ function FormationDetails() {
     }
   };
 
-  if (loading) return <p className="loading-text">{tc.loading}</p>;
+  if (loading) return <LoadingSpinner texto={tc.loading} />;
 
   if (idiomaNoDisponible) {
     return (
       <EmptyState
         title={`😢 ${tc.unavailableTitle}`}
-        subtitle={tc.unavailable.replace("{{lang}}", tc.languageNames[lang] || lang.toUpperCase())}
+        subtitle={tc.unavailable.replace(
+          "{{lang}}",
+          tc.languageNames[lang] || lang.toUpperCase()
+        )}
       />
     );
   }
@@ -96,7 +110,8 @@ function FormationDetails() {
 
           {idiomasDisponibles.length > 0 && (
             <p className="detalle-idiomas">
-              🌐 {tc.availableLanguages}: {idiomasDisponibles
+              🌐 {tc.availableLanguages}:{" "}
+              {idiomasDisponibles
                 .map((code) => tc.languageNames[code.toLowerCase()] || code)
                 .join(" / ")}
             </p>
@@ -131,7 +146,6 @@ function FormationDetails() {
         </div>
       </div>
 
-      {/* 🔸 Bloque de características con info estática */}
       <div className="detalle-caracteristicas">
         <div className="caracteristica">
           <i className="fas fa-wifi"></i>
@@ -148,6 +162,8 @@ function FormationDetails() {
           <span>{tc.feature_support}</span>
         </div>
       </div>
+
+      <InternationalPriceCard isCourse={false} price={formation.price} />
     </>
   );
 }

@@ -35,6 +35,15 @@
   height: 100%;
 }
 
+.custom-card-description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* limita a 3 líneas */
+  -webkit-box-orient: vertical;
+}
+
+
 /* Responsive ajustes */
 @media (max-width: 600px) {
   .custom-card-img {

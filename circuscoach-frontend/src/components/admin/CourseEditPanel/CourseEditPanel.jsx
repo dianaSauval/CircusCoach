@@ -4,10 +4,12 @@ import { getYoutubeEmbedUrl } from "../../../utils/youtube";
 import "./CourseEditPanel.css";
 import CourseForm from "../Form/CourseForm";
 import { updateCourse, updateCourseClass } from "../../../services/courseService";
+import { toggleCourseClassVisibility } from "../../../services/courseService";
+
 
 const CourseEditPanel = ({ course, selectedClass, onUpdate }) => {
   const [activeTab, setActiveTab] = useState("es");
- const [isEditing, setIsEditing] = useState(false); 
+  const [isEditing, setIsEditing] = useState(false);
 
   if (!course && !selectedClass) {
     return <p className="placeholder">Seleccioná un curso o clase para ver sus detalles.</p>;
@@ -15,10 +17,6 @@ const CourseEditPanel = ({ course, selectedClass, onUpdate }) => {
 
   const data = selectedClass || course;
   const isClass = Boolean(selectedClass);
-  const video = data?.video?.[activeTab];  
-  const videoUrl = isClass ? video?.url : video;
-  const youtubeEmbed = getYoutubeEmbedUrl(videoUrl);
-  
 
   const handleSave = async (updatedData) => {
     try {
@@ -27,10 +25,8 @@ const CourseEditPanel = ({ course, selectedClass, onUpdate }) => {
       } else if (course) {
         await updateCourse(course._id, updatedData);
       }
-  
-      // Actualizá el contenido local
+
       Object.assign(data, updatedData);
-  
       setIsEditing(false);
       onUpdate?.();
     } catch (error) {
@@ -38,7 +34,90 @@ const CourseEditPanel = ({ course, selectedClass, onUpdate }) => {
       console.log("Detalles del error:", error.response?.data);
     }
   };
-  
+
+  const handleToggleVisibility = async () => {
+  try {
+    console.log("Toggle visibilidad con:", selectedClass._id, activeTab);
+
+    await toggleCourseClassVisibility(data._id, activeTab);
+    // Actualiza la visibilidad local
+    data.visible[activeTab] = !data.visible?.[activeTab];
+    onUpdate?.(); // actualiza la vista
+  } catch (error) {
+    console.error("Error al cambiar visibilidad:", error);
+  }
+};
+
+
+  const renderPDFs = () => {
+  const visibles = (data.pdfs || []).filter(
+    (pdf) => pdf.url?.[activeTab] || pdf.title?.[activeTab] || pdf.description?.[activeTab]
+  );
+
+  if (visibles.length === 0) {
+    return <p className="no-material">📭 Aún no se ha cargado ningún documento en este idioma.</p>;
+  }
+
+  return visibles.map((pdf, i) => (
+    <div key={i} className="pdf-preview-item">
+      {pdf.title?.[activeTab] && (
+        <p><strong>📌 Título:</strong> {pdf.title[activeTab]}</p>
+      )}
+      {pdf.description?.[activeTab] && (
+        <p><strong>📝 Descripción:</strong> {pdf.description[activeTab]}</p>
+      )}
+      {pdf.url?.[activeTab] ? (
+        <a
+          href={pdf.url[activeTab]}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          🔗 Ver PDF
+        </a>
+      ) : (
+        <p className="no-material">❌ Sin enlace al PDF en este idioma.</p>
+      )}
+    </div>
+  ));
+};
+
+
+  const renderVideos = () => {
+  const visibles = (data.videos || []).filter(
+    (video) => video.url?.[activeTab] || video.title?.[activeTab] || video.description?.[activeTab]
+  );
+
+  if (visibles.length === 0) {
+    return <p className="no-material">📭 Aún no se ha cargado ningún video en este idioma.</p>;
+  }
+
+  return visibles.map((video, i) => {
+    const embed = getYoutubeEmbedUrl(video.url?.[activeTab]);
+    return (
+      <div key={i} className="video-preview-item">
+        {embed ? (
+          <iframe
+            width="100%"
+            height="200"
+            src={embed}
+            frameBorder="0"
+            allowFullScreen
+            title={`Video ${i + 1}`}
+          ></iframe>
+        ) : (
+          <p className="no-material">❌ Video sin enlace válido en este idioma.</p>
+        )}
+        {video.title?.[activeTab] && (
+          <p><strong>📌 Título:</strong> {video.title[activeTab]}</p>
+        )}
+        {video.description?.[activeTab] && (
+          <p><strong>📝 Descripción:</strong> {video.description[activeTab]}</p>
+        )}
+      </div>
+    );
+  });
+};
+
 
   return (
     <div className="course-edit-panel">
@@ -77,62 +156,35 @@ const CourseEditPanel = ({ course, selectedClass, onUpdate }) => {
           )}
 
           <div className="pdf-preview-container">
-            <h3>📄 Documento cargado</h3>
-            {data?.pdf?.[activeTab]?.url || data?.pdf?.[activeTab] ? (
-              <>
-                {data?.pdf?.[activeTab]?.title && (
-                  <p><strong>📌 Título:</strong> {data.pdf[activeTab].title}</p>
-                )}
-                {data?.pdf?.[activeTab]?.description && (
-                  <p><strong>📝 Descripción:</strong> {data.pdf[activeTab].description}</p>
-                )}
-                <a
-                  href={data.pdf[activeTab].url || data.pdf[activeTab]}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  🔗 Ver PDF
-                </a>
-              </>
-            ) : (
-              <p className="no-material">📭 Aún no se ha cargado ningún documento.</p>
-            )}
+            <h3>📄 PDFs Cargados</h3>
+            {renderPDFs()}
           </div>
 
           <div className="video-preview-container">
-            <h3>🎥 Video cargado</h3>
-            {youtubeEmbed ? (
-              <div className="video-container">
-                <iframe
-                  width="100%"
-                  height="200"
-                  src={youtubeEmbed}
-                  frameBorder="0"
-                  allowFullScreen
-                  title="Video"
-                ></iframe>
-                {data?.video?.[activeTab]?.title && (
-                  <p><strong>📌 Título:</strong> {data.video[activeTab].title}</p>
-                )}
-                {data?.video?.[activeTab]?.description && (
-                  <p><strong>📝 Descripción:</strong> {data.video[activeTab].description}</p>
-                )}
-              </div>
-            ) : (
-              <p className="no-material">📭 Aún no se ha cargado ningún video.</p>
-            )}
+            <h3>🎥 Videos Cargados</h3>
+            {renderVideos()}
           </div>
 
           <div className="button-group">
-            <button className="edit" onClick={() => setIsEditing(true)}>
-              ✏️ Editar
-            </button>
-            {/* Aquí podrías agregar botón de visibilidad también */}
-          </div>
+  <button className="edit" onClick={() => setIsEditing(true)}>
+    ✏️ Editar
+  </button>
+
+  {isClass && (
+   <button
+  className={`toggle-visibility ${data.visible?.[activeTab] ? "visible" : "hidden"}`}
+  onClick={handleToggleVisibility}
+>
+  {data.visible?.[activeTab] ? "Ocultar en este idioma" : "Hacer visible en este idioma"}
+</button>
+
+  )}
+</div>
+
         </div>
       ) : (
         <CourseForm
-        initialData={data}
+          initialData={data}
           isClass={isClass}
           activeTab={activeTab}
           setIsEditing={setIsEditing}

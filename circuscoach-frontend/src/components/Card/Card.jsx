@@ -6,15 +6,20 @@ const Card = ({ image, description, onClick }) => {
 
   // 📷 Selecciona la imagen correcta según el idioma, o usa 'es' como fallback
   const selectedImage =
-    typeof image === "string"
-      ? image
-      : image?.[language] || image?.es || null;
+    typeof image === "string" ? image : image?.[language] || image?.es || null;
 
   // 📝 Selecciona la descripción correcta según el idioma, o usa 'es' como fallback
   const selectedDescription =
     typeof description === "string"
       ? description
       : description?.[language] || description?.es || "";
+
+  function truncateText(text, maxLength = 120) {
+    if (text.length <= maxLength) return text;
+    const truncated = text.slice(0, maxLength);
+    const lastSpace = truncated.lastIndexOf(" ");
+    return truncated.slice(0, lastSpace) + "...";
+  }
 
   return (
     <div
@@ -30,7 +35,7 @@ const Card = ({ image, description, onClick }) => {
         />
       )}
       <div className="custom-card-description">
-        {selectedDescription}
+        {truncateText(selectedDescription)}
       </div>
     </div>
   );

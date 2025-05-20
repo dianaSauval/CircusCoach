@@ -105,12 +105,13 @@ const ManageCourses = () => {
       <div className={`courses-layout ${isCollapsed ? "collapsed" : ""}`}>
         <div className={`courses-list ${isCollapsed ? "collapsed" : ""}`}>
           <button
-            className={`collapse-toggleCourses ${isCollapsed ? "collapsed-positionCourses" : ""}`}
+            className={`collapse-toggleCourses ${
+              isCollapsed ? "collapsed" : "expanded"
+            }`}
             onClick={() => setIsCollapsed(!isCollapsed)}
           >
-            {isCollapsed ? "🡠" : "🡢"}
+            {isCollapsed ? "🡢" : "🡠"}
           </button>
-
           {!isCollapsed && (
             <>
               <h2>📌 Cursos disponibles</h2>
@@ -125,23 +126,32 @@ const ManageCourses = () => {
                       <span key={lang} className="lang-visibility">
                         {lang === "es" && "Español"}
                         {lang === "en" && "Inglés"}
-                        {lang === "fr" && "Francés"} {course.visible?.[lang] ? "✅" : "❌"}
+                        {lang === "fr" && "Francés"}{" "}
+                        {course.visible?.[lang] ? "✅" : "❌"}
                       </span>
                     ))}
                   </div>
 
                   <div
-                    className={`course-title ${selectedCourse?._id === course._id ? "selected" : ""}`}
+                    className={`course-title ${
+                      selectedCourse?._id === course._id ? "selected" : ""
+                    }`}
                     onClick={() => handleSelectCourse(course)}
                   >
                     {course.title?.es || "Sin título"}
                   </div>
 
                   <div className="course-actions">
-                    <button className="btn green" onClick={() => handleOpenModal(course._id)}>
+                    <button
+                      className="btn green"
+                      onClick={() => handleOpenModal(course._id)}
+                    >
                       ➕ Agregar clase
                     </button>
-                    <button className="btn red" onClick={() => handleDeleteCourse(course._id)}>
+                    <button
+                      className="btn red"
+                      onClick={() => handleDeleteCourse(course._id)}
+                    >
                       🗑 Eliminar Curso
                     </button>
                     <button

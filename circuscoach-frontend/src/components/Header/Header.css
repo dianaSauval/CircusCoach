@@ -154,6 +154,23 @@
     font-size: 18px;
   }
   
+.cart-icon-container {
+  color: var(--color-blanco);
+  position: relative;
+}
+
+.cart-count {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: var(--color-menta);
+  color: var(--color-azul-profundo);
+  font-weight: bold;
+  border-radius: 50%;
+  padding: 4px 8px;
+  font-size: 0.8rem;
+}
+
 
 
 /* 🌐 Responsive */

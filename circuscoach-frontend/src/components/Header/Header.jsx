@@ -14,10 +14,12 @@ import { useState } from "react";
 import { useLanguage } from "../../context/LanguageContext";
 import translations from "../../i18n/translations";
 import { useAuth } from "../../context/AuthContext";
+import { useCart } from "../../context/CartContext";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
+  const { cartCount } = useCart();
 
   const { language, setLanguage } = useLanguage();
   const t = translations.header[language];
@@ -41,25 +43,45 @@ export default function Header() {
 
       <nav className={`header-nav ${menuOpen ? "open" : ""}`}>
         <NavLink to="/" className="nav-link" onClick={() => setMenuOpen(false)}>
-         <p>{t.home}</p> 
+          <p>{t.home}</p>
         </NavLink>
-        <NavLink to="/cursos" className="nav-link" onClick={() => setMenuOpen(false)}>
+        <NavLink
+          to="/cursos"
+          className="nav-link"
+          onClick={() => setMenuOpen(false)}
+        >
           {t.courses}
         </NavLink>
-        <NavLink to="/formaciones" className="nav-link" onClick={() => setMenuOpen(false)}>
+        <NavLink
+          to="/formaciones"
+          className="nav-link"
+          onClick={() => setMenuOpen(false)}
+        >
           {t.formations}
         </NavLink>
-        <NavLink to="/nosotros" className="nav-link" onClick={() => setMenuOpen(false)}>
+        <NavLink
+          to="/nosotros"
+          className="nav-link"
+          onClick={() => setMenuOpen(false)}
+        >
           {t.aboutUs}
         </NavLink>
 
         {isAuthenticated && (
           <>
-            <NavLink to="/mis-cursos" className="nav-link" onClick={() => setMenuOpen(false)}>
+            <NavLink
+              to="/mis-cursos"
+              className="nav-link"
+              onClick={() => setMenuOpen(false)}
+            >
               {t.myCourses}
             </NavLink>
             {user?.role === "admin" && (
-              <NavLink to="/admin" className="nav-link" onClick={() => setMenuOpen(false)}>
+              <NavLink
+                to="/admin"
+                className="nav-link"
+                onClick={() => setMenuOpen(false)}
+              >
                 {t.admin}
               </NavLink>
             )}
@@ -79,7 +101,10 @@ export default function Header() {
 
       <div className="header-icons">
         <div className="language-selector">
-          <button className="language-button" onClick={() => setLanguageMenuOpen(!languageMenuOpen)}>
+          <button
+            className="language-button"
+            onClick={() => setLanguageMenuOpen(!languageMenuOpen)}
+          >
             <FaGlobe className="globe-icon" />
             <span>{t.language}</span>
             {languageMenuOpen ? <FaChevronUp /> : <FaChevronDown />}
@@ -95,7 +120,10 @@ export default function Header() {
         </div>
 
         <FaSearch className="header-icon" />
-        <FaShoppingBag className="header-icon" />
+        <NavLink to="/carrito" className="cart-icon-container">
+          <FaShoppingBag className="header-icon" />
+          {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
+        </NavLink>
 
         {isAuthenticated ? (
           <NavLink to="/" className="nav-link desktop-only" onClick={logout}>
