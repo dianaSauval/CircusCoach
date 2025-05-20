@@ -2,7 +2,8 @@ const express = require("express");
 const {
   getFormations,
   getAllFormations,
-  getFormationById,
+  getFormationById ,
+  getFormationByIdAllInformation,
   getFormationVisibleContent,
   createFormation,
   updateFormation,
@@ -34,7 +35,10 @@ router.delete("/:id", authMiddleware, isAdminMiddleware, deleteFormation);
 router.post("/", authMiddleware, isAdminMiddleware, createFormation);
 
 // 🔹 Obtener formación por ID (usuario autenticado)
-router.get("/id/:id", authMiddleware, getFormationById);
+router.get("/id/:id", authMiddleware, getFormationByIdAllInformation);
+
+// 🔹 Obtener formación por id e idioma (sin autenticación)
+router.get("/:id", getFormationById);
 
 // 🔹 Obtener formación con contenido visible (módulos y clases) por idioma
 router.get("/visible/:id", authMiddleware, getFormationVisibleContent);

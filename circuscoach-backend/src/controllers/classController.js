@@ -55,7 +55,7 @@ const createClass = async (req, res) => {
   try {
     console.log("📩 Datos recibidos en el backend:", req.body); // 🔹 Verifica qué datos llegan
 
-    const { title, subtitle, content, secondaryContent, pdf, video, moduleId } = req.body;
+    const { title, subtitle, content, secondaryContent, pdfs, videos, moduleId } = req.body;
 
     if (!title || !moduleId) {
       return res.status(400).json({ error: "El título y el módulo son obligatorios" });
@@ -66,8 +66,8 @@ const createClass = async (req, res) => {
       subtitle,
       content,
       secondaryContent,
-      pdf,
-      video,
+      pdfs,
+      videos,
       module: moduleId,
       visible: { es: false, en: false, fr: false }
     });

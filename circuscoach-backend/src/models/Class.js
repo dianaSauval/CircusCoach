@@ -1,5 +1,43 @@
 const mongoose = require("mongoose");
 
+// Subesquema de video multilenguaje
+const videoSchema = new mongoose.Schema({
+  url: {
+    es: { type: String, default: "" },
+    en: { type: String, default: "" },
+    fr: { type: String, default: "" }
+  },
+  title: {
+    es: { type: String, default: "" },
+    en: { type: String, default: "" },
+    fr: { type: String, default: "" }
+  },
+  description: {
+    es: { type: String, default: "" },
+    en: { type: String, default: "" },
+    fr: { type: String, default: "" }
+  }
+}, { _id: false });
+
+// Subesquema de PDF multilenguaje
+const pdfSchema = new mongoose.Schema({
+  url: {
+    es: { type: String, default: "" },
+    en: { type: String, default: "" },
+    fr: { type: String, default: "" }
+  },
+  title: {
+    es: { type: String, default: "" },
+    en: { type: String, default: "" },
+    fr: { type: String, default: "" }
+  },
+  description: {
+    es: { type: String, default: "" },
+    en: { type: String, default: "" },
+    fr: { type: String, default: "" }
+  }
+}, { _id: false });
+
 const classSchema = new mongoose.Schema({
   title: {
     es: { type: String, required: true },
@@ -21,46 +59,14 @@ const classSchema = new mongoose.Schema({
     en: { type: String, default: "" },
     fr: { type: String, default: "" }
   },
-  pdf: {
-    es: {
-      url: { type: String, default: "" }, // URL del PDF en español
-      title: { type: String, default: "" }, // Título opcional
-      description: { type: String, default: "" } // Descripción opcional
-    },
-    en: {
-      url: { type: String, default: "" },
-      title: { type: String, default: "" },
-      description: { type: String, default: "" }
-    },
-    fr: {
-      url: { type: String, default: "" },
-      title: { type: String, default: "" },
-      description: { type: String, default: "" }
-    }
-  },
-  video: {
-    es: {
-      url: { type: String, default: "" }, // URL del video en español
-      title: { type: String, default: "" }, // Título opcional
-      description: { type: String, default: "" } // Descripción opcional
-    },
-    en: {
-      url: { type: String, default: "" },
-      title: { type: String, default: "" },
-      description: { type: String, default: "" }
-    },
-    fr: {
-      url: { type: String, default: "" },
-      title: { type: String, default: "" },
-      description: { type: String, default: "" }
-    }
-  },
-  module: { type: mongoose.Schema.Types.ObjectId, ref: "Module", required: true }, // ✅ Relación obligatoria con módulo
+  pdfs: [pdfSchema],     // ✅ Múltiples PDFs multilingües
+  videos: [videoSchema],  // ✅ Múltiples videos multilingües
+  module: { type: mongoose.Schema.Types.ObjectId, ref: "Module", required: true },
   visible: {
     es: { type: Boolean, default: false },
     en: { type: Boolean, default: false },
     fr: { type: Boolean, default: false }
-  } // 🔹 Control de visibilidad por idioma
+  }
 });
 
 module.exports = mongoose.model("Class", classSchema);

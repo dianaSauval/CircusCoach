@@ -33,6 +33,25 @@ exports.getVisibleCoursesByLanguage = async (req, res) => {
   }
 };
 
+// 🔹 Obtener cursos por ID
+exports.getCourseById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const course = await Course.findById(id).populate("classes");
+
+    if (!course) {
+      return res.status(404).json({ error: "Curso no encontrado" });
+    }
+
+    res.status(200).json(course);
+  } catch (error) {
+    console.error("Error al obtener curso por ID:", error);
+    res.status(500).json({ error: "Error en el servidor" });
+  }
+};
+
+
 // 🔹 Crear un curso (admin)
 exports.createCourse = async (req, res) => {
   if (!isAdmin(req)) return res.status(403).json({ error: "No autorizado" });

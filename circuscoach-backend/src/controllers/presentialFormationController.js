@@ -4,6 +4,7 @@ const isAdmin = (req) => req.user && req.user.role === "admin";
 
 //Obtener todas las formaciones presenciales (público)
 const getAllPresentialFormations = async (req, res) => {
+  if (!isAdmin(req)) return res.status(403).json({ error: "No autorizado" });
     try {
         const formations = await PresentialFormation.aggregate([
             {
@@ -31,6 +32,49 @@ const getAllPresentialFormations = async (req, res) => {
       
   };
   
+  // 🔹 Obtener formaciones presenciales visibles por idioma (público)
+const getVisiblePresentialFormations = async (req, res) => {
+  const lang = req.query.lang || "es";
+
+  try {
+    const formations = await PresentialFormation.aggregate([
+      {
+        $addFields: {
+          sortDate: {
+            $cond: [
+              { $eq: ["$dateType", "single"] },
+              "$singleDate",
+              "$dateRange.start"
+            ]
+          }
+        }
+      },
+      { $sort: { sortDate: 1 } }
+    ]);
+
+    // Formateamos solo los campos del idioma correspondiente
+    const formatted = formations.map(f => ({
+      _id: f._id,
+      title: f.title?.[lang] || "",
+      description: f.description?.[lang] || "",
+      location: f.location?.[lang] || "",
+      dateType: f.dateType,
+      singleDate: f.singleDate,
+      dateRange: f.dateRange,
+      time: f.time,
+      registrationLink: f.registrationLink,
+    }));
+
+    res.json(formatted);
+  } catch (error) {
+    console.error("Error en getVisiblePresentialFormations:", error.message || error);
+    res.status(500).json({
+      message: "Error al obtener las formaciones presenciales",
+      error: error.message || "Error desconocido"
+    });
+  }
+};
+
   
 
 // Crear una formación presencial (admin)
@@ -77,6 +121,7 @@ const createPresentialFormation = async (req, res) => {
 
   module.exports = {
     getAllPresentialFormations,
+    getVisiblePresentialFormations,
     createPresentialFormation,
     updatePresentialFormation,
     deletePresentialFormation

@@ -2,6 +2,7 @@ const express = require("express");
 const {
   getAllCourses,
   getVisibleCoursesByLanguage,
+  getCourseById,
   createCourse,
   updateCourse,
   toggleCourseVisibilityByLanguage,
@@ -32,6 +33,10 @@ router.patch("/:id/visibility/language", authMiddleware, isAdminMiddleware, togg
 
 // 🔹 Eliminar un curso y sus clases (solo admin)
 router.delete("/:id", authMiddleware, isAdminMiddleware, deleteCourse);
+
+// 🔹 Obtener curso por ID (público)
+router.get("/:id", getCourseById);
+
 
 module.exports = router;
 

@@ -1,5 +1,42 @@
 const mongoose = require("mongoose");
 
+// Reutilizamos los subesquemas como en el modelo de Class
+const videoSchema = new mongoose.Schema({
+  url: {
+    es: { type: String, default: "" },
+    en: { type: String, default: "" },
+    fr: { type: String, default: "" }
+  },
+  title: {
+    es: { type: String, default: "" },
+    en: { type: String, default: "" },
+    fr: { type: String, default: "" }
+  },
+  description: {
+    es: { type: String, default: "" },
+    en: { type: String, default: "" },
+    fr: { type: String, default: "" }
+  }
+}, { _id: false });
+
+const pdfSchema = new mongoose.Schema({
+  url: {
+    es: { type: String, default: "" },
+    en: { type: String, default: "" },
+    fr: { type: String, default: "" }
+  },
+  title: {
+    es: { type: String, default: "" },
+    en: { type: String, default: "" },
+    fr: { type: String, default: "" }
+  },
+  description: {
+    es: { type: String, default: "" },
+    en: { type: String, default: "" },
+    fr: { type: String, default: "" }
+  }
+}, { _id: false });
+
 const courseClassSchema = new mongoose.Schema({
   title: {
     es: { type: String, required: true },
@@ -21,41 +58,13 @@ const courseClassSchema = new mongoose.Schema({
     en: { type: String, default: "" },
     fr: { type: String, default: "" }
   },
-  pdf: {
-    es: {
-      url: { type: String, default: "" },
-      title: { type: String, default: "" },
-      description: { type: String, default: "" }
-    },
-    en: {
-      url: { type: String, default: "" },
-      title: { type: String, default: "" },
-      description: { type: String, default: "" }
-    },
-    fr: {
-      url: { type: String, default: "" },
-      title: { type: String, default: "" },
-      description: { type: String, default: "" }
-    }
+  pdfs: [pdfSchema],       // ✅ Múltiples PDFs por clase
+  videos: [videoSchema],   // ✅ Múltiples videos por clase
+  course: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Course",
+    required: true
   },
-  video: {
-    es: {
-      url: { type: String, default: "" },
-      title: { type: String, default: "" },
-      description: { type: String, default: "" }
-    },
-    en: {
-      url: { type: String, default: "" },
-      title: { type: String, default: "" },
-      description: { type: String, default: "" }
-    },
-    fr: {
-      url: { type: String, default: "" },
-      title: { type: String, default: "" },
-      description: { type: String, default: "" }
-    }
-  },
-  course: { type: mongoose.Schema.Types.ObjectId, ref: "Course", required: true },
   visible: {
     es: { type: Boolean, default: false },
     en: { type: Boolean, default: false },

@@ -130,6 +130,24 @@ const resetPassword = async (req, res) => {
   }
 };
 
+const getUserProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const user = await User.findById(userId).select("-password");
+    if (!user) {
+      return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+
+    res.json(user);
+  } catch (error) {
+    console.error("Error en getUserProfile:", error);
+    res.status(500).json({ error: "Error en el servidor" });
+  }
+};
+
+
+
 
 // EXPORTAMOS AMBAS FUNCIONES
-module.exports = { register, login , forgotPassword, resetPassword};
+module.exports = { register, login , forgotPassword, resetPassword, getUserProfile};
