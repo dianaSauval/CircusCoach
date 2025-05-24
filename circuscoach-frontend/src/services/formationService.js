@@ -12,7 +12,7 @@ export const getFormationById = async (id, lang = "es") => {
     return res.data;
   } catch (error) {
     if (error.response) {
-      throw error; // reenvía el error con el response completo (403, 404, etc.)
+      throw error;
     } else {
       throw new Error("No se pudo obtener la formación");
     }
@@ -56,5 +56,11 @@ export const toggleFormationVisibilityByLanguage = async (id, lang) => {
 
 export const makeFormationVisibleInAllLanguages = async (id) => {
   const res = await api.patch(`/formations/${id}/visibility/all`);
+  return res.data;
+};
+
+// 🔹 Obtener clase individual por ID y por idioma
+export const getClassById = async (id, lang = "es") => {
+  const res = await api.get(`/classes/${id}?lang=${lang}`);
   return res.data;
 };

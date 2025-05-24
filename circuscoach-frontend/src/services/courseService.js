@@ -1,15 +1,17 @@
 // services/courseService.js
 import api from "./api";
 
+// Cursos
 export const getCourses = async (lang) => {
   const res = await api.get(`/courses/visible?lang=${lang}`);
   return res.data;
 };
 
-export const getCourseById = async (id) => {
-  const res = await api.get(`/courses/${id}`);
+export const getCourseById = async (id, lang = "es") => {
+  const res = await api.get(`/courses/${id}?lang=${lang}`);
   return res.data;
 };
+
 
 export const getAllCourses = async () => {
   const res = await api.get("/courses/admin");
@@ -52,3 +54,13 @@ export const toggleCourseClassVisibility = async (classId, lang) => {
   return res.data;
 };
 
+// ✅ NUEVAS funciones para clases visibles y detalle por idioma
+export const getVisibleCourseClasses = async (courseId, lang = "es") => {
+  const res = await api.get(`/course-classes/visible/${courseId}?lang=${lang}`);
+  return res.data;
+};
+
+export const getCourseClassById = async (classId, lang = "es") => {
+  const res = await api.get(`/course-classes/${classId}?lang=${lang}`);
+  return res.data;
+};

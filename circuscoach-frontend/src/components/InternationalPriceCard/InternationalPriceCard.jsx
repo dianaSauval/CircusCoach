@@ -6,31 +6,36 @@ import { useState } from "react";
 
 export default function InternationalPriceCard({
   isCourse = false,
-  price = 50,
+  course = null,
+  formation = null,
 }) {
   const { language } = useLanguage();
   const t = translations.detail[language];
   const { addToCart } = useCart();
   const [showMsg, setShowMsg] = useState(false);
 
+  const item = isCourse ? course : formation;
 
   const handleAdd = () => {
-  addToCart({
-    type: isCourse ? "course" : "formation",
-    id: window.location.pathname.split("/").pop(),
-    price,
-  });
+    if (!item) return;
 
-  setShowMsg(true);
-  setTimeout(() => setShowMsg(false), 2000);
-};
+    addToCart({
+      type: isCourse ? "course" : "formation",
+      id: item._id,
+      title: item.title,
+      image: item.image,
+      price: item.price,
+    });
 
+    setShowMsg(true);
+    setTimeout(() => setShowMsg(false), 2000);
+  };
 
   return (
     <div className="international-card">
       <h3 className="card-title">{t.priceTitle}</h3>
       <p className="card-price">
-        USD {price} / {t.month}
+        USD {item?.price || 0} / {t.month}
       </p>
 
       <ul className="card-benefits">
@@ -44,12 +49,12 @@ export default function InternationalPriceCard({
       <button className="add-to-cart-btn" onClick={handleAdd}>
         {t.addToCart}
       </button>
-      {showMsg && (
-  <div className="cart-feedback-msg">
-    ✅ ¡{t.addedToCart || "Agregado al carrito"}!
-  </div>
-)}
 
+      {showMsg && (
+        <div className="cart-feedback-msg">
+          ✅ ¡{t.addedToCart || "Agregado al carrito"}!
+        </div>
+      )}
     </div>
   );
 }

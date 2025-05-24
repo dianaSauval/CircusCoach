@@ -160,7 +160,8 @@ function CourseDetail() {
         </div>
       </div>
 
-      <InternationalPriceCard isCourse={true} price={course.price} />
+      <InternationalPriceCard isCourse={true} course={course} />
+
     </>
   );
 }

@@ -8,7 +8,7 @@ import translations from "../i18n/translations";
 import EmptyState from "../components/EmptyState/EmptyState";
 import InternationalPriceCard from "../components/InternationalPriceCard/InternationalPriceCard";
 import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
-import slugify from "slugify"; // Asegurate de tenerlo instalado: npm i slugify
+import slugify from "slugify";
 
 function FormationDetails() {
   const { id, slug } = useParams();
@@ -26,43 +26,47 @@ function FormationDetails() {
     const fetchFormation = async () => {
       try {
         const data = await getFormationById(id, lang);
-        if (!data.visible?.[lang]) {
-          setFormation(null);
+        setFormation(data);
+        setIdiomaNoDisponible(false);
+
+        // Corrige la URL si el slug no coincide
+        const generatedSlug = slugify(data.title?.[lang] || "", {
+          lower: true,
+        });
+        if (!slug || slug !== generatedSlug) {
+          navigate(`/formaciones/${id}/${generatedSlug}`, { replace: true });
+        }
+
+        const langs = Object.entries(data.visible || {})
+          .filter(([_, visible]) => visible)
+          .map(([idioma]) => idioma.toUpperCase());
+
+        setIdiomasDisponibles(langs);
+      } catch (error) {
+        if (error.response?.status === 403) {
           setIdiomaNoDisponible(true);
-          const langs = Object.entries(data.visible || {})
+          const langs = Object.entries(
+            error.response.data?.availableLanguages || {}
+          )
             .filter(([_, visible]) => visible)
             .map(([idioma]) => idioma.toUpperCase());
           setIdiomasDisponibles(langs);
         } else {
-          setFormation(data);
-          setIdiomaNoDisponible(false);
-
-          // 🔁 Si falta el slug en la URL, redireccionamos
-          const generatedSlug = slugify(data.title, { lower: true });
-          if (!slug || slug !== generatedSlug) {
-            navigate(`/formaciones/${id}/${generatedSlug}`, { replace: true });
-          }
-
-          const langs = Object.entries(data.visible || {})
-            .filter(([_, visible]) => visible)
-            .map(([idioma]) => idioma.toUpperCase());
-          setIdiomasDisponibles(langs);
+          console.error("Error al obtener la formación:", error);
         }
-      } catch (error) {
-        console.error("Error al obtener la formación:", error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchFormation();
-  }, [id, lang]);
+  }, [id, lang, slug, navigate]);
 
   const handleDownload = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (formation?.pdf) {
-      window.open(formation.pdf, "_blank", "noopener,noreferrer");
+    if (formation?.pdf?.[lang]) {
+      window.open(formation.pdf[lang], "_blank", "noopener,noreferrer");
     }
   };
 
@@ -84,18 +88,20 @@ function FormationDetails() {
     return <p className="error-text">{tc.notFound}</p>;
   }
 
-  const embedUrl = formation.video ? getYoutubeEmbedUrl(formation.video) : null;
+  const embedUrl = formation.video?.[lang]
+    ? getYoutubeEmbedUrl(formation.video[lang])
+    : null;
 
   return (
     <>
       <div className="detalle-container">
         <div className="left-section">
-          <h1 className="detalle-title">{formation.title}</h1>
-          <p className="detalle-description">{formation.description}</p>
+          <h1 className="detalle-title">{formation.title?.[lang]}</h1>
+          <p className="detalle-description">{formation.description?.[lang]}</p>
 
           <button className="inscribite-button">{tc.enrollNow}</button>
 
-          {formation.pdf && (
+          {formation.pdf?.[lang] && (
             <>
               <p className="pdf-info-text">{tc.downloadInfo}</p>
               <button
@@ -136,10 +142,17 @@ function FormationDetails() {
               onKeyDown={(e) => e.key === "Enter" && setShowVideo(true)}
             >
               <img
-                src={formation.image}
-                alt={formation.title}
+                src={
+                  formation.image?.[lang] ||
+                  formation.image?.es || // fallback seguro si falta el idioma actual
+                  "/placeholder.png"
+                }
+                alt={
+                  formation.title?.[lang] || formation.title?.es || "Formación"
+                }
                 className="formation-image"
               />
+
               {embedUrl && <div className="play-overlay">▶️</div>}
             </div>
           )}
@@ -151,19 +164,17 @@ function FormationDetails() {
           <i className="fas fa-wifi"></i>
           <span>{tc.feature_online}</span>
         </div>
-
         <div className="caracteristica">
           <i className="fas fa-file-download"></i>
           <span>{tc.feature_downloadable}</span>
         </div>
-
         <div className="caracteristica">
           <i className="fas fa-comments"></i>
           <span>{tc.feature_support}</span>
         </div>
       </div>
 
-      <InternationalPriceCard isCourse={false} price={formation.price} />
+      <InternationalPriceCard isCourse={false} formation={formation} />
     </>
   );
 }

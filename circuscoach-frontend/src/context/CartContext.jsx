@@ -1,3 +1,4 @@
+// ✅ CONTEXTO DE CARRITO (context/CartContext.js)
 import { createContext, useContext, useEffect, useState } from "react";
 
 const CartContext = createContext();
@@ -25,5 +26,4 @@ export const CartProvider = ({ children }) => {
   );
 };
 
-// ✅ Este hook es lo que usás en el Header
 export const useCart = () => useContext(CartContext);

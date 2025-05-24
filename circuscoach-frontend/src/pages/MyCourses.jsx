@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { getCourses } from "../services/courseService";
-import {
-  getVisibleFormations,
-} from "../services/formationService";
+import { getVisibleFormations } from "../services/formationService";
 import { useLanguage } from "../context/LanguageContext";
+import translations from "../i18n/translations";
 import "../styles/pages/MyCourses.css";
 import Card from "../components/Card/Card";
 import EmptyState from "../components/EmptyState/EmptyState";
+import { getMisCompras } from "../services/userService";
 
 function MyCourses() {
   const [formations, setFormations] = useState([]);
@@ -16,7 +16,9 @@ function MyCourses() {
   const navigate = useNavigate();
   const { language } = useLanguage();
   const { isAuthenticated, isAdmin, loading } = useAuth();
-  
+
+  // ✅ Traducciones basadas en tu estructura actual
+  const t = translations.myCourses[language];
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
@@ -24,25 +26,31 @@ function MyCourses() {
       return;
     }
 
-          const fetchData = async () => {
+    const fetchData = async () => {
       try {
-        const [formationsData, coursesData] = await Promise.all([
-          getVisibleFormations(language),
-          getCourses(language),
-        ]);
-        setFormations(formationsData);
-        setCourses(coursesData);
+        if (isAdmin) {
+          const [formationsData, coursesData] = await Promise.all([
+            getVisibleFormations(language),
+            getCourses(language),
+          ]);
+          setFormations(formationsData);
+          setCourses(coursesData);
+        } else {
+          const { cursos, formaciones } = await getMisCompras();
+          setFormations(formaciones);
+          setCourses(cursos);
+        }
       } catch (error) {
-        console.error("Error al cargar cursos o formaciones:", error);
+        console.error("Error al cargar cursos/formaciones:", error);
       }
     };
 
     if (isAuthenticated) fetchData();
-  }, [language, isAuthenticated, loading]);
+  }, [language, isAuthenticated, isAdmin, loading]);
 
   return (
     <div className="my-courses-page">
-      <h2 className="section-title">📚 Mis Formaciones</h2>
+      <h2 className="section-title">{t.titleFormations}</h2>
       <div className="formaciones-grid">
         {formations.length > 0 ? (
           formations.map((formacion) => (
@@ -50,22 +58,31 @@ function MyCourses() {
               key={formacion._id}
               image={formacion.image}
               description={formacion.title}
-              onClick={() => navigate(`/mis-cursos/${formacion._id}`)}
+              visible={formacion.visible?.[language]}
+              onClick={() =>
+                navigate(`/mis-cursos/formacion/${formacion._id}`, {
+                  state: {
+                    visible: formacion.visible?.[language], // ✅ lo que importa
+                  },
+                })
+              }
             />
           ))
         ) : (
           <EmptyState
-            title={isAdmin ? "Sin formaciones visibles" : "Aún no tenés formaciones"}
+            title={
+              isAdmin ? t.emptyFormationsTitleAdmin : t.emptyFormationsTitleUser
+            }
             subtitle={
               isAdmin
-                ? "No hay formaciones visibles en este idioma por el momento."
-                : "Todavía no has comprado ninguna formación. ¡Explorá nuestras propuestas y empezá tu camino!"
+                ? t.emptyFormationsSubtitleAdmin
+                : t.emptyFormationsSubtitleUser
             }
           />
         )}
       </div>
 
-      <h2 className="section-title">💻 Mis Cursos Online</h2>
+      <h2 className="section-title">{t.titleCourses}</h2>
       <div className="formaciones-grid">
         {courses.length > 0 ? (
           courses.map((course) => (
@@ -73,16 +90,21 @@ function MyCourses() {
               key={course._id}
               image={course.image}
               description={course.title}
-              onClick={() => navigate(`/curso/${course._id}`)}
+              visible={course.visible?.[language]}
+              onClick={() =>
+                navigate(`/mis-cursos/curso/${course._id}`, {
+                  state: {
+                    visible: course.visible?.[language], // ✅ también lo pasamos
+                  },
+                })
+              }
             />
           ))
         ) : (
           <EmptyState
-            title={isAdmin ? "Sin cursos visibles" : "Aún no tenés cursos"}
+            title={isAdmin ? t.emptyCoursesTitleAdmin : t.emptyCoursesTitleUser}
             subtitle={
-              isAdmin
-                ? "No hay cursos visibles en este idioma por el momento."
-                : "Todavía no has comprado ningún curso online. ¡Explorá nuestro catálogo y empezá a aprender!"
+              isAdmin ? t.emptyCoursesSubtitleAdmin : t.emptyCoursesSubtitleUser
             }
           />
         )}

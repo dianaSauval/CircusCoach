@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "../styles/pages/Login.css";
+import { requestPasswordReset } from "../services/authService";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -12,7 +13,7 @@ function ForgotPassword() {
     setMessage(null);
 
     try {
-      await ForgotPassword(email);
+     await requestPasswordReset(email);
       setMessage("📩 Te enviamos un correo con instrucciones para recuperar tu contraseña.");
     } catch (err) {
       setError(err.response?.data?.error || "Ocurrió un error. Intentalo nuevamente.");

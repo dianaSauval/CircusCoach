@@ -14,7 +14,7 @@ import "./assets/styles/variables.css";
 import "./assets/styles/App.css";
 import FormationDetails from "./pages/FormationDetails";
 import MyCourses from "./pages/MyCourses";
-import MyCourseDetail from "./pages/MyCourseDetail";
+import MyFormationDetail from "./pages/MyFormationDetail";
 import FormationPage from "./pages/FormationPage";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import BioRocioGarrote from "./pages/BioRocioGarrote";
@@ -26,6 +26,7 @@ import ManageCourses from "./pages/admin/ManageCourses";
 import ManagePresentialFormations from "./pages/admin/ManagePresentialFormations";
 import RequireAdmin from "./components/routes/RequireAdmin/RequireAdmin";
 import CartPage from "./pages/CartPage";
+import MyCourseDetail from "./pages/MyCourseDetail";
 
 function App() {
   return (
@@ -37,7 +38,12 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/cursos" element={<CoursesPage />} />
           <Route path="/mis-cursos" element={<MyCourses />} />
-          <Route path="/mis-cursos/:id" element={<MyCourseDetail />} />
+          <Route
+            path="/mis-cursos/formacion/:id"
+            element={<MyFormationDetail />}
+          />
+          <Route path="/mis-cursos/curso/:id" element={<MyCourseDetail />} />
+
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/registro-exitoso" element={<RegisterSuccess />} />
@@ -50,7 +56,7 @@ function App() {
           <Route path="/courses/:id/:slug" element={<CourseDetail />} />
 
           {/* 🔒 Rutas protegidas para admins */}
-          <Route element={<RequireAdmin/>}>
+          <Route element={<RequireAdmin />}>
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/create" element={<CreateCourse />} />
             <Route path="/admin/edit/:id" element={<EditCourse />} />

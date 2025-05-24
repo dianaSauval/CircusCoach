@@ -376,24 +376,106 @@ const translations = {
   cart: {
     es: {
       title: "Tu carrito",
-      empty: "Todavía no agregaste ningún producto.",
       clear: "Vaciar carrito",
+      buy: "Comprar ahora",
+      total: "Total",
+      loginRequiredTitle: "🔐 Iniciá sesión para continuar",
+      loginRequiredSubtitle:
+        "Necesitás una cuenta para poder comprar y acceder luego a tus cursos en 'Mis cursos'.",
+      emptyTitle: "🛒 Tu carrito está vacío",
+      emptySubtitle: "Agregá cursos o formaciones para comenzar tu viaje.",
       course: "Curso",
       formation: "Formación",
+      purchaseSuccess: "Compra registrada exitosamente",
+      purchaseError: "Error al registrar la compra",
+      alreadyOwned: "Ya tenías estos cursos/formaciones en tu cuenta",
     },
     en: {
-      title: "Your cart",
-      empty: "You haven't added any products yet.",
+      title: "Your Cart",
       clear: "Clear cart",
+      buy: "Buy now",
+      total: "Total",
+      loginRequiredTitle: "🔐 Please log in",
+      loginRequiredSubtitle:
+        "You need an account to purchase and later access your items in 'My Courses'.",
+      emptyTitle: "🛒 Your cart is empty",
+      emptySubtitle: "Add courses or formations to start your journey.",
       course: "Course",
-      formation: "Training",
+      formation: "Formation",
+      purchaseSuccess: "Purchase successfully registered",
+      purchaseError: "An error occurred while registering the purchase",
+      alreadyOwned: "You already had these courses/trainings in your account",
     },
     fr: {
-      title: "Ton panier",
-      empty: "Tu n’as encore rien ajouté.",
+      title: "Votre panier",
       clear: "Vider le panier",
+      buy: "Acheter maintenant",
+      total: "Total",
+      loginRequiredTitle: "🔐 Connectez-vous pour continuer",
+      loginRequiredSubtitle:
+        "Vous devez avoir un compte pour acheter et accéder ensuite à vos cours dans 'Mes cours'.",
+      emptyTitle: "🛒 Votre panier est vide",
+      emptySubtitle:
+        "Ajoutez des cours ou des formations pour commencer votre voyage.",
       course: "Cours",
       formation: "Formation",
+      purchaseSuccess: "Achat enregistré avec succès",
+      purchaseError:
+        "Une erreur s'est produite lors de l'enregistrement de l'achat",
+      alreadyOwned: "Vous aviez déjà ces cours/formations dans votre compte",
+    },
+  },
+  myCourses: {
+    es: {
+      titleFormations: "📚 Mis Formaciones",
+      titleCourses: "💻 Mis Cursos Online",
+      emptyFormationsTitleAdmin: "Sin formaciones visibles",
+      emptyFormationsTitleUser: "Aún no tenés formaciones",
+      emptyFormationsSubtitleAdmin:
+        "No hay formaciones visibles en este idioma por el momento.",
+      emptyFormationsSubtitleUser:
+        "Todavía no has comprado ninguna formación. ¡Explorá nuestras propuestas y empezá tu camino!",
+      emptyCoursesTitleAdmin: "Sin cursos visibles",
+      emptyCoursesTitleUser: "Aún no tenés cursos",
+      emptyCoursesSubtitleAdmin:
+        "No hay cursos visibles en este idioma por el momento.",
+      emptyCoursesSubtitleUser:
+        "Todavía no has comprado ningún curso online. ¡Explorá nuestro catálogo y empezá a aprender!",
+      notAvailableInLanguage: "❌ No disponible en este idioma",
+    },
+    en: {
+      titleFormations: "📚 My Trainings",
+      titleCourses: "💻 My Online Courses",
+      emptyFormationsTitleAdmin: "No visible trainings",
+      emptyFormationsTitleUser: "You have no trainings yet",
+      emptyFormationsSubtitleAdmin:
+        "There are no visible trainings in this language at the moment.",
+      emptyFormationsSubtitleUser:
+        "You haven't purchased any trainings yet. Explore our programs and begin your journey!",
+      emptyCoursesTitleAdmin: "No visible courses",
+      emptyCoursesTitleUser: "You have no courses yet",
+      emptyCoursesSubtitleAdmin:
+        "There are no visible courses in this language at the moment.",
+      emptyCoursesSubtitleUser:
+        "You haven't purchased any online courses yet. Browse our catalog and start learning!",
+      notAvailableInLanguage: "❌ Not available in this language",
+    },
+    fr: {
+      titleFormations: "📚 Mes Formations",
+      titleCourses: "💻 Mes Cours en Ligne",
+      emptyFormationsTitleAdmin: "Aucune formation visible",
+      emptyFormationsTitleUser: "Vous n’avez pas encore de formations",
+      emptyFormationsSubtitleAdmin:
+        "Aucune formation visible dans cette langue pour le moment.",
+      emptyFormationsSubtitleUser:
+        "Vous n’avez encore acheté aucune formation. Explorez nos propositions et commencez votre chemin !",
+      emptyCoursesTitleAdmin: "Aucun cours visible",
+      emptyCoursesTitleUser: "Vous n’avez pas encore de cours",
+      emptyCoursesSubtitleAdmin:
+        "Aucun cours visible dans cette langue pour le moment.",
+      emptyCoursesSubtitleUser:
+        "Vous n’avez encore acheté aucun cours en ligne. Parcourez notre catalogue et commencez à apprendre !",
+      notAvailableInLanguage: "❌ Non disponible dans cette langue",
     },
   },
 };

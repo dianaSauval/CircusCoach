@@ -1,14 +1,16 @@
 import "./Card.css";
 import { useLanguage } from "../../context/LanguageContext";
+import translations from "../../i18n/translations";
 
-const Card = ({ image, description, onClick }) => {
+const Card = ({ image, description, onClick, visible = true }) => {
   const { language } = useLanguage();
+const t = translations.myCourses[language];
 
-  // 📷 Selecciona la imagen correcta según el idioma, o usa 'es' como fallback
+  // 📷 Imagen multilenguaje
   const selectedImage =
     typeof image === "string" ? image : image?.[language] || image?.es || null;
 
-  // 📝 Selecciona la descripción correcta según el idioma, o usa 'es' como fallback
+  // 📝 Descripción multilenguaje
   const selectedDescription =
     typeof description === "string"
       ? description
@@ -23,9 +25,9 @@ const Card = ({ image, description, onClick }) => {
 
   return (
     <div
-      className="custom-card"
-      onClick={onClick}
-      style={{ cursor: onClick ? "pointer" : "default" }}
+      className={`custom-card ${!visible ? "card-disabled" : ""}`}
+      onClick={visible ? onClick : undefined}
+      style={{ cursor: visible && onClick ? "pointer" : "default" }}
     >
       {selectedImage && (
         <img
@@ -34,9 +36,16 @@ const Card = ({ image, description, onClick }) => {
           className="custom-card-img"
         />
       )}
+
       <div className="custom-card-description">
         {truncateText(selectedDescription)}
       </div>
+
+      {!visible && (
+        <div className="card-overlay">
+          <span>{t.notAvailableInLanguage}</span>
+        </div>
+      )}
     </div>
   );
 };
