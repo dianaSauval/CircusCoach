@@ -5,37 +5,46 @@ const {
   createUser,
   updateUser,
   deleteUser,
-  marcarClaseComoCompletada,
-  obtenerProgresoDelCurso,
+  getComprasDelUsuario,
+
+  // Cursos
   comprarCurso,
+  marcarClaseCurso,
+  desmarcarClaseCurso,
+  obtenerProgresoCurso,
+
+  // Formaciones
+  marcarClaseFormacion,
+  desmarcarClaseFormacion,
+  obtenerProgresoFormacion
 } = require("../controllers/userController");
 
 const { authMiddleware, isAdminMiddleware } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
-// 🔹 Obtener todos los usuarios (solo admin)
+
+// 🔹 Compras
+router.get("/mis-compras", authMiddleware, getComprasDelUsuario);
+
+// 🔹 Usuarios
 router.get("/", authMiddleware, isAdminMiddleware, getUsers);
-
-// 🔹 Obtener usuario por ID
 router.get("/:id", authMiddleware, getUserById);
-
-// 🔹 Crear usuario
 router.post("/", createUser);
-
-// 🔹 Editar usuario
 router.put("/:id", authMiddleware, updateUser);
-
-// 🔹 Eliminar usuario (solo admin)
 router.delete("/:id", authMiddleware, isAdminMiddleware, deleteUser);
 
-// 🔹 Marcar clase como completada
-router.post("/:id/progreso/:courseId", authMiddleware, marcarClaseComoCompletada);
-
-// 🔹 Obtener progreso de un curso
-router.get("/:id/progreso/:courseId", authMiddleware, obtenerProgresoDelCurso);
-
-// 🔹 Comprar curso (opcional)
+// 🔹 Compras
 router.post("/:id/comprar/:courseId", authMiddleware, comprarCurso);
+
+// 🔹 Progreso en Cursos
+router.post("/:id/progreso-curso/:courseId", authMiddleware, marcarClaseCurso);
+router.delete("/:id/progreso-curso/:courseId/:classId", authMiddleware, desmarcarClaseCurso);
+router.get("/:id/progreso-curso/:courseId", authMiddleware, obtenerProgresoCurso);
+
+// 🔹 Progreso en Formaciones
+router.post("/:id/progreso-formacion/:formationId", authMiddleware, marcarClaseFormacion);
+router.delete("/:id/progreso-formacion/:formationId/:classId", authMiddleware, desmarcarClaseFormacion);
+router.get("/:id/progreso-formacion/:formationId", authMiddleware, obtenerProgresoFormacion);
 
 module.exports = router;

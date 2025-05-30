@@ -43,35 +43,27 @@ exports.getAllFormations = async (req, res) => {
 };
 
 // Obtener formación por ID y por idioma (sin autenticación)
+// 🔹 Obtener formación por ID (con visibilidad por idioma, pero devuelve todo el objeto multilenguaje)
 exports.getFormationById = async (req, res) => {
   const { id } = req.params;
   const lang = req.query.lang || "es";
 
   try {
-    const formation = await Formation.findById(id);
+    const formation = await Formation.findById(id).populate("modules");
 
     if (!formation) {
       return res.status(404).json({ message: "Formación no encontrada" });
     }
 
-    // Si el idioma no está visible, mostrar mensaje personalizado
     if (!formation.visible?.[lang]) {
       return res.status(403).json({
         message: `La formación aún no está disponible en ${lang.toUpperCase()}.`,
-        availableLanguages: formation.visible, // por si querés mostrar otras opciones
+        availableLanguages: formation.visible,
       });
     }
 
-    res.json({
-      _id: formation._id,
-      title: formation.title?.[lang] || "",
-      description: formation.description?.[lang] || "",
-      price: formation.price,
-      pdf: formation.pdf?.[lang] || "",
-      video: formation.video?.[lang] || "",
-      image: formation.image?.[lang] || "",
-      visible: formation.visible, // útil para renderizar los idiomas disponibles
-    });
+    // 👉 Devuelve el objeto completo (como getCourseById)
+    res.status(200).json(formation);
   } catch (error) {
     console.error("Error al obtener la formación:", error);
     res.status(500).json({ message: "Error interno del servidor" });
@@ -97,7 +89,6 @@ exports.getFormationByIdAllInformation = async (req, res) => {
   }
 };
 
-// 🔹 Obtener formación con módulos y títulos de clases visibles
 exports.getFormationVisibleContent = async (req, res) => {
   try {
     const { id } = req.params;
@@ -106,6 +97,14 @@ exports.getFormationVisibleContent = async (req, res) => {
     const formation = await Formation.findById(id);
     if (!formation) {
       return res.status(404).json({ error: "Formación no encontrada" });
+    }
+
+    // ⚠️ Si no está visible en este idioma, devolver 403 (excepto si es admin, si querés agregar esa lógica luego)
+    if (!formation.visible?.[lang]) {
+      return res.status(403).json({
+        error: "Esta formación no está disponible en este idioma",
+        visible: false
+      });
     }
 
     const modules = await Module.find({ formation: id, [`visible.${lang}`]: true });
@@ -136,6 +135,7 @@ exports.getFormationVisibleContent = async (req, res) => {
     res.status(500).json({ error: "Error en el servidor", details: error.message });
   }
 };
+
 
 // 🔹 Crear formación
 exports.createFormation = async (req, res) => {

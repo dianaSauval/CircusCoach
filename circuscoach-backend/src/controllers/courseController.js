@@ -33,9 +33,10 @@ exports.getVisibleCoursesByLanguage = async (req, res) => {
   }
 };
 
-// 🔹 Obtener cursos por ID
+// 🔹 Obtener curso por ID y filtrar por idioma
 exports.getCourseById = async (req, res) => {
   const { id } = req.params;
+  const lang = req.query.lang || "es";
 
   try {
     const course = await Course.findById(id).populate("classes");
@@ -44,12 +45,34 @@ exports.getCourseById = async (req, res) => {
       return res.status(404).json({ error: "Curso no encontrado" });
     }
 
-    res.status(200).json(course);
+    // Verificar visibilidad en el idioma
+    if (!course.visible?.[lang]) {
+      return res.status(403).json({ error: "Curso no disponible en este idioma" });
+    }
+
+    // Filtrar clases visibles por idioma
+    const clasesFiltradas = course.classes.filter(
+      (cl) => cl.visible?.[lang]
+    );
+
+    res.json({
+      _id: course._id,
+      title: course.title?.[lang] || "",
+      description: course.description?.[lang] || "",
+      image: course.image?.[lang] || "",
+      video: course.video?.[lang] || "",
+      pdf: course.pdf?.[lang] || "",
+      visible: course.visible,
+      price: course.price,
+      classes: clasesFiltradas,
+    });
   } catch (error) {
     console.error("Error al obtener curso por ID:", error);
     res.status(500).json({ error: "Error en el servidor" });
   }
 };
+
+
 
 
 // 🔹 Crear un curso (admin)

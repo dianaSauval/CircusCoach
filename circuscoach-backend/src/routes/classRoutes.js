@@ -2,6 +2,7 @@ const express = require("express");
 const {
   getAllClasses,
   getClassesByModule,
+  getClassById,
   createClass,
   updateClass,
   makeClassVisibleInAllLanguages,
@@ -32,6 +33,9 @@ router.get("/module/:moduleId", authMiddleware, getClassesByModule);
 
 // 🔹 Crear una nueva clase (solo admin)
 router.post("/", authMiddleware, isAdminMiddleware, createClass);
+
+// 🆕 Obtener clase por ID y idioma
+router.get("/:classId", getClassById);
 
 // 🔹 Editar una clase (solo admin)
 router.put("/:classId", authMiddleware, updateClass);

@@ -158,12 +158,43 @@ const deleteClass = async (req, res) => {
   }
 };
 
+// 🔹 Obtener clase por ID (filtrando por idioma)
+const getClassById = async (req, res) => {
+  try {
+    const { classId } = req.params;
+    const lang = req.query.lang || "es";
+
+    const clase = await Class.findById(classId);
+    if (!clase) return res.status(404).json({ error: "Clase no encontrada" });
+
+    // Si la clase no está visible en ese idioma (y no es admin), rechazar
+    if (!clase.visible?.[lang]) {
+      return res.status(403).json({ error: "Esta clase no está disponible en este idioma" });
+    }
+
+    res.json({
+      _id: clase._id,
+      title: clase.title?.[lang] || "",
+      subtitle: clase.subtitle?.[lang] || "",
+      content: clase.content?.[lang] || "",
+      secondaryContent: clase.secondaryContent?.[lang] || "",
+      pdfs: clase.pdfs || [],
+      videos: clase.videos || [],
+    });
+  } catch (error) {
+    console.error("❌ Error al obtener clase por ID:", error);
+    res.status(500).json({ error: "Error en el servidor", details: error.message });
+  }
+};
+
+
 module.exports = {
   getAllClasses,
   getClassesByModule,
+  getClassById,
   createClass,
   updateClass,
   makeClassVisibleInAllLanguages,
   toggleClassVisibilityByLanguage,
-  deleteClass
+  deleteClass,
 };
