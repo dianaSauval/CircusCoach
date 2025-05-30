@@ -4,6 +4,7 @@ import CourseEditPanel from "../../components/admin/CourseEditPanel/CourseEditPa
 import CourseClassList from "../../components/admin/CourseClassList/CourseClassList";
 import AddCoursesModal from "../../components/admin/ModalAdmin/AddCoursesModal";
 import { deleteCourse, getAllCourses } from "../../services/courseService";
+import ConfirmModal from "../../components/common/ConfirmModal";
 
 const ManageCourses = () => {
   const [courses, setCourses] = useState([]);
@@ -14,6 +15,8 @@ const ManageCourses = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalCourseId, setModalCourseId] = useState(null);
   const [isAddingCourse, setIsAddingCourse] = useState(false);
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const [courseToDelete, setCourseToDelete] = useState(null);
 
   useEffect(() => {
     fetchCourses();
@@ -47,17 +50,9 @@ const ManageCourses = () => {
   const handleCourseOrClassUpdated = () => {
     fetchCourses();
   };
-
-  const handleDeleteCourse = async (courseId) => {
-    if (confirm("¿Estás segura de eliminar este curso?")) {
-      try {
-        await deleteCourse(courseId);
-        if (selectedCourse?._id === courseId) setSelectedCourse(null);
-        fetchCourses();
-      } catch (error) {
-        console.error("Error al eliminar curso:", error);
-      }
-    }
+  const handleDeleteCourse = (courseId) => {
+    setCourseToDelete(courseId);
+    setConfirmModalOpen(true);
   };
 
   const handleOpenModal = (courseId) => {
@@ -168,6 +163,7 @@ const ManageCourses = () => {
                       course={course}
                       selectedClass={selectedClass}
                       setSelectedClass={handleSelectClass}
+                      onClassDeleted={handleCourseOrClassUpdated}
                     />
                   )}
                 </div>
@@ -192,6 +188,27 @@ const ManageCourses = () => {
           onCourseAdded={handleCourseAdded}
         />
       )}
+      <ConfirmModal
+        isOpen={confirmModalOpen}
+        onClose={() => {
+          setConfirmModalOpen(false);
+          setCourseToDelete(null);
+        }}
+        onConfirm={async () => {
+          try {
+            await deleteCourse(courseToDelete);
+            if (selectedCourse?._id === courseToDelete) setSelectedCourse(null);
+            fetchCourses();
+          } catch (error) {
+            console.error("Error al eliminar curso:", error);
+          } finally {
+            setConfirmModalOpen(false);
+            setCourseToDelete(null);
+          }
+        }}
+        title="Eliminar curso"
+        message="¿Estás segura/o de que querés eliminar este curso? Esta acción no se puede deshacer."
+      />
     </div>
   );
 };

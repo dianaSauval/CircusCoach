@@ -14,11 +14,14 @@ import {
 import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
 import EmptyState from "../components/EmptyState/EmptyState";
 import { useLanguage } from "../context/LanguageContext";
+import translations from "../i18n/translations";
 
 function MyFormationDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { language } = useLanguage();
+  const t = translations.myFormationDetail[language];
+
   const [formacion, setFormacion] = useState(null);
   const [modules, setModules] = useState([]);
   const [moduloSeleccionado, setModuloSeleccionado] = useState(0);
@@ -34,7 +37,7 @@ function MyFormationDetail() {
 
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(true); // ✅ activamos loading al empezar
+      setIsLoading(true);
       try {
         setFormacionNoDisponible(false);
         const user = await getUserProfile();
@@ -57,7 +60,7 @@ function MyFormationDetail() {
           console.error("Error al obtener datos visibles o perfil:", err);
         }
       } finally {
-        setIsLoading(false); // ✅ desactivamos loading al terminar
+        setIsLoading(false);
       }
     };
 
@@ -103,20 +106,20 @@ function MyFormationDetail() {
   };
 
   if (isLoading) {
-  return <LoadingSpinner />;
-}
+    return <LoadingSpinner texto={t.loading} />;
+  }
 
   if (visible === false || formacionNoDisponible) {
     return (
       <EmptyState
-        title="Formación no disponible"
-        subtitle="Esta formación no está disponible en el idioma seleccionado."
+        title={t.notAvailableTitle}
+        subtitle={t.notAvailableSubtitle}
       />
     );
   }
 
   if (!formacion || modules.length === 0)
-    return <LoadingSpinner texto="Cargando..." />;
+    return <LoadingSpinner texto={t.loading} />;
 
   const totalClases = modules.reduce((acc, mod) => acc + mod.classes.length, 0);
   const clasesHechas = clasesCompletadas.length;
@@ -136,14 +139,14 @@ function MyFormationDetail() {
   return (
     <div className="my-course-detail">
       <button className="volver-button" onClick={() => navigate("/mis-cursos")}>
-        ⬅️ Volver a mis cursos
+        {t.back}
       </button>
       <h1 className="formation-title">{getLocalizedText(formacion.title)}</h1>
       <p className="formation-description">
         {getLocalizedText(formacion.description)}
       </p>
 
-      <h2 className="progress-title">Tu progreso</h2>
+      <h2 className="progress-title">{t.yourProgress}</h2>
       <div className="progress-section">
         <div className="progress-item">
           <div
@@ -156,7 +159,7 @@ function MyFormationDetail() {
           </div>
           <p>
             {porcentaje}%<br />
-            Contenido
+            {t.content}
           </p>
         </div>
 
@@ -172,7 +175,7 @@ function MyFormationDetail() {
           <p>
             {modulosCompletados}/{totalModulos}
             <br />
-            Módulos
+            {t.modules}
           </p>
         </div>
       </div>
@@ -201,7 +204,7 @@ function MyFormationDetail() {
             className={`class-pill ${j === claseSeleccionada ? "active" : ""}`}
             onClick={() => setClaseSeleccionada(j)}
           >
-            Clase {j + 1}
+            {t.class} {j + 1}
           </button>
         ))}
       </div>
@@ -224,7 +227,7 @@ function MyFormationDetail() {
 
             {claseCompleta.pdfs?.length > 0 && (
               <div className="pdf-list">
-                <h4>📄 PDFs:</h4>
+                <h4>{t.pdfsTitle}</h4>
                 <ul>
                   {claseCompleta.pdfs.map((pdf, index) => (
                     <li key={index}>
@@ -243,7 +246,7 @@ function MyFormationDetail() {
 
             {claseCompleta.videos?.length > 0 && (
               <div className="video-list">
-                <h4>🎥 Videos:</h4>
+                <h4>{t.videosTitle}</h4>
                 <ul>
                   {claseCompleta.videos.map((video, index) => (
                     <li key={index}>
@@ -265,16 +268,16 @@ function MyFormationDetail() {
                 className="mark-done-button unmark"
                 onClick={handleDesmarcarClase}
               >
-                🔄 Desmarcar clase
+                {t.unmark}
               </button>
             ) : (
               <button className="mark-done-button" onClick={handleMarcarClase}>
-                ✔️ Marcar como hecha
+                {t.markAsDone}
               </button>
             )}
           </>
         ) : (
-          <p>No hay contenido disponible para esta clase.</p>
+          <p>{t.noContent}</p>
         )}
       </div>
     </div>

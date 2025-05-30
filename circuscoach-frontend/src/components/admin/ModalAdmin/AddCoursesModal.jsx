@@ -17,16 +17,8 @@ const AddCoursesModal = ({ courseId, onClose, onClassAdded, onCourseAdded }) => 
     subtitle: { es: "", en: "", fr: "" },
     content: { es: "", en: "", fr: "" },
     secondaryContent: { es: "", en: "", fr: "" },
-    pdfDetails: {
-      es: { url: "", title: "", description: "" },
-      en: { url: "", title: "", description: "" },
-      fr: { url: "", title: "", description: "" },
-    },
-    videoDetails: {
-      es: { url: "", title: "", description: "" },
-      en: { url: "", title: "", description: "" },
-      fr: { url: "", title: "", description: "" },
-    },
+    pdfs: [], // para clases
+    videos: [], // para clases
     visible: {
       es: true,
       en: false,
@@ -44,20 +36,6 @@ const AddCoursesModal = ({ courseId, onClose, onClassAdded, onCourseAdded }) => 
       },
     }));
     setErrors((prev) => ({ ...prev, [name]: null }));
-  };
-
-  const handleNestedChange = (e, field) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [field]: {
-        ...prev[field],
-        [activeTab]: {
-          ...prev[field][activeTab],
-          [name]: value,
-        },
-      },
-    }));
   };
 
   const handleSubmit = async (e) => {
@@ -94,8 +72,8 @@ const AddCoursesModal = ({ courseId, onClose, onClassAdded, onCourseAdded }) => 
           subtitle: formData.subtitle,
           content: formData.content,
           secondaryContent: formData.secondaryContent,
-          pdf: formData.pdfDetails,
-          video: formData.videoDetails,
+          pdfs: formData.pdfs || [],
+          videos: formData.videos || [],
           visible: formData.visible,
           course: courseId,
         };
@@ -112,13 +90,56 @@ const AddCoursesModal = ({ courseId, onClose, onClassAdded, onCourseAdded }) => 
 
   const inputClass = (field) => (errors[field] ? "error" : "");
 
+  // -------------------------------
+  // CLASES: Agregar PDF o Video
+  // -------------------------------
+  const addNewPDF = () => {
+    setFormData((prev) => ({
+      ...prev,
+      pdfs: [
+        ...(prev.pdfs || []),
+        {
+          url: { es: "", en: "", fr: "" },
+          title: { es: "", en: "", fr: "" },
+          description: { es: "", en: "", fr: "" },
+        },
+      ],
+    }));
+  };
+
+  const addNewVideo = () => {
+    setFormData((prev) => ({
+      ...prev,
+      videos: [
+        ...(prev.videos || []),
+        {
+          url: { es: "", en: "", fr: "" },
+          title: { es: "", en: "", fr: "" },
+          description: { es: "", en: "", fr: "" },
+        },
+      ],
+    }));
+  };
+
+  const handlePDFChange = (index, field, value) => {
+    const updated = [...formData.pdfs];
+    updated[index][field][activeTab] = value;
+    setFormData((prev) => ({ ...prev, pdfs: updated }));
+  };
+
+  const handleVideoChange = (index, field, value) => {
+    const updated = [...formData.videos];
+    updated[index][field][activeTab] = value;
+    setFormData((prev) => ({ ...prev, videos: updated }));
+  };
+
   return (
     <div className="modal">
       <div className="modal-content">
         <h2>{isAddingCourse ? "Agregar Curso" : "Agregar Clase"}</h2>
 
         <div className="language-tabs">
-          {['es', 'en', 'fr'].map((lang) => (
+          {["es", "en", "fr"].map((lang) => (
             <button
               key={lang}
               className={activeTab === lang ? "active" : ""}
@@ -207,51 +228,59 @@ const AddCoursesModal = ({ courseId, onClose, onClassAdded, onCourseAdded }) => 
                 placeholder={`Contenido secundario (${activeTab})`}
               />
 
-              <h3>📄 PDF</h3>
-              <input
-                type="text"
-                name="url"
-                value={formData.pdfDetails[activeTab].url}
-                onChange={(e) => handleNestedChange(e, "pdfDetails")}
-                placeholder="URL del PDF"
-              />
-              <input
-                type="text"
-                name="title"
-                value={formData.pdfDetails[activeTab].title}
-                onChange={(e) => handleNestedChange(e, "pdfDetails")}
-                placeholder="Título del PDF"
-              />
-              <input
-                type="text"
-                name="description"
-                value={formData.pdfDetails[activeTab].description}
-                onChange={(e) => handleNestedChange(e, "pdfDetails")}
-                placeholder="Descripción del PDF"
-              />
+              <h3>📄 PDFs</h3>
+              {(formData.pdfs || []).map((pdf, i) => (
+                <div key={i} className="pdf-entry">
+                  <input
+                    type="text"
+                    placeholder="URL"
+                    value={pdf.url[activeTab]}
+                    onChange={(e) => handlePDFChange(i, "url", e.target.value)}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Título"
+                    value={pdf.title[activeTab]}
+                    onChange={(e) => handlePDFChange(i, "title", e.target.value)}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Descripción"
+                    value={pdf.description[activeTab]}
+                    onChange={(e) => handlePDFChange(i, "description", e.target.value)}
+                  />
+                </div>
+              ))}
+              <button type="button" onClick={addNewPDF}>
+                ➕ Agregar PDF
+              </button>
 
-              <h3>🎥 Video</h3>
-              <input
-                type="text"
-                name="url"
-                value={formData.videoDetails[activeTab].url}
-                onChange={(e) => handleNestedChange(e, "videoDetails")}
-                placeholder="URL del Video"
-              />
-              <input
-                type="text"
-                name="title"
-                value={formData.videoDetails[activeTab].title}
-                onChange={(e) => handleNestedChange(e, "videoDetails")}
-                placeholder="Título del Video"
-              />
-              <input
-                type="text"
-                name="description"
-                value={formData.videoDetails[activeTab].description}
-                onChange={(e) => handleNestedChange(e, "videoDetails")}
-                placeholder="Descripción del Video"
-              />
+              <h3>🎥 Videos</h3>
+              {(formData.videos || []).map((video, i) => (
+                <div key={i} className="video-entry">
+                  <input
+                    type="text"
+                    placeholder="URL"
+                    value={video.url[activeTab]}
+                    onChange={(e) => handleVideoChange(i, "url", e.target.value)}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Título"
+                    value={video.title[activeTab]}
+                    onChange={(e) => handleVideoChange(i, "title", e.target.value)}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Descripción"
+                    value={video.description[activeTab]}
+                    onChange={(e) => handleVideoChange(i, "description", e.target.value)}
+                  />
+                </div>
+              ))}
+              <button type="button" onClick={addNewVideo}>
+                ➕ Agregar Video
+              </button>
             </>
           )}
 

@@ -1,9 +1,13 @@
-// src/pages/RegisterSuccess.jsx
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useLanguage } from "../context/LanguageContext";
+import translations from "../i18n/translations";
 import "../styles/pages/RegisterSuccess.css";
 
 function RegisterSuccess() {
+  const { language } = useLanguage();
+  const t = translations.registerSuccessPage[language];
+
   return (
     <div className="register-success-container">
       <motion.div
@@ -17,21 +21,21 @@ function RegisterSuccess() {
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, duration: 0.6 }}
         >
-          ¡Registro exitoso! 🎉
+          {t.title}
         </motion.h1>
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
         >
-          Bienvenido a <strong>CircusCoach</strong>.
+          {t.welcome} <strong>CircusCoach</strong>.
         </motion.p>
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
         >
-          Tu viaje de aprendizaje circense comienza ahora.
+          {t.subtitle}
         </motion.p>
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -39,7 +43,7 @@ function RegisterSuccess() {
           transition={{ delay: 0.8 }}
         >
           <Link to="/login" className="success-button">
-            Iniciar sesión
+            {t.loginButton}
           </Link>
         </motion.div>
       </motion.div>
@@ -48,4 +52,3 @@ function RegisterSuccess() {
 }
 
 export default RegisterSuccess;
-

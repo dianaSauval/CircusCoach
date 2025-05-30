@@ -1,8 +1,13 @@
 import { useState } from "react";
-import "../styles/pages/Login.css";
 import { requestPasswordReset } from "../services/authService";
+import { useLanguage } from "../context/LanguageContext";
+import translations from "../i18n/translations";
+import "../styles/pages/Login.css";
 
 function ForgotPassword() {
+  const { language } = useLanguage();
+  const t = translations.forgotPasswordPage[language];
+
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
@@ -13,16 +18,16 @@ function ForgotPassword() {
     setMessage(null);
 
     try {
-     await requestPasswordReset(email);
-      setMessage("📩 Te enviamos un correo con instrucciones para recuperar tu contraseña.");
+      await requestPasswordReset(email);
+      setMessage(t.successMessage);
     } catch (err) {
-      setError(err.response?.data?.error || "Ocurrió un error. Intentalo nuevamente.");
+      setError(err.response?.data?.error || t.errorMessage);
     }
   };
 
   return (
     <div className="login-container">
-      <h1 className="login-title">Recuperar contraseña</h1>
+      <h1 className="login-title">{t.title}</h1>
 
       {message && <p className="login-success">{message}</p>}
       {error && <p className="login-error">{error}</p>}
@@ -30,16 +35,15 @@ function ForgotPassword() {
       <form onSubmit={handleSubmit} className="login-form">
         <input
           type="email"
-          placeholder="Ingresá tu correo"
+          placeholder={t.emailPlaceholder}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <button type="submit">Enviar instrucciones</button>
+        <button type="submit">{t.submitButton}</button>
       </form>
     </div>
   );
 }
 
 export default ForgotPassword;
-

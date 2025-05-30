@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import "../styles/pages/Login.css";
 import { resetPassword } from "../services/authService";
+import { useLanguage } from "../context/LanguageContext";
+import translations from "../i18n/translations";
+import "../styles/pages/Login.css";
 
 function ResetPassword() {
   const { token } = useParams();
   const navigate = useNavigate();
+  const { language } = useLanguage();
+  const t = translations.resetPasswordPage[language];
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -16,16 +20,15 @@ function ResetPassword() {
     const newErrors = {};
 
     if (!password) {
-      newErrors.password = "La nueva contraseña es obligatoria.";
+      newErrors.password = t.errors.passwordRequired;
     } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password)) {
-      newErrors.password =
-        "Debe tener 8 caracteres, una mayúscula, una minúscula y un número.";
+      newErrors.password = t.errors.passwordInvalid;
     }
 
     if (!confirmPassword) {
-      newErrors.confirmPassword = "Repetí la contraseña.";
+      newErrors.confirmPassword = t.errors.confirmPasswordRequired;
     } else if (password !== confirmPassword) {
-      newErrors.confirmPassword = "Las contraseñas no coinciden.";
+      newErrors.confirmPassword = t.errors.passwordsNotMatch;
     }
 
     return newErrors;
@@ -43,21 +46,20 @@ function ResetPassword() {
     }
 
     try {
-        await resetPassword(token, password);
-        setSuccess("Contraseña actualizada con éxito. Ya podés iniciar sesión.");
-        setPassword("");
-        setConfirmPassword("");
-        setTimeout(() => navigate("/login"), 3000);
-      } catch (err) {
-        const message =
-          err?.response?.data?.error || "Ocurrió un error al restablecer la contraseña.";
-        setErrors({ general: message });
-      }
+      await resetPassword(token, password);
+      setSuccess(t.success);
+      setPassword("");
+      setConfirmPassword("");
+      setTimeout(() => navigate("/login"), 3000);
+    } catch (err) {
+      const message = err?.response?.data?.error || t.generalError;
+      setErrors({ general: message });
+    }
   };
 
   return (
     <div className="login-container">
-      <h1 className="login-title">Nueva contraseña</h1>
+      <h1 className="login-title">{t.title}</h1>
 
       {success && <p className="login-success">{success}</p>}
       {errors.general && <p className="login-error">{errors.general}</p>}
@@ -66,7 +68,7 @@ function ResetPassword() {
         <div className="input-group">
           <input
             type="password"
-            placeholder="Nueva contraseña"
+            placeholder={t.newPasswordPlaceholder}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -77,7 +79,7 @@ function ResetPassword() {
         <div className="input-group">
           <input
             type="password"
-            placeholder="Confirmar contraseña"
+            placeholder={t.confirmPasswordPlaceholder}
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
@@ -87,7 +89,7 @@ function ResetPassword() {
           )}
         </div>
 
-        <button type="submit">Restablecer</button>
+        <button type="submit">{t.resetButton}</button>
       </form>
     </div>
   );

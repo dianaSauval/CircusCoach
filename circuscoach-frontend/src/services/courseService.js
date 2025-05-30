@@ -33,6 +33,14 @@ export const deleteCourse = async (id) => {
   return res.data;
 };
 
+export const toggleCourseVisibility = async (courseId, lang) => {
+  const res = await api.patch(`/courses/${courseId}/visibility/language`, {
+    language: lang,
+  });
+  return res.data;
+};
+
+
 // Clases de curso
 export const createCourseClass = async (courseId, data) => {
   const res = await api.post(`/course-classes/${courseId}`, data);

@@ -1,45 +1,44 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { saveToken } from "../services/authService";
-import "../styles/pages/Login.css";
-import { loginUser } from "../services/authService";
+import { saveToken, loginUser } from "../services/authService";
 import { useAuth } from "../context/AuthContext";
-
+import { useLanguage } from "../context/LanguageContext";
+import translations from "../i18n/translations";
+import "../styles/pages/Login.css";
 
 function Login() {
   const { login } = useAuth();
+  const { language } = useLanguage();
+  const t = translations.loginPage[language];
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
-  e.preventDefault();
-  setError(null);
-
-  try {
-    const response = await loginUser(email, password);
-    saveToken(response.token);
-
-    await login(); // ⚠️ Este login() del contexto carga el perfil y actualiza el header
-    navigate("/");
-  } catch (err) {
-    console.error("Error en el login:", err);
-    setError("Error al iniciar sesión. Verifica tus datos e intenta nuevamente.");
-  }
-};
-
+    e.preventDefault();
+    setError(null);
+    try {
+      const response = await loginUser(email, password);
+      saveToken(response.token);
+      await login();
+      navigate("/");
+    } catch (err) {
+      console.error("Error en el login:", err);
+      setError(t.error);
+    }
+  };
 
   return (
     <div className="login-container">
-      <h1 className="login-title">Iniciar sesión</h1>
-
+      <h1 className="login-title">{t.title}</h1>
       {error && <p className="login-error">{error}</p>}
 
       <form onSubmit={handleLogin} className="login-form">
         <input
           type="email"
-          placeholder="Correo electrónico"
+          placeholder={t.emailPlaceholder}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -47,17 +46,21 @@ function Login() {
 
         <input
           type="password"
-          placeholder="Contraseña"
+          placeholder={t.passwordPlaceholder}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
 
-        <button type="submit">Ingresar</button>
+        <button type="submit">{t.loginButton}</button>
 
         <div className="login-links">
-          <button type="button" className="link-button" onClick={() => navigate("/olvidaste-tu-contraseña")}>¿Olvidaste tu contraseña?</button>
-          <button type="button" className="link-button" onClick={() => navigate("/register")}>¿Aún no tenés cuenta? Registrate</button>
+          <button type="button" className="link-button" onClick={() => navigate("/olvidaste-tu-contraseña")}>
+            {t.forgotPassword}
+          </button>
+          <button type="button" className="link-button" onClick={() => navigate("/register")}>
+            {t.noAccount}
+          </button>
         </div>
       </form>
     </div>
@@ -65,3 +68,4 @@ function Login() {
 }
 
 export default Login;
+

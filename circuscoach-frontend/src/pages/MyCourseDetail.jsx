@@ -9,6 +9,7 @@ import {
   desmarcarClaseCurso,
 } from "../services/userService";
 import { getCourseById } from "../services/courseService";
+import translations from "../i18n/translations";
 import "../styles/pages/MyCourseDetail.css";
 
 function MyCourseDetail() {
@@ -18,17 +19,14 @@ function MyCourseDetail() {
   const location = useLocation();
   const visible = location.state?.visible;
 
+  const t = translations.myCourseDetail[language];
+
   const [userId, setUserId] = useState(null);
   const [course, setCourse] = useState(null);
   const [clases, setClases] = useState([]);
   const [claseSeleccionada, setClaseSeleccionada] = useState(0);
   const [clasesCompletadas, setClasesCompletadas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  const getLocalizedText = (field) => {
-    if (typeof field === "string") return field;
-    return field?.[language] || field?.es || "";
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -73,14 +71,16 @@ function MyCourseDetail() {
     setClasesCompletadas(prev => prev.filter(cid => cid !== claseCompleta._id));
   };
 
+  const getText = (obj) => (obj && typeof obj === "object" ? obj[language] || "" : obj || "");
+
   const claseCompleta = clases?.[claseSeleccionada] || null;
 
-  if (isLoading) return <LoadingSpinner texto="Cargando..." />;
+  if (isLoading) return <LoadingSpinner texto={t.loading} />;
   if (!course) {
     return (
       <EmptyState
-        title="Curso no disponible"
-        subtitle="Este curso no está disponible en el idioma seleccionado."
+        title={t.notAvailableTitle}
+        subtitle={t.notAvailableSubtitle}
       />
     );
   }
@@ -91,11 +91,11 @@ function MyCourseDetail() {
 
   return (
     <div className="my-course-detail">
-      <button className="volver-button" onClick={() => navigate("/mis-cursos")}>⬅️ Volver a mis cursos</button>
-      <h1 className="formation-title">{getLocalizedText(course.title)}</h1>
-      <p className="formation-description">{getLocalizedText(course.description)}</p>
+      <button className="volver-button" onClick={() => navigate("/mis-cursos")}>{t.back}</button>
+      <h1 className="formation-title">{getText(course.title)}</h1>
+      <p className="formation-description">{getText(course.description)}</p>
 
-      <h2 className="progress-title">Tu progreso</h2>
+      <h2 className="progress-title">{t.yourProgress}</h2>
       <div className="progress-section">
         <div className="progress-item">
           <div
@@ -104,7 +104,7 @@ function MyCourseDetail() {
               background: `conic-gradient(var(--color-petroleo) ${porcentaje}%, #e0e0e0 ${porcentaje}%)`,
             }}
           >📘</div>
-          <p>{porcentaje}%<br />Contenido</p>
+          <p>{porcentaje}%<br />{t.content}</p>
         </div>
       </div>
 
@@ -115,7 +115,7 @@ function MyCourseDetail() {
             className={`class-pill ${j === claseSeleccionada ? "active" : ""}`}
             onClick={() => setClaseSeleccionada(j)}
           >
-            Clase {j + 1}
+            {t.class} {j + 1}
           </button>
         ))}
       </div>
@@ -123,19 +123,19 @@ function MyCourseDetail() {
       <div className="class-content">
         {claseCompleta ? (
           <>
-            <h2>{getLocalizedText(claseCompleta.title)}</h2>
-            {claseCompleta.subtitle && <h3>{getLocalizedText(claseCompleta.subtitle)}</h3>}
-            {claseCompleta.content && <p>{getLocalizedText(claseCompleta.content)}</p>}
-            {claseCompleta.secondaryContent && <p className="secondary-content">{getLocalizedText(claseCompleta.secondaryContent)}</p>}
+            <h2>{getText(claseCompleta.title)}</h2>
+            {claseCompleta.subtitle && <h3>{getText(claseCompleta.subtitle)}</h3>}
+            {claseCompleta.content && <p>{getText(claseCompleta.content)}</p>}
+            {claseCompleta.secondaryContent && <p className="secondary-content">{getText(claseCompleta.secondaryContent)}</p>}
 
             {claseCompleta.pdfs?.length > 0 && (
               <div className="pdf-list">
-                <h4>📄 PDFs:</h4>
+                <h4>{t.pdfsTitle}</h4>
                 <ul>
                   {claseCompleta.pdfs.map((pdf, index) => (
                     <li key={index}>
-                      <a href={getLocalizedText(pdf.url)} target="_blank" rel="noopener noreferrer">
-                        {getLocalizedText(pdf.title) || `PDF ${index + 1}`}
+                      <a href={getText(pdf.url)} target="_blank" rel="noopener noreferrer">
+                        {getText(pdf.title) || `PDF ${index + 1}`}
                       </a>
                     </li>
                   ))}
@@ -145,12 +145,12 @@ function MyCourseDetail() {
 
             {claseCompleta.videos?.length > 0 && (
               <div className="video-list">
-                <h4>🎥 Videos:</h4>
+                <h4>{t.videosTitle}</h4>
                 <ul>
                   {claseCompleta.videos.map((video, index) => (
                     <li key={index}>
-                      <a href={getLocalizedText(video.url)} target="_blank" rel="noopener noreferrer">
-                        {getLocalizedText(video.title) || `Video ${index + 1}`}
+                      <a href={getText(video.url)} target="_blank" rel="noopener noreferrer">
+                        {getText(video.title) || `Video ${index + 1}`}
                       </a>
                     </li>
                   ))}
@@ -159,13 +159,13 @@ function MyCourseDetail() {
             )}
 
             {clasesCompletadas.includes(claseCompleta._id) ? (
-              <button className="mark-done-button unmark" onClick={handleDesmarcarClase}>🔄 Desmarcar clase</button>
+              <button className="mark-done-button unmark" onClick={handleDesmarcarClase}>{t.unmark}</button>
             ) : (
-              <button className="mark-done-button" onClick={handleMarcarClase}>✔️ Marcar como hecha</button>
+              <button className="mark-done-button" onClick={handleMarcarClase}>{t.markAsDone}</button>
             )}
           </>
         ) : (
-          <p>No hay contenido disponible para esta clase.</p>
+          <p>{t.noContent}</p>
         )}
       </div>
     </div>

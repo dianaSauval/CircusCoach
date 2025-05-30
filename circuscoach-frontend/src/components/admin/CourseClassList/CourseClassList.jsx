@@ -1,35 +1,38 @@
 import { deleteCourseClass } from "../../../services/courseService";
+import ConfirmModal from "../../common/ConfirmModal";
 import "./CourseClassList.css";
 import { useEffect, useState } from "react";
 
-
-const CourseClassList = ({ course, selectedClass, setSelectedClass }) => {
+const CourseClassList = ({ course, selectedClass, setSelectedClass, onClassDeleted }) => {
   const [localClasses, setLocalClasses] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [classToDelete, setClassToDelete] = useState(null);
 
   useEffect(() => {
-    // Siempre que cambia el curso, actualizamos las clases locales
     setLocalClasses(course.classes || []);
   }, [course]);
+
   const handleSelect = (cls) => {
     setSelectedClass(cls);
   };
 
-  const handleDelete = async (classId) => {
-    const confirm = window.confirm("¿Seguro que querés eliminar esta clase?");
-    if (!confirm) return;
-
-    try {
-      console.log("🔍 Eliminando clase con ID:", classId);
-      await deleteCourseClass(classId);
-      // 🔄 Actualizamos la UI al instante
-      setLocalClasses((prev) => prev.filter((cls) => cls._id !== classId));
-    } catch (error) {
-      console.error("Error al eliminar clase:", error);
-    }
+  const requestDelete = (clsId) => {
+    setClassToDelete(clsId);
+    setShowModal(true);
   };
 
-
-  
+  const confirmDelete = async () => {
+    try {
+      await deleteCourseClass(classToDelete);
+      setLocalClasses((prev) => prev.filter((cls) => cls._id !== classToDelete));
+      if (onClassDeleted) onClassDeleted();
+    } catch (error) {
+      console.error("Error al eliminar clase:", error);
+    } finally {
+      setShowModal(false);
+      setClassToDelete(null);
+    }
+  };
 
   return (
     <div className="course-classes">
@@ -51,7 +54,7 @@ const CourseClassList = ({ course, selectedClass, setSelectedClass }) => {
                 {cls.title?.es || "Clase sin título"}
               </span>
 
-              <button className="delete-btn" onClick={() => handleDelete(cls._id)}>
+              <button className="delete-btn" onClick={() => requestDelete(cls._id)}>
                 🗑️ Eliminar clase
               </button>
             </div>
@@ -60,6 +63,13 @@ const CourseClassList = ({ course, selectedClass, setSelectedClass }) => {
       ) : (
         <p className="no-classes">Este curso aún no cuenta con clases.</p>
       )}
+
+      <ConfirmModal
+        isOpen={showModal}
+        message="¿Seguro que querés eliminar esta clase? Esta acción no se puede deshacer."
+        onConfirm={confirmDelete}
+        onCancel={() => setShowModal(false)}
+      />
     </div>
   );
 };
