@@ -3,7 +3,13 @@ import "../../styles/admin/ManageFormations.css";
 import ModuleList from "../../components/admin/ModuleList/ModuleList";
 import EditPanel from "../../components/admin/EditPanel/EditPanel";
 import AddItemModal from "../../components/admin/ModalAdmin/AddItemModal";
-import { deleteFormation, getAllFormations } from "../../services/formationService";
+import {
+  deleteClassById,
+  deleteFormation,
+  deleteModule,
+  getAllFormations,
+} from "../../services/formationService";
+import ConfirmModal from "../../components/common/ConfirmModal";
 
 const ManageFormations = () => {
   const [formations, setFormations] = useState([]);
@@ -13,6 +19,9 @@ const ManageFormations = () => {
   const [expandedFormations, setExpandedFormations] = useState({});
   const [showModal, setShowModal] = useState(null);
   const [isListCollapsed, setIsListCollapsed] = useState(false);
+  const [formationToDelete, setFormationToDelete] = useState(null);
+  const [moduleToDelete, setModuleToDelete] = useState(null);
+  const [classToDelete, setClassToDelete] = useState(null);
 
   useEffect(() => {
     fetchFormations();
@@ -24,17 +33,6 @@ const ManageFormations = () => {
       setFormations(data);
     } catch (error) {
       console.error("Error al cargar formaciones:", error);
-    }
-  };
-
-  const handleDeleteFormation = async (formationId) => {
-    if (!window.confirm("¿Seguro que quieres eliminar esta formación?")) return;
-
-    try {
-      await deleteFormation(formationId);
-      fetchFormations();
-    } catch (error) {
-      console.error("Error al eliminar formación:", error);
     }
   };
 
@@ -54,9 +52,46 @@ const ManageFormations = () => {
 
   const handleSelectClass = (classItem) => {
     if (classItem) {
-      console.log("Seleccionando clase:", classItem?.title?.es || "Clase sin título");
+      console.log(
+        "Seleccionando clase:",
+        classItem?.title?.es || "Clase sin título"
+      );
       setSelectedClass(classItem);
       setSelectedModule(null);
+    }
+  };
+
+  const confirmDeleteFormation = async () => {
+    try {
+      await deleteFormation(formationToDelete._id);
+      setFormationToDelete(null);
+      fetchFormations();
+    } catch (error) {
+      console.error("Error al eliminar formación:", error);
+    }
+  };
+
+  const confirmDeleteModule = async () => {
+    try {
+      await deleteModule(moduleToDelete._id);
+      setModuleToDelete(null);
+      fetchFormations(); // o fetchModules si solo querés refrescar esa parte
+    } catch (error) {
+      console.error("Error al eliminar módulo:", error);
+    }
+  };
+
+  const handleDeleteClass = (classItem) => {
+    setClassToDelete(classItem);
+  };
+
+  const confirmDeleteClass = async () => {
+    try {
+      await deleteClassById(classToDelete._id);
+      setClassToDelete(null);
+      fetchFormations(); // O podés hacer un fetch más localizado si querés optimizar
+    } catch (error) {
+      console.error("Error al eliminar clase:", error);
     }
   };
 
@@ -64,23 +99,33 @@ const ManageFormations = () => {
     <div className="manage-formations-container">
       <h1>📚 Formaciones</h1>
 
-      <div className={`formations-layout ${isListCollapsed ? "collapsed" : ""}`}>
-      <button
-  className={`collapse-toggle ${isListCollapsed ? "collapsed-position" : ""}`}
-  onClick={() => setIsListCollapsed(!isListCollapsed)}
-  title={isListCollapsed ? "Expandir panel lateral" : "Colapsar panel lateral"}
->
-  {isListCollapsed ? "🡢" : "🡠"}
-</button>
-        <div className={`formations-list ${isListCollapsed ? "collapsed" : ""}`}>
-
-
+      <div
+        className={`formations-layout ${isListCollapsed ? "collapsed" : ""}`}
+      >
+        <button
+          className={`collapse-toggle ${
+            isListCollapsed ? "collapsed-position" : ""
+          }`}
+          onClick={() => setIsListCollapsed(!isListCollapsed)}
+          title={
+            isListCollapsed
+              ? "Expandir panel lateral"
+              : "Colapsar panel lateral"
+          }
+        >
+          {isListCollapsed ? "🡢" : "🡠"}
+        </button>
+        <div
+          className={`formations-list ${isListCollapsed ? "collapsed" : ""}`}
+        >
           {!isListCollapsed && (
             <>
               <h2>📌 Formaciones</h2>
               <button
                 className="add-button"
-                onClick={() => setShowModal({ type: "formation", parentId: null })}
+                onClick={() =>
+                  setShowModal({ type: "formation", parentId: null })
+                }
               >
                 ➕ Crear nueva formación
               </button>
@@ -105,8 +150,10 @@ const ManageFormations = () => {
 
                       <div className="formation-header">
                         <span
-                          className={`formation-title ${
-                            selectedFormation?._id === formation._id ? "selected" : ""
+                          className={`formationEdit-title ${
+                            selectedFormation?._id === formation._id
+                              ? "selected"
+                              : ""
                           }`}
                           onClick={() => {
                             setSelectedFormation(formation);
@@ -138,7 +185,7 @@ const ManageFormations = () => {
                         </button>
                         <button
                           className="delete-btn"
-                          onClick={() => handleDeleteFormation(formation._id)}
+                          onClick={() => setFormationToDelete(formation)}
                         >
                           🗑️ Eliminar Formación
                         </button>
@@ -154,6 +201,8 @@ const ManageFormations = () => {
                           selectedModule={selectedModule}
                           selectedClass={selectedClass}
                           setShowModalInParent={setShowModal}
+                          setModuleToDelete={setModuleToDelete}
+                          onDeleteClass={handleDeleteClass}
                         />
                       </div>
                     )}
@@ -178,6 +227,37 @@ const ManageFormations = () => {
           parentId={showModal.parentId}
           closeModal={() => setShowModal(null)}
           onAdd={fetchFormations}
+        />
+      )}
+      {formationToDelete && (
+        <ConfirmModal
+          isOpen={true}
+          onClose={() => setFormationToDelete(null)}
+          onConfirm={confirmDeleteFormation}
+          title="¿Eliminar formación?"
+          message={`Estás por eliminar la formación: "${formationToDelete.title.es}". Esta acción no se puede deshacer.`}
+        />
+      )}
+
+      {moduleToDelete && (
+        <ConfirmModal
+          isOpen={true}
+          onClose={() => setModuleToDelete(null)}
+          onConfirm={confirmDeleteModule}
+          title="¿Eliminar módulo?"
+          message={`Estás por eliminar el módulo: "${moduleToDelete.title.es}". Esta acción no se puede deshacer.`}
+        />
+      )}
+
+      {classToDelete && (
+        <ConfirmModal
+          isOpen={true}
+          onClose={() => setClassToDelete(null)}
+          onConfirm={confirmDeleteClass}
+          title="¿Eliminar clase?"
+          message={`Estás por eliminar la clase: "${
+            classToDelete.title?.es || "Sin título"
+          }". Esta acción no se puede deshacer.`}
         />
       )}
     </div>

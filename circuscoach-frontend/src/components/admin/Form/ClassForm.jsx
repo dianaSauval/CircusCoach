@@ -1,7 +1,7 @@
 import "./Form.css";
 
 const ClassForm = ({ formData, setFormData, activeTab }) => {
-  // 🟡 Actualizar campos comunes (título, contenido, etc.)
+  // 🟡 Campos comunes (título, contenido, etc.)
   const handleTextChange = (field, value) => {
     setFormData({
       ...formData,
@@ -12,58 +12,70 @@ const ClassForm = ({ formData, setFormData, activeTab }) => {
     });
   };
 
-  // 📄 PDF handlers
+  // 📄 PDF handlers (estructura multilenguaje)
   const handlePdfChange = (index, field, value) => {
-    const updated = [...(formData.pdfs?.[activeTab] || [])];
-    updated[index] = { ...updated[index], [field]: value };
-    setFormData({
-      ...formData,
-      pdfs: { ...formData.pdfs, [activeTab]: updated },
-    });
+    const updated = [...(formData.pdfs || [])];
+    updated[index] = {
+      ...updated[index],
+      [field]: {
+        ...(updated[index]?.[field] || {}),
+        [activeTab]: value,
+      },
+    };
+    setFormData({ ...formData, pdfs: updated });
   };
 
   const addPdf = () => {
-    const current = formData.pdfs?.[activeTab] || [];
     setFormData({
       ...formData,
-      pdfs: { ...formData.pdfs, [activeTab]: [...current, { title: "", description: "", url: "" }] },
+      pdfs: [
+        ...(formData.pdfs || []),
+        {
+          title: { es: "", en: "", fr: "" },
+          description: { es: "", en: "", fr: "" },
+          url: { es: "", en: "", fr: "" },
+        },
+      ],
     });
   };
 
   const removePdf = (index) => {
-    const updated = [...(formData.pdfs?.[activeTab] || [])];
+    const updated = [...(formData.pdfs || [])];
     updated.splice(index, 1);
-    setFormData({
-      ...formData,
-      pdfs: { ...formData.pdfs, [activeTab]: updated },
-    });
+    setFormData({ ...formData, pdfs: updated });
   };
 
-  // 🎥 Video handlers
+  // 🎥 Video handlers (estructura multilenguaje)
   const handleVideoChange = (index, field, value) => {
-    const updated = [...(formData.videos?.[activeTab] || [])];
-    updated[index] = { ...updated[index], [field]: value };
-    setFormData({
-      ...formData,
-      videos: { ...formData.videos, [activeTab]: updated },
-    });
+    const updated = [...(formData.videos || [])];
+    updated[index] = {
+      ...updated[index],
+      [field]: {
+        ...(updated[index]?.[field] || {}),
+        [activeTab]: value,
+      },
+    };
+    setFormData({ ...formData, videos: updated });
   };
 
   const addVideo = () => {
-    const current = formData.videos?.[activeTab] || [];
     setFormData({
       ...formData,
-      videos: { ...formData.videos, [activeTab]: [...current, { title: "", description: "", url: "" }] },
+      videos: [
+        ...(formData.videos || []),
+        {
+          title: { es: "", en: "", fr: "" },
+          description: { es: "", en: "", fr: "" },
+          url: { es: "", en: "", fr: "" },
+        },
+      ],
     });
   };
 
   const removeVideo = (index) => {
-    const updated = [...(formData.videos?.[activeTab] || [])];
+    const updated = [...(formData.videos || [])];
     updated.splice(index, 1);
-    setFormData({
-      ...formData,
-      videos: { ...formData.videos, [activeTab]: updated },
-    });
+    setFormData({ ...formData, videos: updated });
   };
 
   return (
@@ -107,75 +119,78 @@ const ClassForm = ({ formData, setFormData, activeTab }) => {
       </div>
 
       <h3>📄 PDFs</h3>
-      {(formData.pdfs?.[activeTab] || []).map((pdf, index) => (
-        <div key={index} className="pdf-block">
-          <div className="input-group">
-            <label>Título del PDF</label>
-            <input
-              type="text"
-              value={pdf.title || ""}
-              onChange={(e) => handlePdfChange(index, "title", e.target.value)}
-              placeholder="Título"
-            />
+      {Array.isArray(formData.pdfs) ? (
+        formData.pdfs.map((pdf, index) => (
+          <div key={index} className="pdf-block">
+            <div className="input-group">
+              <label>Título del PDF</label>
+              <input
+                type="text"
+                value={pdf.title?.[activeTab] || ""}
+                onChange={(e) => handlePdfChange(index, "title", e.target.value)}
+                placeholder="Título"
+              />
+            </div>
+            <div className="input-group">
+              <label>Descripción del PDF</label>
+              <textarea
+                value={pdf.description?.[activeTab] || ""}
+                onChange={(e) => handlePdfChange(index, "description", e.target.value)}
+                placeholder="Descripción"
+              />
+            </div>
+            <div className="input-group">
+              <label>URL del PDF</label>
+              <input
+                type="text"
+                value={pdf.url?.[activeTab] || ""}
+                onChange={(e) => handlePdfChange(index, "url", e.target.value)}
+                placeholder="URL"
+              />
+            </div>
+            <button onClick={() => removePdf(index)}>🗑️ Quitar PDF</button>
           </div>
-          <div className="input-group">
-            <label>Descripción del PDF</label>
-            <textarea
-              value={pdf.description || ""}
-              onChange={(e) => handlePdfChange(index, "description", e.target.value)}
-              placeholder="Descripción"
-            />
-          </div>
-          <div className="input-group">
-            <label>URL del PDF</label>
-            <input
-              type="text"
-              value={pdf.url || ""}
-              onChange={(e) => handlePdfChange(index, "url", e.target.value)}
-              placeholder="URL"
-            />
-          </div>
-          <button onClick={() => removePdf(index)}>🗑️ Quitar PDF</button>
-        </div>
-      ))}
+        ))
+      ) : null}
       <button onClick={addPdf}>➕ Agregar PDF</button>
 
       <h3>🎥 Videos</h3>
-      {(formData.videos?.[activeTab] || []).map((video, index) => (
-        <div key={index} className="video-block">
-          <div className="input-group">
-            <label>Título del Video</label>
-            <input
-              type="text"
-              value={video.title || ""}
-              onChange={(e) => handleVideoChange(index, "title", e.target.value)}
-              placeholder="Título"
-            />
+      {Array.isArray(formData.videos) ? (
+        formData.videos.map((video, index) => (
+          <div key={index} className="video-block">
+            <div className="input-group">
+              <label>Título del Video</label>
+              <input
+                type="text"
+                value={video.title?.[activeTab] || ""}
+                onChange={(e) => handleVideoChange(index, "title", e.target.value)}
+                placeholder="Título"
+              />
+            </div>
+            <div className="input-group">
+              <label>Descripción del Video</label>
+              <textarea
+                value={video.description?.[activeTab] || ""}
+                onChange={(e) => handleVideoChange(index, "description", e.target.value)}
+                placeholder="Descripción"
+              />
+            </div>
+            <div className="input-group">
+              <label>URL del Video</label>
+              <input
+                type="text"
+                value={video.url?.[activeTab] || ""}
+                onChange={(e) => handleVideoChange(index, "url", e.target.value)}
+                placeholder="URL"
+              />
+            </div>
+            <button onClick={() => removeVideo(index)}>🗑️ Quitar Video</button>
           </div>
-          <div className="input-group">
-            <label>Descripción del Video</label>
-            <textarea
-              value={video.description || ""}
-              onChange={(e) => handleVideoChange(index, "description", e.target.value)}
-              placeholder="Descripción"
-            />
-          </div>
-          <div className="input-group">
-            <label>URL del Video</label>
-            <input
-              type="text"
-              value={video.url || ""}
-              onChange={(e) => handleVideoChange(index, "url", e.target.value)}
-              placeholder="URL"
-            />
-          </div>
-          <button onClick={() => removeVideo(index)}>🗑️ Quitar Video</button>
-        </div>
-      ))}
+        ))
+      ) : null}
       <button onClick={addVideo}>➕ Agregar Video</button>
     </div>
   );
 };
 
 export default ClassForm;
-

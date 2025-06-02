@@ -676,92 +676,126 @@ const translations = {
     },
   },
   resetPasswordPage: {
-  es: {
-    title: "Nueva contraseña",
-    newPasswordPlaceholder: "Nueva contraseña",
-    confirmPasswordPlaceholder: "Confirmar contraseña",
-    resetButton: "Restablecer",
-    success: "Contraseña actualizada con éxito. Ya podés iniciar sesión.",
-    generalError: "Ocurrió un error al restablecer la contraseña.",
-    errors: {
-      passwordRequired: "La nueva contraseña es obligatoria.",
-      passwordInvalid: "Debe tener 8 caracteres, una mayúscula, una minúscula y un número.",
-      confirmPasswordRequired: "Repetí la contraseña.",
-      passwordsNotMatch: "Las contraseñas no coinciden.",
+    es: {
+      title: "Nueva contraseña",
+      newPasswordPlaceholder: "Nueva contraseña",
+      confirmPasswordPlaceholder: "Confirmar contraseña",
+      resetButton: "Restablecer",
+      success: "Contraseña actualizada con éxito. Ya podés iniciar sesión.",
+      generalError: "Ocurrió un error al restablecer la contraseña.",
+      errors: {
+        passwordRequired: "La nueva contraseña es obligatoria.",
+        passwordInvalid:
+          "Debe tener 8 caracteres, una mayúscula, una minúscula y un número.",
+        confirmPasswordRequired: "Repetí la contraseña.",
+        passwordsNotMatch: "Las contraseñas no coinciden.",
+      },
+    },
+    en: {
+      title: "New password",
+      newPasswordPlaceholder: "New password",
+      confirmPasswordPlaceholder: "Confirm password",
+      resetButton: "Reset",
+      success: "Password updated successfully. You can now log in.",
+      generalError: "An error occurred while resetting the password.",
+      errors: {
+        passwordRequired: "New password is required.",
+        passwordInvalid:
+          "Must have 8 characters, an uppercase, a lowercase and a number.",
+        confirmPasswordRequired: "Repeat the password.",
+        passwordsNotMatch: "Passwords do not match.",
+      },
+    },
+    fr: {
+      title: "Nouveau mot de passe",
+      newPasswordPlaceholder: "Nouveau mot de passe",
+      confirmPasswordPlaceholder: "Confirmer le mot de passe",
+      resetButton: "Réinitialiser",
+      success:
+        "Mot de passe mis à jour avec succès. Vous pouvez maintenant vous connecter.",
+      generalError:
+        "Une erreur est survenue lors de la réinitialisation du mot de passe.",
+      errors: {
+        passwordRequired: "Le nouveau mot de passe est obligatoire.",
+        passwordInvalid:
+          "Doit contenir 8 caractères, une majuscule, une minuscule et un chiffre.",
+        confirmPasswordRequired: "Répétez le mot de passe.",
+        passwordsNotMatch: "Les mots de passe ne correspondent pas.",
+      },
     },
   },
-  en: {
-    title: "New password",
-    newPasswordPlaceholder: "New password",
-    confirmPasswordPlaceholder: "Confirm password",
-    resetButton: "Reset",
-    success: "Password updated successfully. You can now log in.",
-    generalError: "An error occurred while resetting the password.",
-    errors: {
-      passwordRequired: "New password is required.",
-      passwordInvalid: "Must have 8 characters, an uppercase, a lowercase and a number.",
-      confirmPasswordRequired: "Repeat the password.",
-      passwordsNotMatch: "Passwords do not match.",
+  registerSuccessPage: {
+    es: {
+      title: "¡Registro exitoso! 🎉",
+      welcome: "Bienvenido a",
+      subtitle: "Tu viaje de aprendizaje circense comienza ahora.",
+      loginButton: "Iniciar sesión",
+    },
+    en: {
+      title: "Successful registration! 🎉",
+      welcome: "Welcome to",
+      subtitle: "Your circus learning journey starts now.",
+      loginButton: "Log in",
+    },
+    fr: {
+      title: "Inscription réussie ! 🎉",
+      welcome: "Bienvenue à",
+      subtitle: "Ton voyage d’apprentissage du cirque commence maintenant.",
+      loginButton: "Se connecter",
     },
   },
-  fr: {
-    title: "Nouveau mot de passe",
-    newPasswordPlaceholder: "Nouveau mot de passe",
-    confirmPasswordPlaceholder: "Confirmer le mot de passe",
-    resetButton: "Réinitialiser",
-    success: "Mot de passe mis à jour avec succès. Vous pouvez maintenant vous connecter.",
-    generalError: "Une erreur est survenue lors de la réinitialisation du mot de passe.",
-    errors: {
-      passwordRequired: "Le nouveau mot de passe est obligatoire.",
-      passwordInvalid: "Doit contenir 8 caractères, une majuscule, une minuscule et un chiffre.",
-      confirmPasswordRequired: "Répétez le mot de passe.",
-      passwordsNotMatch: "Les mots de passe ne correspondent pas.",
+  forgotPasswordPage: {
+    es: {
+      title: "Recuperar contraseña",
+      emailPlaceholder: "Ingresá tu correo",
+      submitButton: "Enviar instrucciones",
+      successMessage:
+        "📩 Te enviamos un correo con instrucciones para recuperar tu contraseña.",
+      errorMessage: "Ocurrió un error. Intentalo nuevamente.",
+    },
+    en: {
+      title: "Forgot your password",
+      emailPlaceholder: "Enter your email",
+      submitButton: "Send instructions",
+      successMessage:
+        "📩 We’ve sent you an email with instructions to reset your password.",
+      errorMessage: "Something went wrong. Please try again.",
+    },
+    fr: {
+      title: "Mot de passe oublié",
+      emailPlaceholder: "Entrez votre adresse e-mail",
+      submitButton: "Envoyer les instructions",
+      successMessage:
+        "📩 Nous vous avons envoyé un e-mail avec les instructions pour réinitialiser votre mot de passe.",
+      errorMessage: "Une erreur s'est produite. Veuillez réessayer.",
     },
   },
-},
-registerSuccessPage: {
-  es: {
-    title: "¡Registro exitoso! 🎉",
-    welcome: "Bienvenido a",
-    subtitle: "Tu viaje de aprendizaje circense comienza ahora.",
-    loginButton: "Iniciar sesión",
+  coursesPage: {
+    es: {
+      title: "CURSOS Y TUTORIALES",
+      subtitle:
+        "PROFUNDIZA TU PROFESIÓN:\nPERFECCIONA TUS HABILIDADES Y ALCANZA TU MÁXIMO POTENCIAL.",
+      emptyTitle: "¡Próximamente!",
+      emptySubtitle:
+        "✨ Por el momento no hay cursos disponibles, pero estamos trabajando en nuevos contenidos para vos.",
+    },
+    en: {
+      title: "COURSES AND TUTORIALS",
+      subtitle:
+        "DEEPEN YOUR PROFESSION:\nREFINE YOUR SKILLS AND REACH YOUR FULL POTENTIAL.",
+      emptyTitle: "Coming soon!",
+      emptySubtitle:
+        "✨ No courses available at the moment, but we’re working on new content for you.",
+    },
+    fr: {
+      title: "COURS ET TUTORIELS",
+      subtitle:
+        "APPROFONDISSEZ VOTRE MÉTIER :\nPERFECTIONNEZ VOS COMPÉTENCES ET ATTEIGNEZ VOTRE PLEIN POTENTIEL.",
+      emptyTitle: "À venir !",
+      emptySubtitle:
+        "✨ Aucun cours disponible pour le moment, mais nous préparons du nouveau contenu pour vous.",
+    },
   },
-  en: {
-    title: "Successful registration! 🎉",
-    welcome: "Welcome to",
-    subtitle: "Your circus learning journey starts now.",
-    loginButton: "Log in",
-  },
-  fr: {
-    title: "Inscription réussie ! 🎉",
-    welcome: "Bienvenue à",
-    subtitle: "Ton voyage d’apprentissage du cirque commence maintenant.",
-    loginButton: "Se connecter",
-  },
-},
-forgotPasswordPage: {
-  es: {
-    title: "Recuperar contraseña",
-    emailPlaceholder: "Ingresá tu correo",
-    submitButton: "Enviar instrucciones",
-    successMessage: "📩 Te enviamos un correo con instrucciones para recuperar tu contraseña.",
-    errorMessage: "Ocurrió un error. Intentalo nuevamente.",
-  },
-  en: {
-    title: "Forgot your password",
-    emailPlaceholder: "Enter your email",
-    submitButton: "Send instructions",
-    successMessage: "📩 We’ve sent you an email with instructions to reset your password.",
-    errorMessage: "Something went wrong. Please try again.",
-  },
-  fr: {
-    title: "Mot de passe oublié",
-    emailPlaceholder: "Entrez votre adresse e-mail",
-    submitButton: "Envoyer les instructions",
-    successMessage: "📩 Nous vous avons envoyé un e-mail avec les instructions pour réinitialiser votre mot de passe.",
-    errorMessage: "Une erreur s'est produite. Veuillez réessayer.",
-  },
-},
 };
 
 export default translations;

@@ -114,13 +114,13 @@
   margin: 0.5rem 0;
 }
 
-.formation-title {
+.formationEdit-title {
   cursor: pointer;
   transition: color 0.3s ease;
   color: var(--color-azul-profundo);
 }
 
-.formation-title.selected {
+.formationEdit-title.selected {
   color: var(--color-petroleo);
 }
 

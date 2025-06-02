@@ -7,7 +7,7 @@ import { getPresentialFormationsByLang } from "../../services/presentialService"
 
 
 const PresentialFormationCard = ({ formation }) => {
-  const { title, location, dateType, singleDate, dateRange } = formation;
+  const { title, location, dateType, singleDate, dateRange, registrationLink } = formation;
 
   const formatFecha = (date, incluirAño = true) => {
     const fecha = new Date(date);
@@ -27,9 +27,19 @@ const PresentialFormationCard = ({ formation }) => {
       </span>
     );
 
+  const handleClick = () => {
+    if (registrationLink) {
+      window.open(registrationLink, "_blank");
+    }
+  };
+
   return (
     <div className="formation-pill">
-      <div className="circle-icon"></div>
+      <div
+        className={`circle-icon ${registrationLink ? "clickable" : ""}`}
+        onClick={handleClick}
+      ></div>
+
       <div className="formation-text">
         <div className="line-top">
           <FaRegCalendarAlt className="icon" />
@@ -37,24 +47,26 @@ const PresentialFormationCard = ({ formation }) => {
           <FaMapMarkerAlt className="icon location-icon" />
           <span>{location}</span>
         </div>
+
         <div className="line-bottom">
-          {formation.registrationLink ? (
+          {registrationLink ? (
             <a
-              className="formation-title"
-              href={formation.registrationLink}
+              className="presentialFormation-title"
+              href={registrationLink}
               target="_blank"
               rel="noopener noreferrer"
             >
               {title}
             </a>
           ) : (
-            <span className="formation-title">{title}</span>
+            <span className="presentialFormation-title">{title}</span>
           )}
         </div>
       </div>
     </div>
   );
 };
+
 
 const PresentialFormationsList = () => {
   const [formations, setFormations] = useState([]);

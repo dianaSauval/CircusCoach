@@ -2,7 +2,12 @@ import { useState, useEffect } from "react";
 import api from "../../../services/api";
 import "./ClassList.css";
 
-const ClassList = ({ module, setSelectedClass, selectedClass }) => {
+const ClassList = ({
+  module,
+  setSelectedClass,
+  selectedClass,
+  onDeleteClass,
+}) => {
   const [classes, setClasses] = useState([]);
 
   useEffect(() => {
@@ -21,20 +26,8 @@ const ClassList = ({ module, setSelectedClass, selectedClass }) => {
   };
 
   const handleDeleteClass = async (classId) => {
-    if (
-      !window.confirm(
-        "¿Seguro que quieres eliminar esta clase? Esta acción no se puede deshacer."
-      )
-    )
-      return; 
-
-    try {
-      await api.delete(`/classes/${classId}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
-      fetchClasses();
-    } catch (error) {
-      console.error("Error al eliminar clase:", error);
+    if (onDeleteClass) {
+      onDeleteClass(classId); // usa la función que vino desde arriba
     }
   };
 
@@ -75,13 +68,14 @@ const ClassList = ({ module, setSelectedClass, selectedClass }) => {
                 {/* 🔹 Nombre de la clase */}
                 <div className="class-header">
                   <div className="class-header">
-                  <span
-  className={`class-title ${selectedClass?._id === cls._id ? "selected" : ""}`}
-  onClick={() => setSelectedClass(cls)}
->
-  {cls.title?.es || "Sin título"}
-</span>
-
+                    <span
+                      className={`class-title ${
+                        selectedClass?._id === cls._id ? "selected" : ""
+                      }`}
+                      onClick={() => setSelectedClass(cls)}
+                    >
+                      {cls.title?.es || "Sin título"}
+                    </span>
                   </div>
                 </div>
 
@@ -89,7 +83,7 @@ const ClassList = ({ module, setSelectedClass, selectedClass }) => {
                 <div className="class-actions">
                   <button
                     className="delete-btn"
-                    onClick={() => handleDeleteClass(cls._id)}
+                    onClick={() => onDeleteClass(cls)} // Pasás el objeto clase completo
                   >
                     🗑️ Eliminar Clase
                   </button>

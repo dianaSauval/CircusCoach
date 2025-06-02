@@ -310,6 +310,24 @@ textarea {
 }
 
 
+.view-pdf-button {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: var(--color-petroleo);
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background 0.3s ease;
+  font-family: var(--font-texto);
+}
+
+.view-pdf-button:hover {
+  background: #366c74;
+}
+
+
 @media (max-width: 768px) {
   .edit-panel {
     width: 100%;

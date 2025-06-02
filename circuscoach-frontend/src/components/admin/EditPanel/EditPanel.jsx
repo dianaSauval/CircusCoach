@@ -6,6 +6,7 @@ import ClassForm from "../Form/ClassForm";
 import FormationForm from "../Form/FormationForm";
 import ModuleForm from "../Form/ModuleForm";
 import { getYoutubeEmbedUrl } from "../../../utils/youtube";
+import { getClassByIdAdmin } from "../../../services/formationService";
 
 const EditPanel = ({
   selectedFormation,
@@ -31,13 +32,25 @@ const EditPanel = ({
   };
 
   useEffect(() => {
+    const fetchClassData = async () => {
+      try {
+        const classData = await getClassByIdAdmin(selectedClass._id);
+        setFormData({
+          ...classData,
+          pdfs: classData.pdfs || [],
+          videos: classData.videos || [],
+        });
+        setIsEditing(false);
+      } catch (error) {
+        console.error(
+          "❌ Error cargando clase:",
+          error.response?.data || error
+        );
+      }
+    };
+
     if (selectedClass) {
-      setFormData({
-        ...selectedClass,
-        pdfs: selectedClass.pdfs || { es: [], en: [], fr: [] },
-        videos: selectedClass.videos || { es: [], en: [], fr: [] },
-      });
-      setIsEditing(false);
+      fetchClassData();
     } else if (selectedModule && !selectedClass) {
       setFormData({ ...selectedModule });
       setIsEditing(false);
@@ -51,30 +64,28 @@ const EditPanel = ({
   }, [selectedClass, selectedModule, selectedFormation]);
 
   const handleSave = async () => {
-    const selectedItem = selectedClass || selectedModule || selectedFormation;
-    if (!selectedItem) return;
+  const selectedItem = selectedClass || selectedModule || selectedFormation;
+  if (!selectedItem) return;
 
-    const endpoint = selectedClass
-      ? `/classes/${selectedClass._id}`
-      : selectedModule
-      ? `/modules/${selectedModule._id}`
-      : selectedFormation
-      ? `/formations/${selectedFormation._id}`
-      : null;
-
-    if (!endpoint) return;
-
-    try {
-      await api.put(endpoint, formData, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
-
-      if (onUpdate) onUpdate();
-      setIsEditing(false);
-    } catch (error) {
-      console.error("Error al actualizar:", error.response?.data || error);
+  try {
+    if (selectedClass) {
+      const { updateClass } = await import("../../../services/formationService");
+      await updateClass(selectedClass._id, formData);
+    } else if (selectedModule) {
+      const { updateModule } = await import("../../../services/formationService"); // o moduleService si lo tenés separado
+      await updateModule(selectedModule._id, formData);
+    } else if (selectedFormation) {
+      const { updateFormation } = await import("../../../services/formationService");
+      await updateFormation(selectedFormation._id, formData);
     }
-  };
+
+    if (onUpdate) onUpdate();
+    setIsEditing(false);
+  } catch (error) {
+    console.error("❌ Error al guardar cambios:", error.response?.data || error);
+  }
+};
+
 
   const toggleVisibility = async () => {
     let endpoint = null;
@@ -103,7 +114,10 @@ const EditPanel = ({
 
       if (onUpdate) onUpdate();
     } catch (error) {
-      console.error("\u274C Error al cambiar visibilidad:", error.response?.data || error);
+      console.error(
+        "\u274C Error al cambiar visibilidad:",
+        error.response?.data || error
+      );
     }
   };
 
@@ -138,15 +152,26 @@ const EditPanel = ({
             <h3>{formData.title?.[activeTab] || "Sin título"}</h3>
 
             {selectedModule && !selectedClass && (
-              <p>{formData.description?.[activeTab] || "No hay descripción disponible"}</p>
+              <p>
+                {formData.description?.[activeTab] ||
+                  "No hay descripción disponible"}
+              </p>
             )}
 
             {selectedFormation && !selectedClass && (
               <>
-                <p>{formData.description?.[activeTab] || "No hay descripción disponible"}</p>
-                <p><strong>Precio:</strong> {formData.price || "No especificado"}</p>
+                <p>
+                  {formData.description?.[activeTab] ||
+                    "No hay descripción disponible"}
+                </p>
+                <p>
+                  <strong>Precio:</strong> {formData.price || "No especificado"}
+                </p>
+
                 <div>
-                  <p><strong>Imagen de presentación:</strong></p>
+                  <p>
+                    <strong>Imagen de presentación:</strong>
+                  </p>
                   {formData.image?.[activeTab] ? (
                     <img
                       src={formData.image[activeTab]}
@@ -159,6 +184,48 @@ const EditPanel = ({
                     </p>
                   )}
                 </div>
+
+                <div style={{ marginTop: "1rem" }}>
+                  <p>
+                    <strong>📄 PDF de presentación:</strong>
+                  </p>
+                  {formData.pdf?.[activeTab] ? (
+                    <a
+                      href={formData.pdf[activeTab]}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="view-pdf-button"
+                    >
+                      🔗 Ver PDF
+                    </a>
+                  ) : (
+                    <p style={{ color: "#777", fontStyle: "italic" }}>
+                      PDF aún no cargado
+                    </p>
+                  )}
+                </div>
+
+                <div style={{ marginTop: "1rem" }}>
+                  <p>
+                    <strong>🎥 Video de presentación:</strong>
+                  </p>
+                  {formData.video?.[activeTab] ? (
+                    <div className="video-container">
+                      <iframe
+                        width="100%"
+                        height="250"
+                        src={getYoutubeEmbedUrl(formData.video[activeTab])}
+                        title="Video de presentación"
+                        frameBorder="0"
+                        allowFullScreen
+                      ></iframe>
+                    </div>
+                  ) : (
+                    <p style={{ color: "#777", fontStyle: "italic" }}>
+                      Video aún no cargado
+                    </p>
+                  )}
+                </div>
               </>
             )}
 
@@ -166,49 +233,88 @@ const EditPanel = ({
               <>
                 <p>{formData.content?.[activeTab] || "No disponible"}</p>
                 <h4>{formData.subtitle?.[activeTab] || "No especificado"}</h4>
-                <p>{formData.secondaryContent?.[activeTab] || "No disponible"}</p>
+                <p>
+                  {formData.secondaryContent?.[activeTab] || "No disponible"}
+                </p>
 
                 <div className="pdf-preview-container">
-                  <h3>\ud83d\udcc4 Documentos cargados</h3>
-                  {formData?.pdfs?.[activeTab]?.length > 0 ? (
-                    formData.pdfs[activeTab].map((pdf, i) => (
+                  <h3>📄 Documentos cargados</h3>
+                  {formData?.pdfs?.length > 0 ? (
+                    formData.pdfs.map((pdf, i) => (
                       <div key={i} className="pdf-preview">
-                        <p><strong>📌 Título:</strong> {pdf.title || "Sin título"}</p>
-                        <p><strong>📝 Descripción:</strong> {pdf.description || "Sin descripción"}</p>
-                        <a href={pdf.url} target="_blank" rel="noopener noreferrer">
-                          🔗 Ver PDF
-                        </a>
+                        <p>
+                          <strong>📌 Título:</strong>{" "}
+                          {pdf.title?.[activeTab] || "Sin título"}
+                        </p>
+                        <p>
+                          <strong>📝 Descripción:</strong>{" "}
+                          {pdf.description?.[activeTab] || "Sin descripción"}
+                        </p>
+                        {pdf.url?.[activeTab] ? (
+                          <a
+                            href={pdf.url[activeTab]}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            🔗 Ver PDF
+                          </a>
+                        ) : (
+                          <p style={{ color: "#777", fontStyle: "italic" }}>
+                            PDF aún no cargado
+                          </p>
+                        )}
                       </div>
                     ))
                   ) : (
-                    <p className="no-material">📭 Aún no se ha cargado ningún documento.</p>
+                    <p className="no-material">
+                      📭 Aún no se ha cargado ningún PDF.
+                    </p>
                   )}
                 </div>
 
                 <div className="video-preview-container">
                   <h3>🎥 Videos cargados</h3>
-                  {formData?.videos?.[activeTab]?.length > 0 ? (
-                    formData.videos[activeTab].map((video, i) => {
-                      const embedUrl = getYoutubeEmbedUrl(video.url);
+                  {formData?.videos?.length > 0 ? (
+                    formData.videos.map((video, i) => {
+                      const embedUrl = getYoutubeEmbedUrl(
+                        video.url?.[activeTab]
+                      );
                       return (
                         <div key={i} className="video-preview">
-                          <p><strong>📌 Título:</strong> {video.title || "Sin título"}</p>
-                          <p><strong>📝 Descripción:</strong> {video.description || "Sin descripción"}</p>
-                          <div className="video-container">
-                            <iframe
-                              width="100%"
-                              height="200"
-                              src={embedUrl}
-                              title={video.title || `Video ${i + 1}`}
-                              frameBorder="0"
-                              allowFullScreen
-                            ></iframe>
-                          </div>
+                          <p>
+                            <strong>📌 Título:</strong>{" "}
+                            {video.title?.[activeTab] || "Sin título"}
+                          </p>
+                          <p>
+                            <strong>📝 Descripción:</strong>{" "}
+                            {video.description?.[activeTab] ||
+                              "Sin descripción"}
+                          </p>
+                          {video.url?.[activeTab] ? (
+                            <div className="video-container">
+                              <iframe
+                                width="100%"
+                                height="200"
+                                src={embedUrl}
+                                title={
+                                  video.title?.[activeTab] || `Video ${i + 1}`
+                                }
+                                frameBorder="0"
+                                allowFullScreen
+                              ></iframe>
+                            </div>
+                          ) : (
+                            <p style={{ color: "#777", fontStyle: "italic" }}>
+                              🎥 Video aún no cargado
+                            </p>
+                          )}
                         </div>
                       );
                     })
                   ) : (
-                    <p className="no-material">📭 Aún no se ha cargado ningún video.</p>
+                    <p className="no-material">
+                      📭 Aún no se ha cargado ningún video.
+                    </p>
                   )}
                 </div>
               </>
@@ -216,9 +322,13 @@ const EditPanel = ({
           </div>
 
           <div className="button-group">
-            <button className="edit" onClick={() => setIsEditing(true)}>✏️ Editar</button>
+            <button className="edit" onClick={() => setIsEditing(true)}>
+              ✏️ Editar
+            </button>
             <button
-              className={`toggle-visibility ${formData.visible?.[activeTab] ? "visible" : "hidden"}`}
+              className={`toggle-visibility ${
+                formData.visible?.[activeTab] ? "visible" : "hidden"
+              }`}
               onClick={toggleVisibility}
             >
               {visibilityText}
@@ -231,7 +341,8 @@ const EditPanel = ({
       {isEditing && (
         <div className="edit-mode">
           <h2>
-            ✏️ Editando {selectedClass ? "Clase" : selectedModule ? "Módulo" : "Formación"}
+            ✏️ Editando{" "}
+            {selectedClass ? "Clase" : selectedModule ? "Módulo" : "Formación"}
           </h2>
 
           {selectedFormation && !selectedClass && !selectedModule && (
@@ -260,9 +371,15 @@ const EditPanel = ({
           )}
 
           <div className="button-group">
-            <button className="save" onClick={handleSave}>💾 Guardar Cambios</button>
-            <button className="cancel" onClick={() => setIsEditing(false)}>❌ Cancelar</button>
-            <button className="toggle-visibility" onClick={toggleVisibility}>{visibilityText}</button>
+            <button className="save" onClick={handleSave}>
+              💾 Guardar Cambios
+            </button>
+            <button className="cancel" onClick={() => setIsEditing(false)}>
+              ❌ Cancelar
+            </button>
+            <button className="toggle-visibility" onClick={toggleVisibility}>
+              {visibilityText}
+            </button>
           </div>
         </div>
       )}

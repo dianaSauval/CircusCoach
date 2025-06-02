@@ -1,65 +1,57 @@
 import { useState } from "react";
-import api from "../../../services/api";
 import "./AddItemModal.css";
+import {
+  createClass,
+  createFormation,
+  createModule,
+} from "../../../services/formationService";
 
 const AddItemModal = ({ type, parentId, closeModal, onAdd }) => {
   const [activeTab, setActiveTab] = useState("es");
   const isFormation = type === "formation";
   const isClass = type === "class";
 
-  const [formData, setFormData] = useState({
+  const initialState = {
     title: { es: "", en: "", fr: "" },
     description: { es: "", en: "", fr: "" },
-    price: isFormation ? "" : undefined,
-    image: isFormation ? { es: "", en: "", fr: "" } : undefined,
-    subtitle: isClass ? { es: "", en: "", fr: "" } : undefined,
-    secondaryContent: isClass ? { es: "", en: "", fr: "" } : undefined,
-    pdf: isFormation
-      ? { es: "", en: "", fr: "" }
-      : {
-          es: { url: "", title: "", description: "" },
-          en: { url: "", title: "", description: "" },
-          fr: { url: "", title: "", description: "" },
-        },
-    video: isFormation
-      ? { es: "", en: "", fr: "" }
-      : {
-          es: { url: "", title: "", description: "" },
-          en: { url: "", title: "", description: "" },
-          fr: { url: "", title: "", description: "" },
-        },
-  });
+    ...(isFormation && {
+      price: "",
+      image: { es: "", en: "", fr: "" },
+      pdf: { es: "", en: "", fr: "" },
+      video: { es: "", en: "", fr: "" },
+    }),
+    ...(isClass && {
+      subtitle: { es: "", en: "", fr: "" },
+      secondaryContent: { es: "", en: "", fr: "" },
+      pdfs: {
+        es: [{ url: "", title: "", description: "" }],
+        en: [{ url: "", title: "", description: "" }],
+        fr: [{ url: "", title: "", description: "" }],
+      },
+      videos: {
+        es: [{ url: "", title: "", description: "" }],
+        en: [{ url: "", title: "", description: "" }],
+        fr: [{ url: "", title: "", description: "" }],
+      },
+    }),
+  };
+
+  const [formData, setFormData] = useState(initialState);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: { ...formData[name], [activeTab]: value },
-    });
-  };
-
-  const handleFileChange = (e, field) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [field]: {
-        ...formData[field],
-        [activeTab]: {
-          ...formData[field][activeTab],
-          [name]: value,
-        },
-      },
-    });
+    setFormData((prev) => ({
+      ...prev,
+      [name]: { ...prev[name], [activeTab]: value },
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      let endpoint = "";
       let payload = {};
 
       if (type === "formation") {
-        endpoint = "/formations";
         payload = {
           title: formData.title,
           description: formData.description,
@@ -69,41 +61,124 @@ const AddItemModal = ({ type, parentId, closeModal, onAdd }) => {
           video: formData.video,
         };
       } else if (type === "module") {
-        endpoint = "/modules";
         payload = {
           title: formData.title,
           description: formData.description,
           formationId: parentId,
         };
       } else if (type === "class") {
-        endpoint = "/classes";
+        // 🔧 Transformar PDF y Video para que tengan estructura multilanguage
+        const transformToMultiLang = (items) =>
+          items.map((item) => ({
+            url: { es: "", en: "", fr: "", [activeTab]: item.url },
+            title: { es: "", en: "", fr: "", [activeTab]: item.title },
+            description: {
+              es: "",
+              en: "",
+              fr: "",
+              [activeTab]: item.description,
+            },
+          }));
+
         payload = {
           title: formData.title,
           subtitle: formData.subtitle,
           content: formData.description,
           secondaryContent: formData.secondaryContent,
-          pdf: formData.pdf,
-          video: formData.video,
+          pdfs: transformToMultiLang(formData.pdfs[activeTab]),
+          videos: transformToMultiLang(formData.videos[activeTab]),
           moduleId: parentId,
         };
       }
 
-      if (!endpoint) throw new Error("Tipo no válido");
+      const handlers = {
+        formation: createFormation,
+        module: createModule,
+        class: createClass,
+      };
 
-      const response = await api.post(endpoint, payload);
+      const response = await handlers[type](payload);
       onAdd(response.data);
       closeModal();
     } catch (error) {
-      console.error(`❌ Error al agregar ${type}:`, error.response?.data || error.message);
+      console.error(
+        "❌ Error al agregar:",
+        error.response?.data || error.message
+      );
     }
   };
 
+  const handlePdfChange = (index, e) => {
+    const updated = [...formData.pdfs[activeTab]];
+    updated[index][e.target.name] = e.target.value;
+    setFormData((prev) => ({
+      ...prev,
+      pdfs: { ...prev.pdfs, [activeTab]: updated },
+    }));
+  };
+
+  const addPdf = () => {
+    setFormData((prev) => ({
+      ...prev,
+      pdfs: {
+        ...prev.pdfs,
+        [activeTab]: [
+          ...prev.pdfs[activeTab],
+          { url: "", title: "", description: "" },
+        ],
+      },
+    }));
+  };
+
+  const removePdf = (index) => {
+    const updated = [...formData.pdfs[activeTab]];
+    updated.splice(index, 1);
+    setFormData((prev) => ({
+      ...prev,
+      pdfs: { ...prev.pdfs, [activeTab]: updated },
+    }));
+  };
+
+  const handleVideoChange = (index, e) => {
+    const updated = [...formData.videos[activeTab]];
+    updated[index][e.target.name] = e.target.value;
+    setFormData((prev) => ({
+      ...prev,
+      videos: { ...prev.videos, [activeTab]: updated },
+    }));
+  };
+
+  const addVideo = () => {
+    setFormData((prev) => ({
+      ...prev,
+      videos: {
+        ...prev.videos,
+        [activeTab]: [
+          ...prev.videos[activeTab],
+          { url: "", title: "", description: "" },
+        ],
+      },
+    }));
+  };
+
+  const removeVideo = (index) => {
+    const updated = [...formData.videos[activeTab]];
+    updated.splice(index, 1);
+    setFormData((prev) => ({
+      ...prev,
+      videos: { ...prev.videos, [activeTab]: updated },
+    }));
+  };
   return (
     <div className="modal">
       <div className="modal-content">
         <h2>
           Agregar{" "}
-          {type === "formation" ? "Formación" : type === "module" ? "Módulo" : "Clase"}
+          {type === "formation"
+            ? "Formación"
+            : type === "module"
+            ? "Módulo"
+            : "Clase"}
         </h2>
 
         {/* 🔹 Pestañas de idioma */}
@@ -151,51 +226,71 @@ const AddItemModal = ({ type, parentId, closeModal, onAdd }) => {
                 placeholder={`Contenido Secundario (${activeTab.toUpperCase()})`}
               />
 
-              <h3>📄 PDF</h3>
-              <input
-                type="text"
-                name="url"
-                value={formData.pdf[activeTab].url}
-                onChange={(e) => handleFileChange(e, "pdf")}
-                placeholder="URL del PDF"
-              />
-              <input
-                type="text"
-                name="title"
-                value={formData.pdf[activeTab].title}
-                onChange={(e) => handleFileChange(e, "pdf")}
-                placeholder="Título del PDF"
-              />
-              <input
-                type="text"
-                name="description"
-                value={formData.pdf[activeTab].description}
-                onChange={(e) => handleFileChange(e, "pdf")}
-                placeholder="Descripción del PDF"
-              />
+              <h3>📄 PDFs</h3>
+              {formData.pdfs[activeTab].map((pdf, index) => (
+                <div key={index} className="pdf-block">
+                  <input
+                    type="text"
+                    name="url"
+                    value={pdf.url}
+                    onChange={(e) => handlePdfChange(index, e)}
+                    placeholder="URL del PDF"
+                  />
+                  <input
+                    type="text"
+                    name="title"
+                    value={pdf.title}
+                    onChange={(e) => handlePdfChange(index, e)}
+                    placeholder="Título del PDF"
+                  />
+                  <input
+                    type="text"
+                    name="description"
+                    value={pdf.description}
+                    onChange={(e) => handlePdfChange(index, e)}
+                    placeholder="Descripción del PDF"
+                  />
+                  <button type="button" onClick={() => removePdf(index)}>
+                    ❌ Eliminar PDF
+                  </button>
+                </div>
+              ))}
+              <button type="button" onClick={addPdf}>
+                ➕ Agregar PDF
+              </button>
 
-              <h3>🎥 Video</h3>
-              <input
-                type="text"
-                name="url"
-                value={formData.video[activeTab].url}
-                onChange={(e) => handleFileChange(e, "video")}
-                placeholder="URL del Video"
-              />
-              <input
-                type="text"
-                name="title"
-                value={formData.video[activeTab].title}
-                onChange={(e) => handleFileChange(e, "video")}
-                placeholder="Título del Video"
-              />
-              <input
-                type="text"
-                name="description"
-                value={formData.video[activeTab].description}
-                onChange={(e) => handleFileChange(e, "video")}
-                placeholder="Descripción del Video"
-              />
+              <h3>🎥 Videos</h3>
+              {formData.videos[activeTab].map((video, index) => (
+                <div key={index} className="video-block">
+                  <input
+                    type="text"
+                    name="url"
+                    value={video.url}
+                    onChange={(e) => handleVideoChange(index, e)}
+                    placeholder="URL del Video"
+                  />
+                  <input
+                    type="text"
+                    name="title"
+                    value={video.title}
+                    onChange={(e) => handleVideoChange(index, e)}
+                    placeholder="Título del Video"
+                  />
+                  <input
+                    type="text"
+                    name="description"
+                    value={video.description}
+                    onChange={(e) => handleVideoChange(index, e)}
+                    placeholder="Descripción del Video"
+                  />
+                  <button type="button" onClick={() => removeVideo(index)}>
+                    ❌ Eliminar Video
+                  </button>
+                </div>
+              ))}
+              <button type="button" onClick={addVideo}>
+                ➕ Agregar Video
+              </button>
             </>
           )}
 
@@ -205,7 +300,9 @@ const AddItemModal = ({ type, parentId, closeModal, onAdd }) => {
                 type="number"
                 name="price"
                 value={formData.price}
-                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, price: e.target.value })
+                }
                 placeholder="Precio"
                 required
               />
@@ -252,11 +349,11 @@ const AddItemModal = ({ type, parentId, closeModal, onAdd }) => {
               />
             </>
           )}
-<div className="content-button-modal">
-          <button type="submit">✅ Agregar</button>
-          <button type="button" onClick={closeModal}>
-            ❌ Cancelar
-          </button>
+          <div className="content-button-modal">
+            <button type="submit">✅ Agregar</button>
+            <button type="button" onClick={closeModal}>
+              ❌ Cancelar
+            </button>
           </div>
         </form>
       </div>

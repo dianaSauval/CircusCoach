@@ -11,6 +11,8 @@ const ModuleList = ({
   selectedModule,
   selectedClass, // ✅ Recibimos selectedClass correctamente
   setShowModalInParent,
+  setModuleToDelete,
+  onDeleteClass,
 }) => {
   const [modules, setModules] = useState([]);
   const [expandedModules, setExpandedModules] = useState({});
@@ -30,24 +32,6 @@ const ModuleList = ({
       setModules(response.data);
     } catch (error) {
       console.error("Error al obtener módulos:", error);
-    }
-  };
-
-  const handleDeleteModule = async (moduleId) => {
-    if (
-      !window.confirm(
-        "¿Seguro que quieres eliminar este módulo? Esta acción no se puede deshacer."
-      )
-    )
-      return;
-
-    try {
-      await api.delete(`/modules/${moduleId}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
-      fetchModules();
-    } catch (error) {
-      console.error("Error al eliminar módulo:", error);
     }
   };
 
@@ -80,10 +64,10 @@ const ModuleList = ({
                       <p>Español</p> {es ? " ✅" : "✖"}
                     </span>
                     <span className={en ? "visible" : "not-visible"}>
-                    <p>Inglés</p> {en ? "✅" : "✖"}
+                      <p>Inglés</p> {en ? "✅" : "✖"}
                     </span>
                     <span className={fr ? "visible" : "not-visible"}>
-                    <p>Francés</p> {fr ? "✅" : "✖"}
+                      <p>Francés</p> {fr ? "✅" : "✖"}
                     </span>
                   </>
                 </div>
@@ -128,7 +112,7 @@ const ModuleList = ({
 
                   <button
                     className="delete-btn"
-                    onClick={() => handleDeleteModule(module._id)}
+                    onClick={() => setModuleToDelete(module)}
                   >
                     🗑️ Eliminar Módulo
                   </button>
@@ -142,6 +126,7 @@ const ModuleList = ({
                     module={module}
                     setSelectedClass={setSelectedClass}
                     selectedClass={selectedClass} // ✅ Pasamos selectedClass
+                    onDeleteClass={onDeleteClass}
                   />
                 </div>
               )}

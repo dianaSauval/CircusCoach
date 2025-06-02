@@ -59,8 +59,60 @@ export const makeFormationVisibleInAllLanguages = async (id) => {
   return res.data;
 };
 
-// 🔹 Obtener clase individual por ID y por idioma
+
+
+// 🔹 FUNCIONES PARA MODULOS
+
+export const createModule = async (data) => {
+  const res = await api.post("/modules", data);
+  return res.data;
+};
+
+
+export const deleteModule = async (id) => {
+  const res = await api.delete(`/modules/${id}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+  return res.data;
+};
+
+export const updateModule = async (id, data) => {
+  const res = await api.put(`/modules/${id}`, data);
+  return res.data;
+};
+
+// 🔹 FUNCIONES PARA CLASES DE MODULOS
+
+
+// Eliminar una clase por ID
+export const deleteClassById = async (id) => {
+  const res = await api.delete(`/classes/${id}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+  return res.data;
+};
+
 export const getClassById = async (id, lang = "es") => {
   const res = await api.get(`/classes/${id}?lang=${lang}`);
+  return res.data;
+};
+
+export const getClassByIdAdmin = async (id) => {
+  const res = await api.get(`/classes/admin/${id}`);
+  return res.data;
+};
+
+
+export const createClass = async (data) => {
+  const res = await api.post("/classes", data);
+  return res.data;
+};
+
+export const updateClass = async (classId, classData) => {
+  const res = await api.put(`/classes/${classId}`, classData);
   return res.data;
 };

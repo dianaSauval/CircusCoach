@@ -26,6 +26,7 @@ function CourseDetail() {
       try {
         const data = await getCourseById(id, lang);
 
+        // si no está visible en este idioma
         if (!data.visible?.[lang]) {
           setIdiomaNoDisponible(true);
           const langs = Object.entries(data.visible || {})
@@ -48,6 +49,7 @@ function CourseDetail() {
     fetchCourse();
   }, [id, lang]);
 
+  // Redirige si el slug no coincide con el título actual
   useEffect(() => {
     if (course?.title?.[lang]) {
       const expectedSlug = course.title[lang]
@@ -64,8 +66,9 @@ function CourseDetail() {
   const handleDownload = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (course?.pdfUrl) {
-      window.open(course.pdfUrl, "_blank", "noopener,noreferrer");
+    const url = course?.pdf?.[lang];
+    if (url) {
+      window.open(url, "_blank", "noopener,noreferrer");
     }
   };
 
@@ -96,7 +99,7 @@ function CourseDetail() {
 
           <button className="inscribite-button">{tc.enrollNow}</button>
 
-          {course.pdfUrl && (
+          {course.pdf?.[lang] && (
             <>
               <p className="pdf-info-text">{tc.downloadInfoCurso}</p>
               <button className="descargar-button" onClick={handleDownload}>
@@ -148,12 +151,10 @@ function CourseDetail() {
           <i className="fas fa-wifi"></i>
           <span>{tc.feature_online}</span>
         </div>
-
         <div className="caracteristica">
           <i className="fas fa-file-download"></i>
           <span>{tc.feature_downloadable}</span>
         </div>
-
         <div className="caracteristica">
           <i className="fas fa-comments"></i>
           <span>{tc.feature_support}</span>
@@ -161,7 +162,6 @@ function CourseDetail() {
       </div>
 
       <InternationalPriceCard isCourse={true} course={course} />
-
     </>
   );
 }

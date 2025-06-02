@@ -193,13 +193,30 @@ const CourseEditPanel = ({ course, selectedClass, onUpdate }) => {
     }
   };
 
+
+  const labelByLang = {
+  es: {
+    course: "🎓 Curso",
+    class: "📖 Clase",
+  },
+  en: {
+    course: "🎓 Course",
+    class: "📖 Class",
+  },
+  fr: {
+    course: "🎓 Cours",
+    class: "📖 Leçon",
+  },
+};
+
+
   return (
     <div className="course-edit-panel">
       <LanguageTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
       {!isEditing ? (
         <div className="informationCourse">
-          <h2>{isClass ? "📖 Clase" : "🎓 Curso"}</h2>
+          <h2>{isClass ? labelByLang[activeTab].class : labelByLang[activeTab].course}</h2>
           <h3>{data.title?.[activeTab] || "Sin título"}</h3>
 
           {!isClass && (
