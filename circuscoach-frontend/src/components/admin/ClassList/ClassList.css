@@ -11,7 +11,6 @@
   display: flex;
   flex-direction: column;
   background: var(--color-blanco);
-  padding: 12px;
   margin: 8px 0;
   border-radius: 10px;
   border: 1px solid var(--color-menta);
@@ -25,7 +24,7 @@
 }
 
 /* 🔹 Contenido de la clase */
-.class-content {
+.class-formationContent {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -100,14 +99,23 @@
     align-items: flex-start;
   }
 
-  .class-content {
+  .class-formationContent {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
+    padding: 6px;
   }
 
   .delete-btn {
     width: 100%;
     text-align: center;
   }
+
+  .class-list{
+    padding: 5px;
+  }
+
+  .class-visibilityClass {
+  font-size: 0.80rem;
+}
 }

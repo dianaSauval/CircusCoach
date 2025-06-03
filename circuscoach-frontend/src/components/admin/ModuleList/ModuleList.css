@@ -159,9 +159,17 @@
     padding: 12px;
   }
 
+  .module-title{
+    font-size: 1rem;
+  }
+
   .module-content {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .module-classes {
+  padding-left: 0.5px;
   }
 
   .module-actions {
@@ -180,6 +188,10 @@
     font-size: small;
     display: flex;
     gap: 2px;
+  }
+
+    .toggle-btn{
+    font-size: 1rem;
   }
 
 }

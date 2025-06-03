@@ -49,7 +49,7 @@ const ClassList = ({
               }`}
             >
               {/* 🔹 Nueva estructura con visibilidad de idiomas */}
-              <div className="class-content">
+              <div className="class-formationContent">
                 {/* 🔹 Indicadores de visibilidad */}
                 <div className="class-visibilityClass">
                   <>

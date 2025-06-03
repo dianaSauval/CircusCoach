@@ -143,7 +143,8 @@
   margin-top: 0.5rem;
 }
 
-.small-btn, .delete-btn {
+.small-btn,
+.delete-btn {
   padding: 8px 14px;
   font-size: 0.95rem;
   border: none;
@@ -195,7 +196,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   transition: background-color 0.3s ease, left 0.3s ease;
   z-index: 10;
 }
@@ -221,7 +222,6 @@
   grid-template-columns: 100%;
 }
 
-
 /* 📱 Responsive */
 @media (max-width: 768px) {
   .formations-layout {
@@ -237,13 +237,20 @@
   .formation-actions {
     justify-content: flex-start;
   }
-  .collapse-toggle{
-    top: 8rem;
+  .collapse-toggle {
+    top: 8.5rem;
     left: 82%;
-
   }
 
-  .formations-list.collapsed{
+  .formations-list {
+    padding: 1rem;
+  }
+
+  .formation-item{
+    padding: 15px;
+  }
+
+  .formations-list.collapsed {
     width: 0px;
     padding: 0;
   }
@@ -252,6 +259,15 @@
     left: 0.3rem;
   }
 
- 
+  .formation-modules {
+    padding: 0;
+  }
 
+  .manage-formations-container {
+    padding: 3rem 1rem;
+  }
+
+  .toggle-btn{
+    font-size: 1rem;
+  }
 }

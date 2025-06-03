@@ -42,7 +42,7 @@ const CourseClassList = ({ course, selectedClass, setSelectedClass, onClassDelet
           return (
             <div
               key={cls._id}
-              className={`class-item ${selectedClass?._id === cls._id ? "selected" : ""}`}
+              className={`courseClass-item ${selectedClass?._id === cls._id ? "selected" : ""}`}
             >
               <div className="class-visibilityClass">
                 <span className={es ? "visible" : "not-visible"}>Español {es ? "✅" : "❌"}</span>
